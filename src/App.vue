@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const count = ref(0)
+console.log(import.meta.env.VITE_APP_API_BASE_URL)
 </script>
 
 <template>
@@ -11,7 +12,7 @@ const count = ref(0)
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .logo {
   height: 6em;
   padding: 1.5em;
