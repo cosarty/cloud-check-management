@@ -28,6 +28,7 @@ module.exports = defineConfig({
   ],
   // https://cn.eslint.org/docs/rules/
   rules: {
+    'no-undef': 'off',
     // 禁止使用 var
     'no-var': 'error',
     semi: 'off',
