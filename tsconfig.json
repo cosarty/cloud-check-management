@@ -14,12 +14,12 @@
     "skipLibCheck": true,
     "noEmit": true,
     "paths": {
-      "@/*":["src/*"]
+      "@/*":["src/*"],
+      "@server/api": ["../cloud-check-server/types"]
     },
-    
     "types": ["element-plus/global","vite/client","@types/node"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue","types/**/*.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [{ "path": "./tsconfig.node.json"}],
   
 }

@@ -1,29 +1,18 @@
-<script setup lang="ts">
-const count = ref(0)
-console.log(import.meta.env.VITE_APP_API_BASE_URL)
-</script>
-
 <template>
-  {{ count }}
-  <ElButton type="primary" @click="count++"> 点击 </ElButton>
-
-  <button class="p-2 m-2 bg-blue-800 rounded-3xl text-red-600 shadow-xl">
-    BUTTON
-  </button>
+  <div class="md:container md:mx-auto relative h-10 bg-red-100">
+    <!-- <div class="inline-block absolute top-3 left-3 bg-indigo-300">fds</div> -->
+    <button @click="submit">提交</button>
+    {{ data }}
+  </div>
 </template>
 
-<style scoped lang="scss">
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
+<script setup lang="ts">
+import { Data } from '@server/api'
+import http from '@/http'
+const data = ref<Data>()
+const submit = async () => {
+  const res = await http.request<undefined, Data>({ url: '/' })
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  data.value = res.data
 }
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+</script>
