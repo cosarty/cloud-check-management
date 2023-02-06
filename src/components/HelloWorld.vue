@@ -4,6 +4,12 @@ defineProps<{ msg: string }>()
 const count = ref(0)
 </script>
 
+<script lang="ts">
+export default defineComponent({
+  auth: ['admin'],
+})
+</script>
+
 <template>
   <h1>{{ msg }}</h1>
 
