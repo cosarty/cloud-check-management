@@ -60,11 +60,12 @@ module.exports = defineConfig({
       },
     ],
     // 禁止出现未使用的变量
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
-    ],
+    // '@typescript-eslint/no-unused-vars': [
+    //   'error',
+    //   { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
+    // ],
     'vue/html-indent': 'off',
+    'vue/multi-word-component-names': 'off',
     // 关闭此规则 使用 prettier 的格式化规则，
     'vue/max-attributes-per-line': ['off'],
     // 优先使用驼峰，element 组件除外
@@ -84,6 +85,12 @@ module.exports = defineConfig({
       {
         destructuring: 'any',
         ignoreReadBeforeAssign: false,
+      },
+    ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'crlf',
       },
     ],
   },

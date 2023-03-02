@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [],
+  routes: [{ path: '/', component: () => import('@/components/Home.vue') }],
 })
 
 router.onError(err => {

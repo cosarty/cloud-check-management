@@ -1,27 +1,11 @@
 <template>
-  <div class="md:container md:mx-auto relative h-10 bg-red-100">
-    <!-- <div class="inline-block absolute top-3 left-3 bg-indigo-300">fds</div> -->
-    <button @click="submit">提交</button>
-    {{ data }}
-  </div>
-
-  <div
-    class="relative box h-60 w-70 mx-auto my-10 bg-red-200 text-center leading-70"
-  >
-    <span
-      class="box_active inline-block h-full w-3 align-middle bg-blue-300"
-    ></span>
-    <span
-      class="box_active inline-block w-10 h-10 align-middle bg-lime-600 text-lg"
-    ></span
-    ><span class="text-6xl align-middle">x写fhdskj</span>
-  </div>
+  <div>fgfd</div>
+  <RouterView></RouterView>
 </template>
 
 <script setup lang="ts">
 import { Data } from '@server/api'
-import HelloWorld from './components/HelloWorld.vue'
-console.log('HelloWorld: ', HelloWorld)
+// import HelloWorld from './components/HelloWorld.vue'
 import http from '@/http'
 const data = ref<Data>()
 
