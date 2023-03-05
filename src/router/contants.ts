@@ -1,7 +1,9 @@
 import { RouteRecordRaw } from 'vue-router'
 
 const contantsRouter: RouteRecordRaw[] = [
-  { path: '/', component: () => import('@/view/sys/login/index.vue') },
+  { path: '/login', name: 'login', component: () => import('@/view/sys/login/index.vue') },
+  {
+    path: '/', component: () =>  import('@/components/Home.vue')},
   {
     path: '/404',
     name: '404',

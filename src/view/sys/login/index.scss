@@ -1,5 +1,16 @@
 @use '@/style/var' as *;
 
+.login-enter-active,
+.login-leave-active {
+  transition: all .7s ease;
+}
+
+.login-enter-from,
+.login-leave-to {
+  transform: translateX(var(--offset-x));
+  opacity: 0;
+}
+
 .fill {
   width: 100% !important;
 }
@@ -36,6 +47,7 @@
     height: 100vh;
   }
   &-form {
+
     width: 50%;
     box-sizing: border-box;
     padding: 0 150px;

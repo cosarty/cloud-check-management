@@ -3,11 +3,12 @@ import 'normalize.css'
 import '@/style/base.scss'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
-import router from '@/router'
+import router, { setupRouterGuard } from '@/router'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 const createRoot = async () => {
   const app = createApp(App)
+  setupRouterGuard(router)
   app.use(router)
   const pinia = createPinia()
   pinia.use(piniaPluginPersistedstate)
