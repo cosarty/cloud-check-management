@@ -5,6 +5,7 @@ import { ErrorDataImp } from '@server/api'
 import { ElMessage } from 'element-plus'
 import storage from '@/utils/storage'
 import { CacheEnum } from '@/enum/CacheEnum'
+import userStore from '@/store/userStore'
 
 const noon = <T>(res: T): T => res
 
@@ -181,8 +182,9 @@ export default new Request({
         case 403:
           ElMessage({
             type: 'error',
-            message: (err.response?.data?.error as string) ?? '登录失效',
+            message: (err.response?.data?.error as string) ?? '请重新登录',
           })
+          userStore().logout()
           break
         case 429:
           ElMessage({
@@ -191,10 +193,15 @@ export default new Request({
           })
           break
         case 401:
-
           ElMessage({
             type: 'error',
             message: '请先登录',
+          })
+          break
+        case 500:
+          ElMessage({
+            type: 'error',
+            message: '服务器错误',
           })
           break
       }

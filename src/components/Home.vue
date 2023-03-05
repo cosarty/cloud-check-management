@@ -1,7 +1,7 @@
 <template>
   <div>home</div>
-  <div>{{ user.name }}</div>
-
+  <div>{{ user.userInfo }}</div>
+   <ElButton @click="user.logout()">退出登录 </ElButton>
   <img src="@/assets/svg/login-bg.svg">
 </template>
 

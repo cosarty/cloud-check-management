@@ -27,27 +27,26 @@ export const setupRouterGuard = (router: Router) => {
   router.beforeEach(
     async (to: RouteLocationNormalized, form: RouteLocationNormalized) => {
       NProgress.start()
+      const user = userStore()
+
+      if (!user.token && to.path === '/login') return
       // 判断token是否存在
-      if (userStore().token) {
+      if (user.token) {
         // 判断pinia中是否存储了用户信息  如果存储了就跳过
-        const user = userStore().userInfo
 
+        if (!user.userInfo) {
+          
         // 如果用户不存在就尝试获取用户，获取不到就跳转到登录页
-        if (!user) {
-          console.log('user: ', user)
-          await userStore().getUserInfo()
-
-          console.log('user: ', user)
-
-          if (!user) return '/login'
+          await user.getUserInfo()
+          if (!user.userInfo) return '/login'
         }
 
         if (to.path === '/login') return '/'
+      
+        return
       } else {
         return { path: 'login' }
       }
-
-      return
     },
   )
 
