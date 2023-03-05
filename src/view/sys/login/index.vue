@@ -7,13 +7,13 @@
       </div>
       <div class="login-form">
         <h2 class="login-form__title">登录</h2>
-        <ElForm @submit.prevent :model="loginForm" :rules="rules"  ref="ruleFormRef">
+        <ElForm @submit.prevent :model="loginForm" :rules="rules" ref="ruleFormRef">
           <ElSpace :size="10" fill class="fill">
-            <ElFormItem prop="userName">
-              <ElInput v-model="loginForm.userName" placeholder="请输入邮箱或者账号" autocomplete="off" />
+            <ElFormItem prop="email">
+              <ElInput v-model="loginForm.email" placeholder="请输入邮箱" />
             </ElFormItem>
             <ElFormItem prop="password">
-              <ElInput type="password" placeholder="请输入密码" autocomplete="off" v-model="loginForm.password" />
+              <ElInput type="password" placeholder="请输入密码" v-model="loginForm.password" />
             </ElFormItem>
           </ElSpace>
           <ElSpace :size="10" fill class="fill">
@@ -39,15 +39,23 @@
 
 <script setup lang="ts">
 import { FormInstance, FormRules } from 'element-plus'
+import { login } from '@/http/api/user'
+import { omit } from '@/utils/object'
 const ruleFormRef = ref<FormInstance>()
 const loginForm = reactive({
-  userName: '',
+  email: '',
   password: '',
   remember: false,
 })
 
 const rules = reactive<FormRules>({
-  userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' },
+  {
+    type: 'email',
+    message: '请输入合法邮箱',
+    trigger: ['blur'],
+  }
+  ],
   password: [
     {
       required: true,
@@ -58,11 +66,17 @@ const rules = reactive<FormRules>({
 })
 
 const submit = async () => {
- if(!ruleFormRef) return 
-  await ruleFormRef.value?.validate((valid, fields) => {
-    console.log('valid, fields: ', valid, fields);
-    
-  })
+  if (!ruleFormRef) return
+  const v = await ruleFormRef.value?.validate()
+
+
+  const data = await login(omit(loginForm, ['remember']))
+  console.log('data: ', data);
+  console.log('loginForm: ', loginForm);
+
+
+  console.log('v: ', v);
+
 
 }
 </script>

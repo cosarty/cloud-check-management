@@ -1,5 +1,3 @@
-declare interface ResponseData<T> {
-  code: number
-  message: string
-  data: T
-}
+import {BaseData} from '@server/api'
+
+export declare  type ResponseData<T> = BaseData<T>

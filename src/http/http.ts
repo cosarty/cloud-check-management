@@ -1,15 +1,18 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { ResponseData } from './type'
+import { ErrorDataImp } from '@server/api'
+import { ElMessage } from 'element-plus'
 
 const noon = <T>(res: T): T => res
 
 export interface RequestInterceptors {
   // 请求拦截
   requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig
-  requestInterceptorsCatch?: (err: any) => any
+  requestInterceptorsCatch?: (err: AxiosError<any, ErrorDataImp>) => any
   // 响应拦截
   responseInterceptors?: <T = AxiosResponse>(config: T) => T
-  responseInterceptorsCatch?: (err: any) => any
+  responseInterceptorsCatch?: (err: AxiosError<ErrorDataImp, any>) => any
 }
 // 自定义传入的参数
 export interface RequestConfig extends AxiosRequestConfig {
@@ -117,7 +120,7 @@ class Request {
   }
 
   // 设置请求
-  async request<D = any, T = any>(
+  async request<T = any, D = any>(
     config: RequestData<D>,
   ): Promise<ResponseData<T>> {
     const { method = 'GET' } = config
@@ -156,14 +159,36 @@ export default new Request({
   interceptors: {
     // 请求拦截器
     requestInterceptors: config => {
-      console.log('实例请求拦截器')
+      // console.log('实例请求拦截器')
 
       return config
     },
     // 响应拦截器
-    responseInterceptors: result => {
-      console.log('实例响应拦截器')
-      return result
+    // responseInterceptors: result => {
+      // console.log('实例响应拦截器')
+    //   return result
+    // },
+    responseInterceptorsCatch(err) {
+      switch (err.response?.status) {
+        case 403:
+          if (err.response?.data?.error) {
+            ElMessage({
+              type: 'error',
+              message: (err.response?.data?.error as string) ?? '登录失效',
+            })
+          }
+
+          break
+        case 429:
+          ElMessage({
+            type: 'error',
+            message: '请求过于频繁',
+          })
+          break
+      }
+
+      return Promise.reject()
     },
   },
 })
+
