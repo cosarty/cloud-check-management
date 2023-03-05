@@ -90,7 +90,7 @@ module.exports = defineConfig({
     'prettier/prettier': [
       'error',
       {
-        endOfLine: 'crlf',
+        endOfLine: 'all',
       },
     ],
   },

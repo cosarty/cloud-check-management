@@ -1,8 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
+import contantsRouter from './contants'
 
+
+
+const view  = import.meta.glob(['@/view/**/*.vue','!@/view/**/sys'],{eager:true})
+console.log('view: ', view);
 const router = createRouter({
   history: createWebHistory(),
-  routes: [{ path: '/', component: () => import('@/components/Home.vue') }],
+  routes: [...contantsRouter],
 })
 
 router.onError(err => {
@@ -10,3 +15,4 @@ router.onError(err => {
 })
 
 export default router
+
