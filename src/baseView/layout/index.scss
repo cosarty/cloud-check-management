@@ -10,6 +10,7 @@
 
   .continer {
     height: 100%;
+
     .aside {
       width: 86px;
       background-color: rgb(28, 46, 86);
@@ -21,11 +22,14 @@
 
     .main {
       background-color: rgb(236, 241, 253);
+      height: inherit;
+      box-sizing: border-box !important;
       &-box {
+        padding: 20px;
         background-color: white;
-        height: 100%;
-        width: 100%;
         border-radius: 13px;
+        height: calc(100% - (3 * 40px));
+        overflow-y: auto;
       }
     }
 
