@@ -13,14 +13,14 @@ export default defineConfig(({ mode }) => {
       vue(),
       AutoImport({
         resolvers: [ElementPlusResolver()],
-        imports: ['vue', 'vue-router'],
+        imports: ['vue', 'vue-router', 'pinia'],
         dts: 'types/auto-imports.d.ts',
       }),
       Components({
         resolvers: [ElementPlusResolver()],
         // directoryAsNamespace: true,
         dts: 'types/components.d.ts',
-        dirs: ['src/layout'],
+        // dirs: ['src/layout'],
       }),
     ],
     resolve: {

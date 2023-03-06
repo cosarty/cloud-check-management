@@ -9,7 +9,7 @@ import { RouteRecordRaw } from 'vue-router'
 const baseRouter: RouteRecordRaw[] = [
   {
     path: '/login',
-    component: () => import('@/view/sys/login/index.vue'),
+    component: () => import('@/baseView/userPermission/login/index.vue'),
     meta: {
       hideLayout: true,
     },
@@ -25,7 +25,7 @@ const forbiddenRouter: RouteRecordRaw[] = [
       {
         path: '404',
         name: '404',
-        component: () => import('@/view/sys/404.vue'),
+        component: () => import('@/baseView/forbidden/404.vue'),
       },
     ],
   },

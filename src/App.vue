@@ -6,8 +6,7 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
-console.log('route: ', { ...route })
+import Layout from '@/baseView/layout/index.vue'
 </script>
 
 <style scoped lang="scss"></style>

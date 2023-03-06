@@ -1,5 +1,4 @@
 import { UserType } from '@server/api'
-import { defineStore } from 'pinia'
 import { getCurrentUser, login as loginApi } from '@/http/api/user'
 import storage from '@/utils/storage'
 import { CacheEnum } from '@/enum/CacheEnum'
@@ -37,11 +36,12 @@ const userStore = defineStore('user', () => {
     return data.auth
   }
 
-  const logout = () => {
+  const logout = async () => {
     storage.remove(CacheEnum.TOKEN_NAME)
-    userInfo.value = null
     token.value = ''
-    router.push({ path: '/login', replace: true })
+    await router.push({ path: '/login', replace: true })
+    userInfo.value = null
+
     ElMessage({
       type: 'success',
       message: '退出登录成功',

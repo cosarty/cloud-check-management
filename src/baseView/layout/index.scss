@@ -1,0 +1,31 @@
+.layout {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  .header {
+    line-height: 48px;
+    background-color: rgb(23, 36, 70);
+  }
+
+  .continer {
+    height: 100%;
+    .aside {
+      width: 86px;
+      background-color: rgb(28, 46, 86);
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+    }
+
+    .main {
+      background-color: rgb(236, 241, 253);
+    }
+
+    .footer {
+      box-shadow: 0 10px 20px -2px rgb(57, 58, 59);
+      height: 70px;
+    }
+  }
+}
