@@ -4,8 +4,16 @@
     <ElContainer class="continer">
       <ElAside class="aside"></ElAside>
       <ElContainer class="continer">
-        <ElMain class="main"> laout<slot></slot></ElMain>
-        <ElFooter class="footer">底部</ElFooter>
+        <ElMain class="main">
+          <ElBreadcrumb style="margin-bottom: 20px">
+            <ElBreadcrumbItem :to="{ path: '/' }">homepage</ElBreadcrumbItem>
+            <ElBreadcrumbItem :to="{ path: '/' }"
+              >promotion management</ElBreadcrumbItem
+            >
+          </ElBreadcrumb>
+          <div class="main-box">laout<slot></slot></div
+        ></ElMain>
+        <!-- <ElFooter class="footer">底部</ElFooter> -->
       </ElContainer>
     </ElContainer>
   </ElContainer>
