@@ -1,18 +1,20 @@
+import { Component, ComponentPublicInstance } from 'vue'
 import { RouteRecordRaw } from 'vue-router'
 
 const viewComponent = import.meta.glob(['@/view/**/*.vue', '!@/view/**/sys'], {
-  eager: false,
+  eager: true,
 })
 
 const ssRouter: RouteRecordRaw[] = []
 
 for (const key of Object.keys(viewComponent)) {
-  console.log('viewComponent[key]: ', viewComponent[key])
+  const cm = (viewComponent[key] as any).default
+  console.log('cm: ', cm.auth)
 
   ssRouter.push({
     name: 'admin',
     path: '/admin',
-    component: () => viewComponent[key](),
+    component: async () => await viewComponent[key],
   })
 }
 
