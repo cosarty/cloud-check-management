@@ -8,6 +8,7 @@ import contantsRouter from './contants'
 import userStore from '@/store/userStore'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { baseRouter, forbiddenRouter } from './baseRouter'
 NProgress.configure({ showSpinner: false })
 // const view = import.meta.glob(['@/view/**/*.vue', '!@/view/**/sys'], {
 //   eager: true,
@@ -17,7 +18,7 @@ NProgress.configure({ showSpinner: false })
 export const cteateRouter = () => {
   const router = createRouter({
     history: createWebHistory(),
-    routes: [...contantsRouter],
+    routes: [...baseRouter, ...forbiddenRouter, ...contantsRouter],
   })
 
   return router
@@ -35,14 +36,13 @@ export const setupRouterGuard = (router: Router) => {
         // 判断pinia中是否存储了用户信息  如果存储了就跳过
 
         if (!user.userInfo) {
-          
-        // 如果用户不存在就尝试获取用户，获取不到就跳转到登录页
+          // 如果用户不存在就尝试获取用户，获取不到就跳转到登录页
           await user.getUserInfo()
           if (!user.userInfo) return '/login'
         }
 
         if (to.path === '/login') return '/'
-      
+
         return
       } else {
         return { path: 'login' }
@@ -60,4 +60,3 @@ export const setupRouterGuard = (router: Router) => {
 // })
 
 export default cteateRouter()
-

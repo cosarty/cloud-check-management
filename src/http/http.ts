@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ResponseData } from './type'
 import { ErrorDataImp } from '@server/api'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import storage from '@/utils/storage'
 import { CacheEnum } from '@/enum/CacheEnum'
 import userStore from '@/store/userStore'
@@ -178,12 +178,15 @@ export default new Request({
     //   return result
     // },
     responseInterceptorsCatch(err) {
-      switch (err.response?.status) {
+      const { response } = err
+      switch (response?.status) {
         case 403:
           ElMessage({
             type: 'error',
-            message: (err.response?.data?.error as string) ?? '请重新登录',
+            message: (response?.data?.error as string) ?? '请重新登录',
           })
+
+          if (response?.data?.error) return
           userStore().logout()
           break
         case 429:
@@ -198,6 +201,18 @@ export default new Request({
             message: '请先登录',
           })
           break
+        case 400:
+          const { error } = response.data
+          if (Array.isArray(error)) {
+            for (const err in error) {
+              ElNotification({
+                title: error[err].field,
+                message: error[err].message,
+                type: 'warning',
+              })
+            }
+          }
+          break
         case 500:
           ElMessage({
             type: 'error',
@@ -210,4 +225,3 @@ export default new Request({
     },
   },
 })
-
