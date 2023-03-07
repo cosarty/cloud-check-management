@@ -5,7 +5,7 @@
       <ElAside class="aside"></ElAside>
       <ElContainer class="content-bg">
         <ElHeader class="content-header">
-          <ElBreadcrumb >
+          <ElBreadcrumb>
             <ElBreadcrumbItem :to="{ path: '/admin' }">homepage</ElBreadcrumbItem>
             <ElBreadcrumbItem :to="{ path: '/' }">promotion management</ElBreadcrumbItem>
           </ElBreadcrumb>
@@ -13,7 +13,8 @@
         <ElMain class="main">
           <div class="main-box">
             <ElScrollbar>
-              <div> laout<slot></slot>
+              <div> 
+                <slot></slot>
               </div>
             </ElScrollbar>
           </div>
@@ -28,4 +29,5 @@
 
 <style scoped lang="scss">
 @use 'index' as *;
+
 </style>

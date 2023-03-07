@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 export default defineComponent({
-  auth: 'class',
+  // auth: 'class',
 })
 </script>
 <script setup lang="ts">
