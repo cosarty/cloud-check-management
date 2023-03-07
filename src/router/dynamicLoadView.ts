@@ -18,7 +18,8 @@ const getDynamicRouter = () => {
   for (const key of keys) {
     if (key.includes('index')) {
       const cm = (viewComponent[key] as any).default
-      const { name, redirect, ...res } = cm as CustomMeta
+      const { name, redirect, hideLayout, affix, auth, orderNo } =
+        cm as CustomMeta
       const n = name ?? key.match(matchName)![0]
       const children = keys.filter(k => k.includes(`${n}/children`))
       const path = '/' + n
@@ -27,8 +28,8 @@ const getDynamicRouter = () => {
         path,
         component: async () => await cm,
         children: children.length ? getChildrenRoutes(children, path) : [],
-        redirect: { name: redirect } ?? undefined,
-        meta: res,
+        redirect:redirect? { name: redirect } : undefined,
+        meta: { hideLayout, affix, auth, orderNo },
       })
     }
   }
@@ -40,13 +41,14 @@ const getChildrenRoutes = (children: string[], prentPath: string) => {
   const router: RouteRecordRaw[] = []
   for (const chid of children) {
     const cm = (viewComponent[chid] as any).default
-    const { name, redirect, ...res } = cm as CustomMeta
+    const { name, redirect, hideLayout, affix, auth, orderNo } =
+      cm as CustomMeta
     const n = cm.name ?? chid.match(matchChildName)![0]
     router.push({
       name: n,
       path: n,
       component: async () => await cm,
-      meta: res,
+      meta: { hideLayout, affix, auth, orderNo },
       // redirect: { name: redirect } ?? undefined,
       children: [],
     })

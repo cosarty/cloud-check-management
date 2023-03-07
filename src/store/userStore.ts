@@ -1,3 +1,4 @@
+import routerStore from '@/store/routerStore'
 import { UserType } from '@server/api'
 import { getCurrentUser, login as loginApi } from '@/http/api/user'
 import storage from '@/utils/storage'
@@ -8,7 +9,7 @@ import { ElMessage } from 'element-plus'
 const userStore = defineStore('user', () => {
   const userInfo = ref<UserType>()
   const token = ref<string>(storage.get(CacheEnum.TOKEN_NAME))
-
+  const $router = routerStore()
   const login = async (payload: any) => {
     const { data } = await loginApi(payload)
     // 设置token
@@ -20,10 +21,10 @@ const userStore = defineStore('user', () => {
   const loginAfterCallcack = async () => {
     if (!token.value) return
     // 获取用户
-    const auth = await getUserInfo()
+    await getUserInfo()
 
     // 构建动态路由
-    console.log('auth: ', auth)
+    await $router.buildRoute(userInfo.value.auth)
 
     await router.replace('/')
   }
@@ -36,11 +37,13 @@ const userStore = defineStore('user', () => {
     return data.auth
   }
 
+  // 推出登录
   const logout = async (showMsg: boolean = true) => {
     storage.remove(CacheEnum.TOKEN_NAME)
     token.value = ''
     await router.push({ path: '/login', replace: true })
     userInfo.value = null
+    await $router.resetRouter()
     if (showMsg)
       ElMessage({
         type: 'success',
