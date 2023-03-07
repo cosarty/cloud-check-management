@@ -4,7 +4,7 @@
 
 <script lang="ts">
 export default defineComponent({
-  auth: ['admin'],
+  auth: 'admin',
 })
 </script>
 

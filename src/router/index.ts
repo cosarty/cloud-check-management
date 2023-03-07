@@ -9,16 +9,17 @@ import userStore from '@/store/userStore'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { baseRouter, forbiddenRouter } from './baseRouter'
-import { ssRouter, viewComponent } from './dynamicRouter'
+import {getDynamicRouter} from './dynamicLoadView'
+
 NProgress.configure({ showSpinner: false })
 
-console.log('view: ', viewComponent)
+
 export const cteateRouter = () => {
   const router = createRouter({
     history: createWebHistory(),
-    routes: [...baseRouter, ...forbiddenRouter, ...contantsRouter, ...ssRouter],
+    routes: [...baseRouter, ...forbiddenRouter, ...contantsRouter,...getDynamicRouter()],
   })
-
+  console.log(' router.getRoutes(): ',  router.getRoutes());
   return router
 }
 

@@ -5,8 +5,8 @@
       <ElAside class="aside"></ElAside>
       <ElContainer class="content-bg">
         <ElHeader class="content-header">
-          <ElBreadcrumb style="margin-bottom: 20px">
-            <ElBreadcrumbItem :to="{ path: '/' }">homepage</ElBreadcrumbItem>
+          <ElBreadcrumb >
+            <ElBreadcrumbItem :to="{ path: '/admin' }">homepage</ElBreadcrumbItem>
             <ElBreadcrumbItem :to="{ path: '/' }">promotion management</ElBreadcrumbItem>
           </ElBreadcrumb>
         </ElHeader>

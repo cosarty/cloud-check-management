@@ -1,13 +1,21 @@
 import 'vue-router'
 
+declare interface CustomMeta {
+  hideLayout?: boolean
+  // 是否固定标签
+  affix?: boolean
+  // 菜单排序
+  orderNo?: boolean
+  auth?: string[] | string,
+  redirect?: string,
+  name?:string
+}
+
 export declare module 'vue' {
-  interface ComponentCustomOptions {
-    auth?: string[] | string
-  }
+  interface ComponentCustomOptions extends CustomMeta {}
 }
 
 declare module 'vue-router' {
-  interface RouteMeta {
-    hideLayout?: boolean
-  }
+  interface RouteMeta extends CustomMeta {}
 }
+
