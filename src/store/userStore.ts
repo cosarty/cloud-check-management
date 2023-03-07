@@ -36,16 +36,16 @@ const userStore = defineStore('user', () => {
     return data.auth
   }
 
-  const logout = async () => {
+  const logout = async (showMsg: boolean = true) => {
     storage.remove(CacheEnum.TOKEN_NAME)
     token.value = ''
     await router.push({ path: '/login', replace: true })
     userInfo.value = null
-
-    ElMessage({
-      type: 'success',
-      message: '退出登录成功',
-    })
+    if (showMsg)
+      ElMessage({
+        type: 'success',
+        message: '退出登录成功',
+      })
   }
   return { userInfo, token, login, logout, getUserInfo }
 })

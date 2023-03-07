@@ -218,6 +218,7 @@ export default new Request({
             type: 'error',
             message: '服务器错误',
           })
+          userStore().logout(false)
           break
       }
 

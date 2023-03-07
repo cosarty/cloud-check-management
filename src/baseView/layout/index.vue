@@ -3,17 +3,24 @@
     <ElHeader class="header"></ElHeader>
     <ElContainer class="continer">
       <ElAside class="aside"></ElAside>
-      <ElContainer class="continer">
-        <ElMain class="main">
-          <ElBreadcrumb style="margin-bottom: 20px">
+      <ElContainer class="continer content-bg">
+        <ElHeader class="content-header">
+          <ElBreadcrumb >
+
             <ElBreadcrumbItem :to="{ path: '/' }">homepage</ElBreadcrumbItem>
-            <ElBreadcrumbItem :to="{ path: '/' }"
-              >promotion management</ElBreadcrumbItem
-            >
+            <ElBreadcrumbItem :to="{ path: '/' }">promotion management</ElBreadcrumbItem>
           </ElBreadcrumb>
-          <div class="main-box">laout<slot></slot></div
-        ></ElMain>
-        <!-- <ElFooter class="footer">底部</ElFooter> -->
+        </ElHeader>
+        <ElMain class="main">
+          <div class="main-box">
+            <ElScrollbar>
+              <div> laout<slot></slot>
+              </div>
+            </ElScrollbar>
+          </div>
+        </ElMain>
+
+        <ElFooter class="footer">底部</ElFooter>
       </ElContainer>
     </ElContainer>
   </ElContainer>

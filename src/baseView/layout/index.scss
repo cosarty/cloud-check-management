@@ -1,10 +1,12 @@
+@use '@/style/var' as *;
 .layout {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  box-sizing: border-box;
 
   .header {
-    line-height: 48px;
+   height: 48px;
     background-color: rgb(23, 36, 70);
   }
 
@@ -12,30 +14,43 @@
     height: 100%;
 
     .aside {
-      width: 86px;
-      background-color: rgb(28, 46, 86);
+      width: $siderbar-width;
+      background-color: rgb(4, 31, 90);
       overflow-y: auto;
       &::-webkit-scrollbar {
         width: 0;
       }
     }
 
-    .main {
+    .content-bg {
       background-color: rgb(236, 241, 253);
-      height: inherit;
-      box-sizing: border-box !important;
+    }
+    .content-header{
+      padding: 1rem;
+      height: min-content;
+    }
+
+    .main {
+      padding-bottom: 0;
+      padding-top: 0;
+      display: flex;
       &-box {
-        padding: 20px;
         background-color: white;
-        border-radius: 13px;
-        height: calc(100% - (3 * 40px));
-        overflow-y: auto;
+        margin-bottom:60px  +  $footer-bar-height ;
+        box-sizing: border-box;
+        flex: 1;
       }
     }
 
     .footer {
-      box-shadow: 0 10px 20px -2px rgb(57, 58, 59);
-      height: 70px;
+      box-shadow: 0 -4px 5px -4px rgba(57, 58, 59, 0.5);
+      height: $footer-bar-height;
+      position: fixed;
+      bottom: 0;
+      left: $siderbar-width;
+      right: 0;
+      background-color: white;
     }
   }
 }
+
