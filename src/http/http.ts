@@ -185,9 +185,7 @@ export default new Request({
             type: 'error',
             message: (response?.data?.error as string) ?? '请重新登录',
           })
-
-          if (response?.data?.error) return
-          userStore().logout()
+          userStore().logout(false)
           break
         case 429:
           ElMessage({

@@ -19,7 +19,6 @@
           </div>
         </ElMain>
 
-        <ElFooter class="footer">底部</ElFooter>
       </ElContainer>
     </ElContainer>
   </ElContainer>

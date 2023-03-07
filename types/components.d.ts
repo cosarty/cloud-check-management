@@ -23,6 +23,7 @@ declare module '@vue/runtime-core' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSpace: typeof import('element-plus/es')['ElSpace']
+    FooterBar: typeof import('./../src/components/FooterBar.vue')['default']
     HelloWorld: typeof import('./../src/components/HelloWorld.vue')['default']
     Home: typeof import('./../src/components/Home.vue')['default']
     Layout: typeof import('./../src/layout/index.vue')['default']

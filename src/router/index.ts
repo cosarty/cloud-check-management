@@ -32,11 +32,10 @@ export const setupRouterGuard = (router: Router) => {
       // 判断token是否存在
       if (user.token) {
         // 判断pinia中是否存储了用户信息  如果存储了就跳过
-
         if (!user.userInfo) {
           // 如果用户不存在就尝试获取用户，获取不到就跳转到登录页
           await user.getUserInfo()
-          if (!user.userInfo) return '/login'
+          // if (!user.userInfo) return '/login'
         }
 
         if (to.path === '/login') return '/'
