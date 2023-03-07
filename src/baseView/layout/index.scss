@@ -6,13 +6,13 @@
   box-sizing: border-box;
 
   .header {
-   height: 48px;
+    height: $navbar-height;
     background-color: rgb(23, 36, 70);
   }
 
   .continer {
-    height: 100%;
-
+    min-height: calc(100vh - $navbar-height);
+    box-sizing: border-box;
     .aside {
       width: $siderbar-width;
       background-color: rgb(4, 31, 90);
@@ -25,20 +25,18 @@
     .content-bg {
       background-color: rgb(236, 241, 253);
     }
-    .content-header{
-      padding: 1rem;
-      height: min-content;
+    .content-header {
+      height: 30px;
     }
 
     .main {
-      padding-bottom: 0;
+      padding-bottom: $footer-bar-height + 10px;
       padding-top: 0;
-      display: flex;
+      // padding-bottom: 0;
       &-box {
         background-color: white;
-        margin-bottom:60px  +  $footer-bar-height ;
-        box-sizing: border-box;
-        flex: 1;
+        // margin-bottom:
+        height: 100%;
       }
     }
 

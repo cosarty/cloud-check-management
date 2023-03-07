@@ -3,10 +3,9 @@
     <ElHeader class="header"></ElHeader>
     <ElContainer class="continer">
       <ElAside class="aside"></ElAside>
-      <ElContainer class="continer content-bg">
+      <ElContainer class="content-bg">
         <ElHeader class="content-header">
-          <ElBreadcrumb >
-
+          <ElBreadcrumb style="margin-bottom: 20px">
             <ElBreadcrumbItem :to="{ path: '/' }">homepage</ElBreadcrumbItem>
             <ElBreadcrumbItem :to="{ path: '/' }">promotion management</ElBreadcrumbItem>
           </ElBreadcrumb>
