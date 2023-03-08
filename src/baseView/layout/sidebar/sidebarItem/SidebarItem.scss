@@ -1,6 +1,6 @@
-.sider-bar{
-  width: 200px;
+.sider-bar {
+  width: var(--base-siderbat-width, 0);
   height: 100%;
-  background-color: rgb(23, 36, 70);
-  
+  background-color: rgb(4, 31, 90);
+  z-index: 0;
 }

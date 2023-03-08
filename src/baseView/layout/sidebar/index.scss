@@ -1,17 +1,30 @@
 @use '@/style/var' as *;
 .aside {
-  width: $siderbar-width;
+  width: calc(#{$siderbar-width} + var(--base-siderbat-width, 0));
+  transition: all 0.7s ease;
   background-color: rgb(4, 31, 90);
   display: flex;
-  // overflow-y: auto;
-
   &::-webkit-scrollbar {
     width: 0;
   }
 
-  .menu{
-    padding: 20px 13px;
-    border-right: 1px solid red;
+  .fead-sidebar {
+    &-enter-active,
+    &-leave-active {
+      transition: 0.7s all ease;
+    }
 
+    &-enter-from,
+    &-leave-to {
+      transform: translateX(-130px);
+    }
+  }
+  .menu {
+    padding: 20px 13px;
+    transition: all 0.4s ease;
+    box-shadow: rgba(0, 0, 0, 0.5) 3px 0px 12px;
+    position: relative;
+    z-index: 1;
+    background-color: rgb(4, 31, 90);
   }
 }
