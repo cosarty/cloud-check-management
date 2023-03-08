@@ -8,7 +8,8 @@
 <script lang="ts">
 export default defineComponent({
   auth: 'teacher',
-  redirect:'class'
+  redirect: 'class',
+  title:'教师',
 })
 </script>
 

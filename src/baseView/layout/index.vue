@@ -2,7 +2,7 @@
   <ElContainer class="layout">
     <ElHeader class="header"></ElHeader>
     <ElContainer class="continer">
-      <ElAside class="aside"></ElAside>
+      <Sidebar />
       <ElContainer class="content-bg">
         <ElHeader class="content-header">
           <ElBreadcrumb>
@@ -13,7 +13,7 @@
         <ElMain class="main">
           <div class="main-box">
             <ElScrollbar>
-              <div> 
+              <div>
                 <slot></slot>
               </div>
             </ElScrollbar>
@@ -25,9 +25,10 @@
   </ElContainer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Sidebar from "./sidebar/index.vue";
+</script>
 
 <style scoped lang="scss">
 @use 'index' as *;
-
 </style>

@@ -8,7 +8,9 @@ declare interface CustomMeta {
   orderNo?: boolean
   auth?: string[] | string,
   redirect?: string,
-  name?:string
+  name?: string,
+  title?: string,
+  hideMenu?:boolean
 }
 
 export declare module 'vue' {

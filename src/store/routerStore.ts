@@ -6,7 +6,7 @@ import { RouteRecordRaw } from 'vue-router'
 const routerStore = defineStore('router', () => {
   // 获取根路由
   // const router = useRouter()
-  const user = userStore()
+
   const isBuildRouter = ref<boolean>(false)
   const userRouter = ref<RouteRecordRaw[]>([])
 
@@ -65,7 +65,7 @@ const routerStore = defineStore('router', () => {
     })
   }
 
-  return { buildRoute, resetRouter, isBuildRouter }
+  return { buildRoute, resetRouter, isBuildRouter,userRouter }
 })
 
 export default routerStore

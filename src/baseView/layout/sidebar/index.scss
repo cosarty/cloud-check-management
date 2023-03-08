@@ -1,0 +1,17 @@
+@use '@/style/var' as *;
+.aside {
+  width: $siderbar-width;
+  background-color: rgb(4, 31, 90);
+  display: flex;
+  // overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .menu{
+    padding: 20px 13px;
+    border-right: 1px solid red;
+
+  }
+}

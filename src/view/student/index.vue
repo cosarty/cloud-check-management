@@ -6,6 +6,7 @@
 <script lang="ts">
 export default defineComponent({
   auth: 'student',
+  title:'学生'
 })
 </script>
 <script setup lang="ts">

@@ -13,14 +13,7 @@
   .continer {
     min-height: calc(100vh - $navbar-height);
     box-sizing: border-box;
-    .aside {
-      width: $siderbar-width;
-      background-color: rgb(4, 31, 90);
-      overflow-y: auto;
-      &::-webkit-scrollbar {
-        width: 0;
-      }
-    }
+
 
     .content-bg {
       background-color: rgba(243, 244, 246);
