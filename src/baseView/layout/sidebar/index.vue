@@ -8,7 +8,11 @@
       />
     </div>
     <Transition name="fead-sidebar" mode="out-in">
-      <SidebarItem v-if="children.length" :children="children" />
+      <SidebarItem
+        v-if="children.length"
+        :children="children"
+        :prent-route-title="prentRouteTitle"
+      />
     </Transition>
   </ElAside>
 </template>
@@ -26,12 +30,17 @@ import MenuItem from './menuItem/MenuItem.vue'
 import SidebarItem from './sidebarItem/SidebarItem.vue'
 
 const route = useRoute()
-const router = useRouter()
+const prentRouteTitle = ref<string>('')
 const children = computed(() => {
   const regx = /(?<=^\/)[^\/]+/g
   const name = route.fullPath.match(regx)
-  if (!name || name[0] === 'forbidden') return []
-  return $router.userRouter.find(r => r.name === name[0])?.children ?? []
+  if (!name || name[0] === 'forbidden') {
+    prentRouteTitle.value = ''
+    return []
+  }
+  const prent = $router.userRouter.find(r => r.name === name[0])
+  prentRouteTitle.value = prent?.meta?.title ?? name[0]
+  return prent?.children ?? []
 })
 const $router = routerStore()
 

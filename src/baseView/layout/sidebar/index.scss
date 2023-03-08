@@ -1,7 +1,7 @@
 @use '@/style/var' as *;
 .aside {
   width: calc(#{$siderbar-width} + var(--base-siderbat-width, 0));
-  transition: all 0.7s ease;
+  transition: all 600ms ease;
   background-color: rgb(4, 31, 90);
   display: flex;
   &::-webkit-scrollbar {
@@ -11,12 +11,13 @@
   .fead-sidebar {
     &-enter-active,
     &-leave-active {
-      transition: 0.7s all ease;
+      transition: 600ms all ease;
+      position: relative;
     }
 
     &-enter-from,
     &-leave-to {
-      transform: translateX(-130px);
+      transform: translateX(-100%);
     }
   }
   .menu {

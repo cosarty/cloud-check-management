@@ -1,6 +1,49 @@
 .sider-bar {
-  width: var(--base-siderbat-width, 0);
+  width: 160px;
   height: 100%;
   background-color: rgb(4, 31, 90);
   z-index: 0;
+  padding: 20px 10px 0;
+  box-sizing: border-box;
+  &__title {
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(71, 84, 119, 1);
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    padding-left: 7px;
+  }
+  &__content {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__item {
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+    &.active {
+      background-image: linear-gradient(to right, #1e39a7 0%, #48c6ef 100%);
+      color: white;
+    }
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+    padding: 7px;
+
+    border-radius: 7px;
+    display: flex;
+    color: rgb(177, 170, 170);
+    &--title {
+      margin-left: 0.3rem;
+      white-space: nowrap;
+    }
+  }
+  .icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
 }

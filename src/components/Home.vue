@@ -1,8 +1,29 @@
 <template>
+  <div style="box-sizing: border-box; padding: 15px">
+    <div>{{ user.userInfo }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
 
-  <div>{{ user.userInfo }}</div>
-  <ElButton @click="user.logout()">退出登录 </ElButton>
-  <FooterBar></FooterBar>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+    <div>{{ user }}</div>
+
+    <ElButton @click="user.logout()">退出登录 </ElButton>
+    <FooterBar></FooterBar>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -12,4 +33,8 @@ import FooterBar from '@/components/FooterBar.vue'
 const user = userStore()
 </script>
 
-<style scoped></style>
+<style scoped>
+div {
+  word-wrap: break-word;
+}
+</style>

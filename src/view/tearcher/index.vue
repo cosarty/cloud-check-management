@@ -1,7 +1,11 @@
 <template>
   <div>
     教室界面
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition name="fead-test" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
   </div>
 </template>
 
@@ -9,14 +13,28 @@
 export default defineComponent({
   auth: 'teacher',
   redirect: 'class',
-  title:'教师',
+  title: '教师',
 })
 </script>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
+<style scoped lang="scss">
+.fead-test {
+  &-enter-active,
+  &-leave-active {
+    transition: 600ms all ease;
+    opacity: 1;
+  }
 
-<style scoped>
+  &-enter-from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
 
+  &-leave-to {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+}
 </style>
