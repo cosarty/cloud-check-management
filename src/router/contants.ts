@@ -1,9 +1,10 @@
 import { RouteRecordRaw } from 'vue-router'
 
+// 首页
 const contantsRouter: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: () => import('@/components/Home.vue'),
+    path: '',
+    redirect:'/home'
   },
 ]
 
