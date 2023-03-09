@@ -2,9 +2,7 @@
   <ElFooter class="footer">底部</ElFooter>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .footer {
@@ -14,10 +12,9 @@
   bottom: 0;
   left: $siderbar-width;
   right: 0;
-  background-color: white; 
-}
-
-:global(:root) {
-  --footer-bar-height:calc(#{$footer-bar-height} + 10px);
+  background-color: white;
+  :global(:root) {
+    --footer-bar-height: calc(#{$footer-bar-height} + 10px);
+  }
 }
 </style>

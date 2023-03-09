@@ -1,5 +1,48 @@
 <template>
   <div>{{ user.userInfo.auth }} 首页</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
+  <div>{{ user.userInfo }}</div>
 </template>
 <script lang="ts">
 export default defineComponent({
