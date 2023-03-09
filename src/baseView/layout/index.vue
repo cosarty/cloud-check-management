@@ -15,11 +15,9 @@
           </ElBreadcrumb>
         </ElHeader>
         <ElMain class="main">
-          <!-- <div class="main-box"> -->
           <ElScrollbar>
             <slot></slot>
           </ElScrollbar>
-          <!-- </div> -->
         </ElMain>
       </ElContainer>
     </ElContainer>

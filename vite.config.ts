@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [ElementPlusResolver()],
         // directoryAsNamespace: true,
         dts: 'types/components.d.ts',
-        // dirs: ['src/layout'],
+        dirs: ['src/components'],
       }),
     ],
     css:{

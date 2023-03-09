@@ -18,18 +18,13 @@
       background-color: rgba(243, 244, 246);
     }
     .content-header {
+      // 面包屑
       height: 30px;
     }
 
     .main {
       padding-bottom:var( --footer-bar-height,20px);
       padding-top: 0;
-      // padding-bottom: 0;
-      &-box {
-        background-color: white;
-        // margin-bottom:
-        height: 100%;
-      }
     }
 
   }

@@ -28,8 +28,6 @@
 
 <script setup lang="ts">
 import userStore from '@/store/userStore'
-import FooterBar from '@/components/FooterBar.vue'
-
 const user = userStore()
 </script>
 
