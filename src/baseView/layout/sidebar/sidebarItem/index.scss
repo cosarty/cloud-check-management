@@ -14,7 +14,7 @@
     padding-left: 7px;
   }
   &__content {
-    padding-top: 20px;
+    padding-top: 13px;
     display: flex;
     flex-direction: column;
   }
@@ -22,6 +22,15 @@
     cursor: pointer;
     user-select: none;
     flex-shrink: 0;
+    padding: 7px;
+    border-radius: 7px;
+    display: flex;
+    color: rgb(177, 170, 170);
+    display: flex;
+    align-items: center;
+    &:hover{
+      background-image:$menu-active-bg;
+    }
     &.active {
       background-image: $menu-active-bg;
       color: $menu-active-color;
@@ -29,15 +38,13 @@
     &:not(:first-child) {
       margin-top: 10px;
     }
-    padding: 7px;
 
-    border-radius: 7px;
-    display: flex;
-    color: rgb(177, 170, 170);
     &--title {
       margin-left: 0.3rem;
       white-space: nowrap;
+      font-size: 13px
     }
+    @include useIcon(1.2rem);
   }
-  @include useIcon(1.2rem);
+
 }

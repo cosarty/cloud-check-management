@@ -1,0 +1,54 @@
+.header {
+  height: $navbar-height;
+  background-color: $navbar-bg;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  color: rgb(177, 170, 170);
+  .title {
+    display: flex;
+    align-items: center;
+
+    font-size: 17px;
+    font-weight: 600;
+    @include useIcon(2rem) {
+      margin-right: 0.3rem;
+    }
+  }
+
+  .extra {
+    display: inline-flex;
+    align-items: center;
+
+    &-item {
+      cursor: pointer;
+      user-select: none;
+
+      display: flex;
+      align-items: center;
+      transform: scale(0.9);
+      flex: 1;
+      padding: 0 1rem;
+      &:last-child {
+        padding-right: 0;
+        margin-left: -5px;
+      }
+      &:not(:last-child) {
+        border-right: 1px solid rgb(177, 170, 170);
+      }
+   &:hover{
+    color:#48c6ef ;
+   }
+      @include useIcon(1.3rem) {
+        margin-right: 0.4rem;
+      }
+
+      .lable {
+        color: rgb(177, 170, 170);
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+      }
+    }
+  }
+}

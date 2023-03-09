@@ -7,7 +7,7 @@
   // background-image: linear-gradient(to right, #1e39a7 0%, #2575fc 100%);
 
   &.active {
-    background-image:$menu-active-bg;
+    background-image: $menu-active-bg;
     .menu-title {
       color: $menu-active-color;
     }
@@ -18,14 +18,14 @@
   height: 49px;
   justify-content: space-between;
   cursor: pointer;
- @include useIcon;
+  @include useIcon;
 
   &:not(:first-child) {
     margin-top: 6px;
   }
 
   .menu-title {
-    font-size: 12px;
+    font-size: 0.6rem;
     color: rgb(177, 170, 170);
   }
 }

@@ -3,11 +3,8 @@
   height: 100vh;
   overflow: hidden;
   box-sizing: border-box;
+  flex-direction: column;
 
-  .header {
-    height: $navbar-height;
-    background-color:$navbar-bg;
-  }
 
   .continer {
     min-height: calc(100vh - $navbar-height);
