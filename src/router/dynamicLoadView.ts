@@ -23,6 +23,7 @@ const getMeta = (meta: CustomMeta): any => {
     hideMenu,
     ignoreKeepAlive,
     ignoreStorage,
+    icon,
   } = meta as CustomMeta
 
   return {
@@ -36,6 +37,7 @@ const getMeta = (meta: CustomMeta): any => {
       hideMenu,
       ignoreKeepAlive: ignoreKeepAlive ?? false,
       ignoreStorage: ignoreStorage ?? false,
+      icon: icon ?? 'icon-gailan',
     },
   }
 }

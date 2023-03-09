@@ -12,7 +12,7 @@
     >
       <div>
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-gailan"></use>
+          <use :xlink:href="`#${menuRoute.meta?.icon}`"></use>
         </svg>
       </div>
       <div class="menu-title">{{ title }}</div>

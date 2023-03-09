@@ -15,7 +15,7 @@
           :class="{ active: isActive }"
         >
           <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-gailan"></use>
+            <use :xlink:href="`#${route.meta?.icon}`"></use>
           </svg>
           <span class="sider-bar__item--title">{{ getTitle(route) }}</span>
         </div>

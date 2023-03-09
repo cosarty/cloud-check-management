@@ -38,9 +38,9 @@
       &:not(:last-child) {
         border-right: 1px solid rgb(177, 170, 170);
       }
-   &:hover{
-    color:#48c6ef ;
-   }
+      &:hover {
+        color: #48c6ef;
+      }
       @include useIcon(1.3rem) {
         margin-right: 0.4rem;
       }
@@ -50,6 +50,7 @@
         display: flex;
         align-items: center;
         font-size: 14px;
+        margin-left: 0.6rem;
       }
     }
   }
