@@ -25,17 +25,15 @@
 </template>
 
 <script setup lang="ts">
+import { getRouteTitle } from '@/utils/utils'
 import { RouteRecordRaw } from 'vue-router'
 
 defineProps<{ children: RouteRecordRaw[]; prentRouteTitle: string }>()
 
 /**@description 获取标题 */
-const getTitle = (route: RouteRecordRaw) => {
-  const { meta: { title } = {}, name } = route
-  return title || name
-}
+const getTitle = (route: RouteRecordRaw) => getRouteTitle(route)
 </script>
 
 <style scoped lang="scss">
-@import 'index' ;
+@import 'index';
 </style>

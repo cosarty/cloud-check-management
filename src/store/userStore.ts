@@ -5,8 +5,10 @@ import storage from '@/utils/storage'
 import { CacheEnum } from '@/enum/CacheEnum'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
+import menuStore from './menuStore'
 
 const userStore = defineStore('user', () => {
+  const menu = menuStore()
   const userInfo = ref<UserType>()
   const token = ref<string>(storage.get(CacheEnum.TOKEN_NAME))
   const $router = routerStore()
@@ -15,6 +17,7 @@ const userStore = defineStore('user', () => {
     // 设置token
     token.value = data.token
     storage.set(CacheEnum.TOKEN_NAME, data.token)
+    menu.clearAll()
     await loginAfterCallcack()
   }
 
@@ -44,6 +47,7 @@ const userStore = defineStore('user', () => {
     await router.push({ path: '/login', replace: true })
     userInfo.value = null
     await $router.resetRouter()
+    menu.clearAll()
     if (showMsg)
       ElMessage({
         type: 'success',

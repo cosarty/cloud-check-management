@@ -1,9 +1,11 @@
 <template>
-  <div @click="$router.push({ name: 'addCcc' })">子目录</div>
+  <div>我是添加</div>
 </template>
 <script lang="ts">
 export default defineComponent({
-  title: '子目录',
+  title: '添加页面',
+  name: 'addCcc',
+  hideMenu: true,
 })
 </script>
 <script setup lang="ts"></script>

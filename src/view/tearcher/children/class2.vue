@@ -3,7 +3,8 @@
 </template>
 <script lang="ts">
 export default defineComponent({
- orderNo:4
+  orderNo: 4,
+  hideMenu: true,
 })
 </script>
 <script setup lang="ts"></script>

@@ -24,12 +24,11 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import menuStore from '@/store/menuStore';
-import routerStore from '@/store/routerStore'
+import menuStore from '@/store/menuStore'
 import { CSSProperties } from 'vue'
 import MenuItem from './menuItem/index.vue'
 import SidebarItem from './sidebarItem/index.vue'
-
+const menu = menuStore()
 const route = useRoute()
 const prentRouteTitle = ref<string>('')
 const children = computed(() => {
@@ -44,15 +43,18 @@ const children = computed(() => {
   return prent?.children ?? []
 })
 // const $router = routerStore()
-const menu = menuStore()
 
 const setWidthVar = computed<CSSProperties>(() => ({
   ['--base-siderbat-width']: children.value.length > 0 ? '140px' : '0px',
 }))
 
 const routerList = computed(() => menu.menuRoute)
+
+watch(route, newRoute => {
+  menu.addTab(newRoute)
+})
 </script>
 
 <style scoped lang="scss">
-@import 'index' ;
+@import 'index';
 </style>

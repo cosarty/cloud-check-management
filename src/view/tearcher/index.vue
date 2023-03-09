@@ -14,11 +14,10 @@ export default defineComponent({
   auth: 'teacher',
   redirect: 'class',
   title: '教师',
+  orderNo: 1,
 })
 </script>
 
 <script setup lang="ts"></script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

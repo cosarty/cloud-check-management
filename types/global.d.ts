@@ -6,11 +6,13 @@ declare interface CustomMeta {
   affix?: boolean
   // 菜单排序
   orderNo?: number
-  auth?: string[] | string,
-  redirect?: string,
-  name?: string,
-  title?: string,
-  hideMenu?:boolean
+  auth?: string[] | string
+  redirect?: string
+  name?: string
+  title?: string
+  hideMenu?: boolean
+  ignoreKeepAlive?: boolean
+  ignoreStorage?: boolean
 }
 
 export declare module 'vue' {
@@ -20,6 +22,3 @@ export declare module 'vue' {
 declare module 'vue-router' {
   interface RouteMeta extends CustomMeta {}
 }
-
-
-

@@ -11,6 +11,35 @@ const viewComponent = import.meta.glob(
 const matchName = /(?<=view\/)[^\/]+/g
 const matchChildName = /(?<=children\/)(.*?)(?=\.vue$)/g
 
+const getMeta = (meta: CustomMeta): any => {
+  const {
+    name,
+    redirect,
+    hideLayout,
+    affix,
+    auth,
+    orderNo,
+    title,
+    hideMenu,
+    ignoreKeepAlive,
+    ignoreStorage,
+  } = meta as CustomMeta
+
+  return {
+    redirect: redirect ? { name: redirect } : undefined,
+    meta: {
+      hideLayout,
+      affix: affix ?? true,
+      auth,
+      orderNo,
+      title,
+      hideMenu,
+      ignoreKeepAlive: ignoreKeepAlive ?? false,
+      ignoreStorage: ignoreStorage ?? false,
+    },
+  }
+}
+
 // 动态加载
 const getDynamicRouter = () => {
   const dynamicRouter: RouteRecordRaw[] = []
@@ -18,9 +47,7 @@ const getDynamicRouter = () => {
   for (const key of keys) {
     if (key.includes('index')) {
       const cm = (viewComponent[key] as any).default
-      const { name, redirect, hideLayout, affix, auth, orderNo,title,hideMenu } =
-        cm as CustomMeta
-      const n = name ?? key.match(matchName)![0]
+      const n = cm.name ?? key.match(matchName)![0]
       const children = keys.filter(k => k.includes(`${n}/children`))
       const path = '/' + n
       dynamicRouter.push({
@@ -28,8 +55,7 @@ const getDynamicRouter = () => {
         path,
         component: async () => await cm,
         children: children.length ? getChildrenRoutes(children, path) : [],
-        redirect:redirect? { name: redirect } : undefined,
-        meta: { hideLayout, affix:affix??true, auth, orderNo,title,hideMenu },
+        ...getMeta(cm),
       })
     }
   }
@@ -41,20 +67,17 @@ const getChildrenRoutes = (children: string[], prentPath: string) => {
   const router: RouteRecordRaw[] = []
   for (const chid of children) {
     const cm = (viewComponent[chid] as any).default
-    const { name, redirect, hideLayout, affix, auth, orderNo,title,hideMenu } =
-      cm as CustomMeta
+
     const n = cm.name ?? chid.match(matchChildName)![0]
     router.push({
       name: n,
       path: n,
       component: async () => await cm,
-      meta: { hideLayout, affix:affix??true, auth, orderNo,title,hideMenu },
-      // redirect: { name: redirect } ?? undefined,
       children: [],
+      ...getMeta(cm),
     })
   }
   return router
 }
 
 export { viewComponent, getDynamicRouter }
-
