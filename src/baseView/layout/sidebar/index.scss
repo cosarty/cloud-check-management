@@ -1,8 +1,8 @@
 
 .aside {
-  width: calc(#{$siderbar-width} + var(--base-siderbat-width, 0));
-  transition: all 600ms ease;
-  background-color: rgb(4, 31, 90);
+  width: calc(#{$siderbar-width} + var(--base-siderbat-width, 0px));
+  transition: all 400ms ease;
+  background-color: $siderbar-bg;
   display: flex;
   &::-webkit-scrollbar {
     width: 0;
@@ -13,11 +13,13 @@
     &-leave-active {
       transition: 600ms all ease;
       position: relative;
+      opacity: 1;
     }
 
     &-enter-from,
     &-leave-to {
-      transform: translateX(-100%);
+      transform: translateX(-120%);
+      opacity: 0;
     }
   }
   .menu {
@@ -26,6 +28,6 @@
     box-shadow: rgba(0, 0, 0, 0.5) 3px 0px 12px;
     position: relative;
     z-index: 1;
-    background-color: rgb(4, 31, 90);
+    background-color: $siderbar-bg;
   }
 }

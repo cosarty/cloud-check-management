@@ -1,7 +1,7 @@
 .sider-bar {
   width: 160px;
   height: 100%;
-  background-color: rgb(4, 31, 90);
+  background-color: $siderbar-bg;
   z-index: 0;
   padding: 20px 10px 0;
   box-sizing: border-box;
@@ -23,8 +23,8 @@
     user-select: none;
     flex-shrink: 0;
     &.active {
-      background-image: linear-gradient(to right, #1e39a7 0%, #48c6ef 100%);
-      color: white;
+      background-image: $menu-active-bg;
+      color: $menu-active-color;
     }
     &:not(:first-child) {
       margin-top: 10px;

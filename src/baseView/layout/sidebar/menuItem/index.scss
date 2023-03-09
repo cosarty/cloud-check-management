@@ -7,9 +7,9 @@
   // background-image: linear-gradient(to right, #1e39a7 0%, #2575fc 100%);
 
   &.active {
-    background-image: linear-gradient(to right, #1e39a7 0%, #48c6ef 100%);
+    background-image:$menu-active-bg;
     .menu-title {
-      color: white;
+      color: $menu-active-color;
     }
   }
   border-radius: 8px;
