@@ -5,7 +5,7 @@ declare interface CustomMeta {
   // 是否固定标签
   affix?: boolean
   // 菜单排序
-  orderNo?: boolean
+  orderNo?: number
   auth?: string[] | string,
   redirect?: string,
   name?: string,

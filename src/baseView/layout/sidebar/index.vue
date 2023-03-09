@@ -24,6 +24,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
+import menuStore from '@/store/menuStore';
 import routerStore from '@/store/routerStore'
 import { CSSProperties } from 'vue'
 import MenuItem from './menuItem/index.vue'
@@ -38,17 +39,18 @@ const children = computed(() => {
     prentRouteTitle.value = ''
     return []
   }
-  const prent = $router.userRouter.find(r => r.name === name[0])
+  const prent = (menu.menuRoute ?? []).find(r => r.name === name[0])
   prentRouteTitle.value = prent?.meta?.title ?? name[0]
   return prent?.children ?? []
 })
-const $router = routerStore()
+// const $router = routerStore()
+const menu = menuStore()
 
 const setWidthVar = computed<CSSProperties>(() => ({
   ['--base-siderbat-width']: children.value.length > 0 ? '140px' : '0px',
 }))
 
-const routerList = computed(() => $router.userRouter)
+const routerList = computed(() => menu.menuRoute)
 </script>
 
 <style scoped lang="scss">

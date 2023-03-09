@@ -1,6 +1,7 @@
 <template>
   <div>
     公共页面
+    <RouterView ></RouterView>
   </div>
 </template>
 <script lang="ts">

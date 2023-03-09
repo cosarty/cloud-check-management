@@ -29,7 +29,7 @@ const getDynamicRouter = () => {
         component: async () => await cm,
         children: children.length ? getChildrenRoutes(children, path) : [],
         redirect:redirect? { name: redirect } : undefined,
-        meta: { hideLayout, affix, auth, orderNo,title,hideMenu },
+        meta: { hideLayout, affix:affix??true, auth, orderNo,title,hideMenu },
       })
     }
   }
@@ -48,7 +48,7 @@ const getChildrenRoutes = (children: string[], prentPath: string) => {
       name: n,
       path: n,
       component: async () => await cm,
-      meta: { hideLayout, affix, auth, orderNo,title,hideMenu },
+      meta: { hideLayout, affix:affix??true, auth, orderNo,title,hideMenu },
       // redirect: { name: redirect } ?? undefined,
       children: [],
     })

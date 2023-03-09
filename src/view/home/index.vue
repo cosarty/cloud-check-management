@@ -1,11 +1,12 @@
 <template>
   <div>
-  {{ user.userInfo.auth }} 首页
+    {{ user.userInfo.auth }} 首页
   </div>
 </template>
 <script lang="ts">
 export default defineComponent({
   title: '首页',
+  orderNo: -1
 })
 </script>
 <script setup lang="ts">

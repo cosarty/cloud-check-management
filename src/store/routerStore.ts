@@ -1,7 +1,7 @@
 import { forbiddenRouter, WHITE_NAME_LIST } from '@/router/baseRouter'
 import router from '@/router'
 import { getDynamicRouter } from '@/router/dynamicLoadView'
-import userStore from './userStore'
+import menuStore from './menuStore'
 import { RouteRecordRaw } from 'vue-router'
 const routerStore = defineStore('router', () => {
   // 获取根路由
@@ -9,7 +9,7 @@ const routerStore = defineStore('router', () => {
 
   const isBuildRouter = ref<boolean>(false)
   const userRouter = ref<RouteRecordRaw[]>([])
-
+  const menu = menuStore()
   // 判断权限
   const hasPermission = (routeAuth: string[], userAuth: string[]): boolean => {
     return routeAuth.some(ra => userAuth.includes(ra))
@@ -49,14 +49,18 @@ const routerStore = defineStore('router', () => {
     for (const route of [...asyncRouter, ...forbiddenRouter]) {
       router.addRoute(route)
     }
+
     isBuildRouter.value = true
     userRouter.value = asyncRouter
+    // 构建菜单
+ await   menu.generateRoute([...asyncRouter])
   }
 
   // 重置路由
   const resetRouter = () => {
     userRouter.value = []
     isBuildRouter.value = false
+    menu.clearMenu()
     router.getRoutes().forEach(route => {
       const { name } = route
       if (name && !WHITE_NAME_LIST.includes(name as string)) {
@@ -65,7 +69,7 @@ const routerStore = defineStore('router', () => {
     })
   }
 
-  return { buildRoute, resetRouter, isBuildRouter,userRouter }
+  return { buildRoute, resetRouter, isBuildRouter, userRouter }
 })
 
 export default routerStore
