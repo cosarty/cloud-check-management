@@ -1,0 +1,33 @@
+.content-header {
+  height: min-content;
+  width: 100%;
+  padding: 0.4rem;
+  background-color: #f9fafb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border-bottom: 1px #e5e7eb solid;
+  border-top: 1px #e5e7eb solid;
+  .history {
+    &-content {
+      display: flex;
+    }
+    &-link {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.3rem;
+      background-color: white;
+      font-size: 0.75rem;
+      line-height: 1rem;
+      border-radius: 5px;
+      border: 1px #e5e7eb solid;
+      &:not(:first-child) {
+        margin-left: 0.3rem;
+      }
+
+      &:hover {
+        background-color: #48c6ef;
+        color: white;
+      }
+    }
+  }
+}

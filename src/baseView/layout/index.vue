@@ -3,13 +3,8 @@
     <Navbar />
     <ElContainer class="continer">
       <Sidebar />
-      <ElContainer class="content-bg">
-        <ElHeader class="content-header">
-          <ElBreadcrumb>
-            <ElBreadcrumbItem :to="{ path: '/admin' }">homepage</ElBreadcrumbItem>
-            <ElBreadcrumbItem :to="{ path: '/' }">promotion management</ElBreadcrumbItem>
-          </ElBreadcrumb>
-        </ElHeader>
+      <ElContainer class="content-bg" style="flex-direction: column;">
+      <History />
         <ElMain class="main">
           <ElScrollbar>
             <slot></slot>
@@ -23,6 +18,7 @@
 <script setup lang="ts">
 import Sidebar from './sidebar/index.vue'
 import Navbar from './navbar/index.vue'
+import History from './history/index.vue'
 </script>
 
 <style scoped lang="scss">
