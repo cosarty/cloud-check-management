@@ -40,8 +40,6 @@ const menuStore = defineStore('menu', () => {
   const generateRoute = async (route: RouteRecordRaw[]) => {
     stortRoute(route)
     route = filterHidnRouter([...route])
-    console.log('route: ', route)
-
     menuRoute.value = [...route]
   }
 

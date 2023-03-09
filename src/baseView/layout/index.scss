@@ -14,8 +14,8 @@
       // padding-top: 0;
       // background-color: red;
       background-color: rgba(177, 170, 170, 0.2);
-      // :deep(.el-scrollbar__view) {
-      // }
+      padding-top: 10px;
+      padding-bottom: 10px;
 
       :deep(.el-scrollbar) {
         border-radius: 0.8rem;
