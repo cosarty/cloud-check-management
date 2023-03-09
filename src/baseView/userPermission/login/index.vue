@@ -85,5 +85,5 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-@use 'index' as *;
+@import 'index' ;
 </style>

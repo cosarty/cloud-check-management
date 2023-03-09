@@ -1,4 +1,4 @@
-@use '@/style/var' as *;
+
 .aside {
   width: calc(#{$siderbar-width} + var(--base-siderbat-width, 0));
   transition: all 600ms ease;

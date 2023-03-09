@@ -37,5 +37,5 @@ const getTitle = (route: RouteRecordRaw) => {
 </script>
 
 <style scoped lang="scss">
-@use 'SidebarItem' as *;
+@import 'index' ;
 </style>

@@ -23,6 +23,16 @@ export default defineConfig(({ mode }) => {
         // dirs: ['src/layout'],
       }),
     ],
+    css:{
+      preprocessorOptions: {
+        // 全局样式引入
+        scss: {
+          additionalData: "@use '@/style/index.scss' as *;",
+          // javascriptEnabled: true
+        }
+
+      }
+    },
     resolve: {
       alias: [{ find: '@', replacement: join(__dirname, 'src') }],
       extensions: ['.js', '.json', '.ts', '.vue'],

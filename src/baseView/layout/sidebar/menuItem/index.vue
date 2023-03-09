@@ -24,5 +24,5 @@ const title = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@use './MenuItem.scss' as *;
+@import 'index' ;
 </style>

@@ -26,8 +26,8 @@ export default defineComponent({
 <script setup lang="ts">
 import routerStore from '@/store/routerStore'
 import { CSSProperties } from 'vue'
-import MenuItem from './menuItem/MenuItem.vue'
-import SidebarItem from './sidebarItem/SidebarItem.vue'
+import MenuItem from './menuItem/index.vue'
+import SidebarItem from './sidebarItem/index.vue'
 
 const route = useRoute()
 const prentRouteTitle = ref<string>('')
@@ -52,5 +52,5 @@ const routerList = computed(() => $router.userRouter)
 </script>
 
 <style scoped lang="scss">
-@use 'index' as *;
+@import 'index' ;
 </style>

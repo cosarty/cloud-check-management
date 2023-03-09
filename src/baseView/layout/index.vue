@@ -31,5 +31,6 @@ import Sidebar from './sidebar/index.vue'
 </script>
 
 <style scoped lang="scss">
-@use 'index' as *;
+@import 'index';
 </style>
+ 
