@@ -1,0 +1,45 @@
+.fead-test {
+  &-enter-active,
+  &-leave-active {
+    transition: 600ms all ease;
+    opacity: 1;
+  }
+
+  &-enter-from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+
+  &-leave-to {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+}
+
+.fead-sidebar {
+  &-enter-active,
+  &-leave-active {
+    transition: 600ms all ease;
+    position: relative;
+    opacity: 1;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+}
+
+.login {
+  &-enter-active,
+  &-leave-active {
+    transition: all .7s ease;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    transform: translateX(var(--offset-x,0));
+    opacity: 0;
+  }
+}

@@ -1,0 +1,10 @@
+@mixin useIcon($size: 1.7rem, $va: -0.15em) {
+  .icon {
+    width: $size;
+    height: $size;
+    vertical-align: $va;
+    fill: currentColor;
+    overflow: hidden;
+    @content;
+  }
+}

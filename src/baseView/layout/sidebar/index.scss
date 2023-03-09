@@ -8,20 +8,7 @@
     width: 0;
   }
 
-  .fead-sidebar {
-    &-enter-active,
-    &-leave-active {
-      transition: 600ms all ease;
-      position: relative;
-      opacity: 1;
-    }
-
-    &-enter-from,
-    &-leave-to {
-      transform: translateX(-120%);
-      opacity: 0;
-    }
-  }
+  
   .menu {
     padding: 20px 13px;
     transition: all 0.4s ease;

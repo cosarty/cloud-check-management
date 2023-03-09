@@ -39,11 +39,5 @@
       white-space: nowrap;
     }
   }
-  .icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-  }
+  @include useIcon(1.2rem);
 }

@@ -45,7 +45,7 @@ const children = computed(() => {
 const $router = routerStore()
 
 const setWidthVar = computed<CSSProperties>(() => ({
-  ['--base-siderbat-width']: children.value.length > 0 ? '160px' : '0px',
+  ['--base-siderbat-width']: children.value.length > 0 ? '140px' : '0px',
 }))
 
 const routerList = computed(() => $router.userRouter)
