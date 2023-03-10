@@ -31,7 +31,7 @@
                 </ElCol>
               </ElRow>
               <ElFormItem>
-                <ElButton type="primary" :size="'large'" class="fill" @click="submit">登录</ElButton>
+                <ElButton type="primary" :loading="loading" :size="'large'" class="fill" @click="submit">登录</ElButton>
               </ElFormItem>
             </ElSpace>
           </ElForm>
@@ -43,9 +43,9 @@
 
 <script setup lang="ts">
 import { FormInstance, FormRules } from 'element-plus'
-import { login } from '@/http/api/user'
 import { omit } from '@/utils/object'
 import userStore from '@/store/userStore';
+const loading = ref(false)
 type FormType = {
   email: string,
   password: string,
@@ -80,7 +80,9 @@ const submit = async () => {
   if (!ruleFormRef) return
   const v = await ruleFormRef.value?.validate()
   if (!v) return
+  loading.value = true
   await user.login(omit(loginForm, ['remember']))
+  loading.value  = false
 }
 </script>
 
