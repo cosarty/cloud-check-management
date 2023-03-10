@@ -31,6 +31,9 @@ const forbiddenRouter: RouteRecordRaw[] = [
         path: '404',
         name: '404',
         component: () => import('@/baseView/forbidden/404.vue'),
+        meta: {
+          hideLayout:true,
+        },
       },
     ],
   },

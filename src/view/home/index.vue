@@ -1,49 +1,7 @@
 <template>
   <div style="background-color: white; padding: 0.3rem">
     <div>{{ user.userInfo.auth }} 首页</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
-    <div>{{ user.userInfo }}</div>
+  
   </div>
 </template>
 <script lang="ts">
