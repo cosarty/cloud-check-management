@@ -1,3 +1,7 @@
 @import 'var';
 @import 'animation';
-@import 'mixin'
+@import 'mixin';
+
+:root {
+  --el-color-primary: #{$siderbar-bg};
+}

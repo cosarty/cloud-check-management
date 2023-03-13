@@ -1,17 +1,17 @@
 .fead-test {
   &-enter-active,
   &-leave-active {
-    transition: 600ms all ease;
+    transition: 400ms all ease;
     opacity: 1;
   }
 
   &-enter-from {
-    transform: translateX(60px);
+    transform: translateX(30px);
     opacity: 0;
   }
 
   &-leave-to {
-    transform: translateX(-60px);
+    transform: translateX(-30px);
     opacity: 0;
   }
 }
@@ -34,12 +34,12 @@
 .login {
   &-enter-active,
   &-leave-active {
-    transition: all .7s ease;
+    transition: all 0.7s ease;
   }
 
   &-enter-from,
   &-leave-to {
-    transform: translateX(var(--offset-x,0));
+    transform: translateX(var(--offset-x, 0));
     opacity: 0;
   }
 }
