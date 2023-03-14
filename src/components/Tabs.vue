@@ -25,7 +25,6 @@ export type TabItemType = {
 const avtiveItem = ref<TabItemType>()
 
 const router = useRouter()
-const route = useRoute()
 const props = defineProps<{
   tabList: TabItemType[]
 }>()
@@ -44,9 +43,11 @@ onMounted(() => {
 const activeName = computed(() => avtiveItem.value?.name)
 const tabChangeHandle = (name: TabPaneName) => {
   const aci = props.tabList.find((t) => t.name === name)
-  avtiveItem.value = aci
   if (aci?.event) aci.event(name)
-  if (aci?.route) router.push({ name: aci.name })
+  if (aci?.route) router.push({ name: aci.name });
+  else {
+    avtiveItem.value = aci
+  }
 }
 
 

@@ -5,3 +5,7 @@
 .el-tabs {
   --el-color-primary: #{$siderbar-bg};
 }
+
+.el-input__wrapper:has(.el-input__inner[readonly]) {
+  box-shadow: none !important;
+}

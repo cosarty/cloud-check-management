@@ -7,7 +7,6 @@
         </svg>
         <h2>账号管理</h2>
       </div>
-
       <Tabs :tab-list="tabList"/>
     </ElCard>
   </div>
