@@ -13,7 +13,8 @@ declare interface CustomMeta {
   hideMenu?: boolean
   ignoreKeepAlive?: boolean
   ignoreStorage?: boolean
-  icon?: string
+  icon?: string,
+  prent?:string
 }
 
 export declare module 'vue' {

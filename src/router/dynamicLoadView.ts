@@ -11,7 +11,7 @@ const viewComponent = import.meta.glob(
 const matchName = /(?<=view\/)[^\/]+/g
 const matchChildName = /(?<=children\/)(.*?)(?=\.vue$)/g
 
-const getMeta = (meta: CustomMeta): any => {
+const getMeta = (meta: CustomMeta, prentPath?: string): any => {
   const {
     name,
     redirect,
@@ -38,6 +38,7 @@ const getMeta = (meta: CustomMeta): any => {
       ignoreKeepAlive: ignoreKeepAlive ?? false,
       ignoreStorage: ignoreStorage ?? false,
       icon: icon ?? 'icon-gailan',
+      prent: prentPath ?? undefined,
     },
   }
 }
@@ -56,7 +57,7 @@ const getDynamicRouter = () => {
         name: n,
         path,
         component: async () => await cm,
-        children: children.length ? getChildrenRoutes(children, path) : [],
+        children: children.length ? getChildrenRoutes(children, n) : [],
         ...getMeta(cm),
       })
     }
@@ -76,10 +77,11 @@ const getChildrenRoutes = (children: string[], prentPath: string) => {
       path: n,
       component: async () => await cm,
       children: [],
-      ...getMeta(cm),
+      ...getMeta(cm, prentPath),
     })
   }
   return router
 }
 
 export { viewComponent, getDynamicRouter }
+

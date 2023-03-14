@@ -41,14 +41,14 @@ import { ArrowDown } from '@element-plus/icons-vue'
 import userStore from '@/store/userStore'
 const user = userStore()
 const router = useRouter()
-const handleCommand = (command: string) => {
-  console.log('command: ', command)
+const handleCommand = async (command: string) => {
   switch (command) {
     case 'logout':
       user.logout()
       break;
     case 'profile':
-      router.push({ name: 'profile' })
+      await router.push({ name: 'profile' })
+   
       break;
   }
 }

@@ -9,6 +9,7 @@ export default defineComponent({
   title: '首页',
   orderNo: -1,
   icon: 'icon-shouye',
+  name:'home'
 })
 </script>
 <script setup lang="ts">

@@ -34,5 +34,6 @@ declare module '@vue/runtime-core' {
     Home: typeof import('./../src/components/Home.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tabs: typeof import('./../src/components/Tabs.vue')['default']
   }
 }

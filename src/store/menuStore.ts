@@ -15,7 +15,9 @@ const menuStore = defineStore('menu', () => {
     history ? JSON.parse(history) : [],
   )
   // 需要缓存的列表
-  const cacheTabList = ref<Set<string>>(new Set())
+  const cacheTabList = ref<Array<string>>(
+    history ? JSON.parse(history).map(r => r.name) : [],
+  )
   const stortRoute = (route: RouteRecordRaw[]) => {
     // 先排序子项，再排序父项
     for (const r of route) {
@@ -71,28 +73,35 @@ const menuStore = defineStore('menu', () => {
    *  - 3. 缓存标签页
    */
   const addTab = (r: RouteLocationNormalized) => {
-    const { fullPath } = getRawRoute(r)
+    const { fullPath, meta } = getRawRoute(r)
     if (['forbidden', 'login'].some(n => r.fullPath.includes(n))) return
-    // if (!r.meta.affix) return
+    if (!r.meta.affix) return
+
     // 查看标签页是否存在
     let updateIndex = -1
     // 标签页已经存在，不在重复添加标签
     const tabHasExits = tabList.value.some((tab, index) => {
       updateIndex = index
-      return tab.fullPath === fullPath
+
+      return (
+        tab.fullPath === fullPath ||
+        (meta.prent &&
+          (tab.name === meta.prent || tab.meta.prent === meta.prent))
+      )
     })
 
     // 标签已经存在就更新
     // 标签已经存在，执行更新操作
     if (tabHasExits) {
-      const curTab = toRaw(tabList.value)[updateIndex] // 获取当前标签页路由记录
-      if (!curTab) {
-        return
-      }
-      tabList.value.splice(updateIndex, 1, curTab) // 替换原有的标签页路由记录
+      // const curTab = toRaw(tabList.value)[updateIndex] // 获取当前标签页路由记录
+      // if (!curTab) {
+      //   return
+      // }
+      tabList.value.splice(updateIndex, 1, getRawRoute(r)) // 替换原有的标签页路由记录
     } else {
       tabList.value.push(getRawRoute(r))
     }
+
     updateCacheTab()
   }
 
@@ -100,9 +109,11 @@ const menuStore = defineStore('menu', () => {
   const updateCacheTab = () => {
     const cacheKeep = toRaw(tabList.value)
       .filter(tab => !tab.meta.ignoreKeepAlive)
-      .map(tab => tab.name as string)
+      .map(tab => (tab.meta.prent || tab.name ) as string)
+      .filter(Boolean)
+    
     // 过滤keepAlive
-    cacheTabList.value = new Set([...cacheKeep])
+    cacheTabList.value = [...new Set(cacheKeep)]
     // 过滤storage
     storage.set(
       CacheEnum.HISTORY_MENU,
@@ -141,7 +152,7 @@ const menuStore = defineStore('menu', () => {
   const clearAll = () => {
     tabList.value = []
     storage.remove(CacheEnum.HISTORY_MENU)
-    cacheTabList.value = new Set()
+    cacheTabList.value = []
   }
 
   const colseCurrent = (
@@ -175,6 +186,7 @@ const menuStore = defineStore('menu', () => {
     clearAll,
     closeTag,
     colseCurrent,
+    cacheTabList,
   }
 })
 

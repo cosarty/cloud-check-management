@@ -81,11 +81,15 @@ const submit = async () => {
   const v = await ruleFormRef.value?.validate()
   if (!v) return
   loading.value = true
-  await user.login(omit(loginForm, ['remember']))
-  loading.value  = false
+  try {
+    await user.login(omit(loginForm, ['remember']))
+
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
 <style scoped lang="scss">
-@import 'index' ;
+@import 'index';
 </style>
