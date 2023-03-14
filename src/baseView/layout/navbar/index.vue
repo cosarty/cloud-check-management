@@ -15,8 +15,14 @@
       </div>
       <ElDropdown popper-class="profile" @command="handleCommand">
         <div class="extra-item">
-          <ElAvatar :size="27" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-            style="margin-right: 0.7rem;" />
+          <ElAvatar
+            :size="27"
+            :src="
+              user.userInfo.pic ??
+              'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+            "
+            style="margin-right: 0.7rem"
+          />
 
           <div class="lable">
             我的
@@ -45,11 +51,11 @@ const handleCommand = async (command: string) => {
   switch (command) {
     case 'logout':
       user.logout()
-      break;
+      break
     case 'profile':
       await router.push({ name: 'profile' })
-   
-      break;
+
+      break
   }
 }
 </script>
@@ -59,5 +65,6 @@ const handleCommand = async (command: string) => {
 </style>
 
 <style lang="scss">
-.profile {}
+.profile {
+}
 </style>
