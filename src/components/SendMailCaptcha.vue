@@ -99,14 +99,14 @@ const rules = reactive<FormRules>({
   ],
 })
 
-const defaultTime = 60  
+const defaultTime = 60 
 
 const time = ref(defaultTime)
 
 const send = async () => {
   if (countForm.value.email) {
     await sendMail({ email: countForm.value.email, type: 'register' })
-
+    
   }
 }
 

@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElFooter: typeof import('element-plus/es')['ElFooter']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -35,6 +36,7 @@ declare module '@vue/runtime-core' {
     FooterBar: typeof import('./../src/components/FooterBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SendMailCaptcha: typeof import('./../src/components/SendMailCaptcha.vue')['default']
     Tabs: typeof import('./../src/components/Tabs.vue')['default']
   }
 }

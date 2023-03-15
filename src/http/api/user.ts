@@ -27,3 +27,10 @@ export const updateUser = async (payload: { sex: 0 | 1 }) =>
     method: 'post',
     data: payload,
   })
+
+export const sendMail = async (payload: { email: string; type: 'register' }) =>
+  await http.request({
+    url: '/genIn/sendMail',
+    method: 'post',
+    data: payload,
+  })

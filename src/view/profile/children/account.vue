@@ -64,65 +64,14 @@
             :model-value="user.userInfo.email"
             placeholder="请输入邮箱"
             readonly
-          /><ElIcon :size="20" class="cursor-pointer" @click="emailShow = true">
+          /><ElIcon :size="20" class="cursor-pointer" @click="open">
             <Edit
           /></ElIcon>
         </div>
       </ElFormItem>
     </ElForm>
 
-    <ElDialog
-      destroy-on-close
-      v-model="emailShow"
-      title="修改邮箱"
-      :show-close="false"
-      align-center
-      class="max-w-2xl"
-      @close="countForm = {}"
-    >
-      <ElForm
-        class="w-4/6 mx-auto"
-        :model="countForm"
-        :rules="rules"
-        ref="ruleFormRef"
-      >
-        <ElFormItem prop="email">
-          <ElInput
-            v-model="countForm.email"
-            :size="'large'"
-            placeholder="请输入邮箱"
-          >
-            <template #prefix>
-              <el-icon size="25"><Message /></el-icon>
-            </template>
-          </ElInput>
-        </ElFormItem>
-        <ElFormItem prop="captcha">
-          <div class="flex item-center w-full">
-            <ElInput
-              :size="'large'"
-              v-model="countForm.captcha"
-              placeholder="请输入验证码"
-            >
-              <template #prefix>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-yanzhengma"></use>
-                </svg>
-              </template>
-            </ElInput>
-            <ElButton class="ml-4" type="primary" round>发送验证码</ElButton>
-          </div>
-        </ElFormItem>
-      </ElForm>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="emailShow = false">取消</el-button>
-          <el-button type="primary" :loading="loading" @click="submit">
-            确认
-          </el-button>
-        </span>
-      </template>
-    </ElDialog>
+    <SendMailCaptcha ref="mailRef" />
   </div>
 </template>
 
@@ -133,35 +82,16 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { updateUser } from '@/http/api'
 import userStore from '@/store/userStore'
-import { Edit, Message } from '@element-plus/icons-vue'
-import { ElMessage, FormInstance, FormRules, UploadProps } from 'element-plus'
+import { Edit } from '@element-plus/icons-vue'
+import { ElMessage, UploadProps } from 'element-plus'
+import { updateUser } from '@/http/api'
+import SendMailCaptcha from '@/components/SendMailCaptcha.vue'
 
-const ruleFormRef = ref<FormInstance>()
-const countForm = ref<{ email?: string; captcha?: string }>({})
 
-const rules = reactive<FormRules>({
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    {
-      type: 'email',
-      message: '请输入合法邮箱',
-      trigger: ['blur'],
-    },
-  ],
-  captcha: [
-    {
-      required: true,
-      message: '请输入验证码',
-      trigger: 'blur',
-    },
-  ],
-})
-
-const loading = ref(false)
 const user = userStore()
-const emailShow = ref(false)
+const mailRef = ref<InstanceType<typeof SendMailCaptcha>>()
+
 // 更新性别
 const changeSex = async (e: any) => {
   await updateUser({ sex: e })
@@ -183,14 +113,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
   return true
 }
 
-const submit = async () => {
-  const data = await ruleFormRef.value?.validate().catch(() => {})
-  if (!data) return
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    emailShow.value = false
-  }, 2000)
+const open = () => {
+  mailRef.value?.open()
 }
 </script>
 
@@ -198,6 +122,6 @@ const submit = async () => {
 .count-box {
   padding-left: 2rem;
 
-  @include useIcon(1.5rem);
+ 
 }
 </style>
