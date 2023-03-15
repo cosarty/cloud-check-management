@@ -34,3 +34,13 @@ export const sendMail = async (payload: { email: string; type: 'register' }) =>
     method: 'post',
     data: payload,
   })
+
+export const updateEmail = async (payload: {
+  email?: string
+  captcha?: string
+}) =>
+  await http.request({
+    url: '/user/updateEmail',
+    method: 'post',
+    data: payload,
+  })

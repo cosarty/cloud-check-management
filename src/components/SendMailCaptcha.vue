@@ -6,7 +6,7 @@
     :show-close="false"
     align-center
     class="max-w-md"
-    @close="countForm = {}"
+    @close="colse"
   >
     <ElForm
       class="w-5/6 mx-auto"
@@ -43,8 +43,9 @@
             type="primary"
             @click="send"
             round
+            :loading="sendLoading"
             :disabled="cpatchaDiabled"
-            >发送验证码</ElButton
+            >{{ isSend ? `${time}秒后重新获取` : '发送验证码' }}</ElButton
           >
         </div>
       </ElFormItem>
@@ -61,14 +62,15 @@
 </template>
 
 <script setup lang="ts">
-import { FormInstance, FormRules } from 'element-plus'
+import {ElMessage, FormInstance, FormRules } from 'element-plus'
 import { Message } from '@element-plus/icons-vue'
 import userStore from '@/store/userStore'
-import { sendMail } from '@/http/api'
+import { sendMail,updateEmail } from '@/http/api'
 const cpatchaDiabled = ref(true)
 const emailShow = ref(false)
+const sendLoading = ref(false)
 const loading = ref(false)
-
+const isSend = ref(false)
 const ruleFormRef = ref<FormInstance>()
 const countForm = ref<{ email?: string; captcha?: string }>({})
 const user = userStore()
@@ -99,15 +101,28 @@ const rules = reactive<FormRules>({
   ],
 })
 
-const defaultTime = 60 
+const defaultTime = 60
 
 const time = ref(defaultTime)
 
 const send = async () => {
   if (countForm.value.email) {
-    await sendMail({ email: countForm.value.email, type: 'register' })
-    
+    sendLoading.value = true
+    await sendMail({ email: countForm.value.email, type: 'register' }).finally(
+      () => (sendLoading.value = false),
+    )
+    isSend.value = true
+    startTime()
   }
+}
+
+const startTime = () => {
+  time.value--
+  let t = setInterval(() => {
+    if (time.value--) return
+    clearInterval(t)
+    isSend.value = false
+  }, 1000)
 }
 
 watch(
@@ -115,7 +130,12 @@ watch(
   n => {
     const regx =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    if (n && regx.test(n) && time.value===60) {
+    if (
+      n &&
+      regx.test(n) &&
+      isSend.value === false &&
+      n !== user.userInfo.email
+    ) {
       cpatchaDiabled.value = false
     }
   },
@@ -124,11 +144,20 @@ watch(
 const submit = async () => {
   const data = await ruleFormRef.value?.validate().catch(() => {})
   if (!data) return
+
+
   loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    emailShow.value = false
-  }, 2000)
+  await updateEmail(countForm.value)
+  loading.value = false
+   emailShow.value = false
+  user.logout(false)
+   ElMessage.success('更改成功,请重新登录')
+}
+
+const colse = () => {
+  countForm.value = {}
+  time.value = defaultTime
+  isSend.value = false
 }
 
 defineExpose({

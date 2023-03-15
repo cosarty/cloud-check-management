@@ -201,6 +201,7 @@ export default new Request({
           break
         case 400:
           const { error } = response.data
+          console.log('error: ', error);
           if (Array.isArray(error)) {
             for (const err in error) {
               ElNotification({
@@ -209,6 +210,10 @@ export default new Request({
                 type: 'warning',
               })
             }
+            return 
+          }
+          if (typeof error === 'string') {
+            ElMessage.error(error)
           }
           break
         case 500:
