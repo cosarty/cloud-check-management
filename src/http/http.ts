@@ -201,16 +201,18 @@ export default new Request({
           break
         case 400:
           const { error } = response.data
-          console.log('error: ', error);
+          console.log('error: ', error)
           if (Array.isArray(error)) {
             for (const err in error) {
-              ElNotification({
-                title: error[err].field,
-                message: error[err].message,
-                type: 'warning',
-              })
+              setTimeout(() => {
+                ElNotification({
+                  title: error[err].field,
+                  message: error[err].message,
+                  type: 'warning',
+                })
+              }, 100 * err)
             }
-            return 
+            return
           }
           if (typeof error === 'string') {
             ElMessage.error(error)

@@ -6,7 +6,7 @@
         :before-upload="beforeAvatarUpload"
         :on-success="handleAvatarSuccess"
         :headers="{ Authorization: `Bearer ${user.token}` }"
-        action="http://localhost:3030/api/upload/userAvatarDir"
+        :action="actionUrl"
         name="userAvatarDir"
       >
         <ElAvatar
@@ -88,6 +88,8 @@ import { ElMessage, UploadProps } from 'element-plus'
 import { updateUser } from '@/http/api'
 import SendMailCaptcha from '@/components/SendMailCaptcha.vue'
 
+const actionUrl =
+  import.meta.env.VITE_APP_API_BASE_URL + '/upload/userAvatarDir'
 
 const user = userStore()
 const mailRef = ref<InstanceType<typeof SendMailCaptcha>>()
@@ -121,7 +123,5 @@ const open = () => {
 <style scoped lang="scss">
 .count-box {
   padding-left: 2rem;
-
- 
 }
 </style>

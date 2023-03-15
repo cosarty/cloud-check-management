@@ -28,7 +28,7 @@ const tabList: TabItemType[] = [
     route: true,
   },
   {
-    label: '忘记密码',
+    label: '更改密码',
     name: 'forget',
     route: true,
   },

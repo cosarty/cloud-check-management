@@ -8,7 +8,9 @@
     >
       <component v-if="tab.componnet" :is="tab.componnet" />
       <RouterView v-if="tab.route" v-slot="{ Component }">
-        <component :is="Component" />
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
       </RouterView>
     </ElTabPane>
   </ElTabs>

@@ -35,12 +35,25 @@ export const sendMail = async (payload: { email: string; type: 'register' }) =>
     data: payload,
   })
 
+// 更新邮箱
 export const updateEmail = async (payload: {
   email?: string
   captcha?: string
 }) =>
   await http.request({
     url: '/user/updateEmail',
+    method: 'post',
+    data: payload,
+  })
+
+export const updatePassword = async (payload: {
+  newPassword?: string
+  oldPassword?: string
+  email: string
+  capacha: string
+}) =>
+  await http.request({
+    url: '/user/updatePassword',
     method: 'post',
     data: payload,
   })
