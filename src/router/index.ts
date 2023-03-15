@@ -21,7 +21,6 @@ const router = createRouter({
 export const setupRouterGuard = (router: Router) => {
   router.beforeEach(
     async (to: RouteLocationNormalized, form: RouteLocationNormalized) => {
-
       NProgress.start()
       const user = userStore()
       const $router = routerStore()
@@ -40,7 +39,7 @@ export const setupRouterGuard = (router: Router) => {
         }
 
         if (!$router.isBuildRouter) {
-          await $router.buildRoute(user.userInfo.auth)
+          await $router.buildRoute(user.auth)
           return { ...to, replace: true }
         }
 
@@ -63,4 +62,3 @@ export const setupRouterGuard = (router: Router) => {
 // })
 
 export default router
-

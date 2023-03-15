@@ -11,6 +11,16 @@ const userStore = defineStore('user', () => {
   const menu = menuStore()
   const userInfo = ref<UserType>()
   const token = ref<string>(storage.get(CacheEnum.TOKEN_NAME))
+
+  const auth = computed<any>(() => {
+    const auth: string[] = []
+    if (userInfo.value.isAdmin) auth.push('admin')
+    if (userInfo.value.super) return ['super']
+    if (['teacher', 'student'].includes(userInfo.value.auth))
+      auth.push(userInfo.value.auth)
+    return auth
+  })
+
   const $router = routerStore()
   const login = async (payload: any) => {
     const { data } = await loginApi(payload)
@@ -27,7 +37,7 @@ const userStore = defineStore('user', () => {
     await getUserInfo()
 
     // 构建动态路由
-    await $router.buildRoute(userInfo.value.auth)
+    await $router.buildRoute(auth.value)
 
     await router.replace('/')
   }
@@ -37,7 +47,6 @@ const userStore = defineStore('user', () => {
     if (!token.value) return null
     const { data } = await getCurrentUser()
     userInfo.value = data
-    return data.auth
   }
 
   // 推出登录
@@ -54,7 +63,7 @@ const userStore = defineStore('user', () => {
         message: '退出登录成功',
       })
   }
-  return { userInfo, token, login, logout, getUserInfo }
+  return { userInfo, token, login, logout, getUserInfo, auth }
 })
 
 export default userStore

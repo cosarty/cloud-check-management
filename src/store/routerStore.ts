@@ -16,10 +16,7 @@ const routerStore = defineStore('router', () => {
   }
 
   // 过滤权限路由
-  const filterAsyncRoutes = (
-    routes: RouteRecordRaw[],
-    roles: string | string[],
-  ) => {
+  const filterAsyncRoutes = (routes: RouteRecordRaw[], roles: any) => {
     const res: RouteRecordRaw[] = []
     for (const route of routes) {
       let routeAuth = route.meta?.auth
@@ -42,7 +39,7 @@ const routerStore = defineStore('router', () => {
   }
 
   // 构建路由
-  const buildRoute = async (auth: string | string[]) => {
+  const buildRoute = async (auth: string[]) => {
     const dynamicRouter = getDynamicRouter()
 
     const asyncRouter = filterAsyncRoutes(dynamicRouter, auth)
@@ -53,7 +50,7 @@ const routerStore = defineStore('router', () => {
     isBuildRouter.value = true
     userRouter.value = asyncRouter
     // 构建菜单
- await   menu.generateRoute([...asyncRouter])
+    await menu.generateRoute([...asyncRouter])
   }
 
   // 重置路由
@@ -73,4 +70,3 @@ const routerStore = defineStore('router', () => {
 })
 
 export default routerStore
-
