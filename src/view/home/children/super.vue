@@ -6,6 +6,7 @@
 export default defineComponent({
   auth: 'super',
   hideMenu: true,
+  affix: false,
 })
 </script>
 <script setup lang="ts"></script>

@@ -73,20 +73,23 @@ const menuStore = defineStore('menu', () => {
    *  - 3. 缓存标签页
    */
   const addTab = (r: RouteLocationNormalized) => {
-    const { fullPath, meta } = getRawRoute(r)
+    const { fullPath, meta, name } = getRawRoute(r)
     if (['forbidden', 'login'].some(n => r.fullPath.includes(n))) return
     if (!r.meta.affix) return
 
     // 查看标签页是否存在
     let updateIndex = -1
+
     // 标签页已经存在，不在重复添加标签
     const tabHasExits = tabList.value.some((tab, index) => {
       updateIndex = index
-
       return (
-        tab.fullPath === fullPath ||
+        tab.name === name ||
+        // 子集覆盖父集
         (meta.prent &&
-          (tab.name === meta.prent || tab.meta.prent === meta.prent))
+          (tab.name === meta.prent || tab.meta.prent === meta.prent)) ||
+        // 父集覆盖 子集
+        tab.fullPath.includes(name as string)
       )
     })
 
@@ -109,9 +112,9 @@ const menuStore = defineStore('menu', () => {
   const updateCacheTab = () => {
     const cacheKeep = toRaw(tabList.value)
       .filter(tab => !tab.meta.ignoreKeepAlive)
-      .map(tab => (tab.meta.prent || tab.name ) as string)
+      .map(tab => (tab.meta.prent || tab.name) as string)
       .filter(Boolean)
-    
+
     // 过滤keepAlive
     cacheTabList.value = [...new Set(cacheKeep)]
     // 过滤storage

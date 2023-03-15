@@ -3,12 +3,12 @@
     <Navbar />
     <ElContainer class="continer">
       <Sidebar />
-      <ElContainer class="content-bg" style="flex-direction: column;">
-      <History />
+      <ElContainer class="content-bg" style="flex-direction: column">
+        <History />
         <ElMain class="main">
-          <ElScrollbar>
-            <slot></slot>
-          </ElScrollbar>
+          <!-- <ElScrollbar> -->
+          <slot></slot>
+          <!-- </ElScrollbar> -->
         </ElMain>
       </ElContainer>
     </ElContainer>
@@ -24,4 +24,3 @@ import History from './history/index.vue'
 <style scoped lang="scss">
 @import 'index';
 </style>
- 

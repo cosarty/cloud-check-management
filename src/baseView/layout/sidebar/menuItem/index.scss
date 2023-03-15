@@ -13,15 +13,15 @@
     }
   }
   border-radius: 8px;
-  padding: 3px;
+  padding: 1px;
   box-sizing: border-box;
   height: 49px;
   justify-content: space-between;
   cursor: pointer;
-  @include useIcon;
+  @include useIcon(1.9rem);
 
   &:not(:first-child) {
-    margin-top: 6px;
+    margin-top: 14px;
   }
 
   .menu-title {
