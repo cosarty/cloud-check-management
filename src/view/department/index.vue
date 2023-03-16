@@ -43,9 +43,6 @@
                   @keydown.enter="
                     updateDepName($event, dp.departmentName, dp.departmentId)
                   "
-                  @blur="
-                    updateDepName($event, dp.departmentName, dp.departmentId)
-                  "
                 ></ElInput>
               </div>
               <ElPopconfirm
