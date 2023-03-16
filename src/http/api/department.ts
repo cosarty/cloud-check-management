@@ -12,3 +12,10 @@ export const getDepartment = async () =>
     url: '/department/get',
     method: 'get',
   })
+
+export const updateDepartment = async (payload: any) =>
+  await http.request({
+    url: '/department/update',
+    method: 'put',
+    data: payload,
+  })
