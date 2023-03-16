@@ -123,5 +123,8 @@ const open = () => {
 <style scoped lang="scss">
 .count-box {
   padding-left: 2rem;
+  :deep(.el-input .el-input__wrapper:has(.el-input__inner[readonly])) {
+    box-shadow: none !important;
+  }
 }
 </style>

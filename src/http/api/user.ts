@@ -57,3 +57,11 @@ export const updatePassword = async (payload: {
     method: 'post',
     data: payload,
   })
+
+// 获取老师
+
+export const getTeacher = async () =>
+  await http.request({
+    url: '/user/getTeacher',
+    method: 'get',
+  })
