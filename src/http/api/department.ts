@@ -19,3 +19,9 @@ export const updateDepartment = async (payload: any) =>
     method: 'put',
     data: payload,
   })
+
+export const deleteDepartment = async (id: any) =>
+  await http.request({
+    url: `/department/del/${id}`,
+    method: 'delete',
+  })

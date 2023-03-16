@@ -12,49 +12,58 @@
           class="department-list flex-grow overflow-y-auto"
           v-loading="depLoading"
         >
-          <div
-            class="department-item"
-            :class="{ active: activeDep === dp.departmentId }"
-            v-for="dp in departmentList"
-            :key="dp.departmentId"
-            @click="
-              activeDep =
-                activeDep === dp.departmentId ? undefined : dp.departmentId
-            "
-          >
-            <svg class="icon" aria-hidden="true">
-              <use :xlink:href="`#icon-zuzhijiagou`"></use>
-            </svg>
-            <div class="department-name">
-              <template v-if="editDep !== dp.departmentId">
-                {{ dp.departmentName }}
-                <ElIcon
-                  @click.stop="
-                    editDepartment(dp.departmentId, dp.departmentName)
-                  "
-                  ><Edit /></ElIcon
-              ></template>
+          <ElScrollbar
+            ><div
+              class="department-item"
+              :class="{ active: activeDep === dp.departmentId }"
+              v-for="dp in departmentList"
+              :key="dp.departmentId"
+            >
+              <svg class="icon" aria-hidden="true">
+                <use :xlink:href="`#icon-zuzhijiagou`"></use>
+              </svg>
+              <div
+                class="department-name"
+                @click.self="
+                  activeDep =
+                    activeDep === dp.departmentId ? undefined : dp.departmentId
+                "
+              >
+                <template v-if="editDep !== dp.departmentId">
+                  {{ dp.departmentName }}
+                  <ElIcon
+                    @click="editDepartment(dp.departmentId, dp.departmentName)"
+                    ><Edit /></ElIcon
+                ></template>
 
-              <ElInput
-                v-else
-                ref="depName"
-                v-model="selectInpt"
-                @keydown.enter="
-                  updateDepName($event, dp.departmentName, dp.departmentId)
-                "
-                @blur="
-                  updateDepName($event, dp.departmentName, dp.departmentId)
-                "
-              ></ElInput>
-            </div>
-            <ElButton
-              type="danger"
-              :icon="Delete"
-              circle
-              :size="'small'"
-              @click="delDepartment"
-            />
-          </div>
+                <ElInput
+                  v-else
+                  ref="depName"
+                  v-model="selectInpt"
+                  @keydown.enter="
+                    updateDepName($event, dp.departmentName, dp.departmentId)
+                  "
+                  @blur="
+                    updateDepName($event, dp.departmentName, dp.departmentId)
+                  "
+                ></ElInput>
+              </div>
+              <ElPopconfirm
+                title="确认删除"
+                @confirm="delDepartment(dp.departmentId)"
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+              >
+                <template #reference>
+                  <ElButton
+                    type="danger"
+                    :icon="Delete"
+                    circle
+                    :size="'small'"
+                  />
+                </template>
+              </ElPopconfirm></div
+          ></ElScrollbar>
         </div>
       </div>
       <div class="h-full overflow-y-auto flex-grow content">
@@ -79,7 +88,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { getDepartment, updateDepartment } from '@/http/api'
+import { deleteDepartment, getDepartment, updateDepartment } from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 const departmentList = ref<
@@ -113,7 +122,10 @@ const getData = async () => {
   depLoading.value = false
 }
 
-const delDepartment = () => {}
+const delDepartment = async (id: string) => {
+  await deleteDepartment(id)
+  await getData()
+}
 
 const editDepartment = async (id: string, name: string) => {
   editDep.value = id
