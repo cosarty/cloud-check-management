@@ -43,6 +43,7 @@
                   @keydown.enter="
                     updateDepName($event, dp.departmentName, dp.departmentId)
                   "
+                  @blur=";(editDep = undefined), (selectInpt = '')"
                 ></ElInput>
               </div>
               <ElPopconfirm
@@ -135,7 +136,7 @@ const updateDepName = async (e: any, departmentName: string, id: string) => {
   editDep.value = undefined
   if (departmentName === e.target.value) return
   await updateDepartment({ id, departmentName: selectInpt.value })
-  selectInpt.value = ''
+
   await getData()
 }
 </script>
