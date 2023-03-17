@@ -14,11 +14,11 @@
       <ElFormItem label="系名" required prop="departmentName">
         <ElInput v-model="ruleForm.departmentName" placeholder="请输入系名" />
       </ElFormItem>
-      <ElFormItem label="辅导员" prop="userId">
+      <ElFormItem label="系主任" prop="userId">
         <ElSelect
           v-model="ruleForm.userId"
           class="w-full"
-          placeholder="选择辅导员"
+          placeholder="选择系主任"
         >
           <ElOption
             :label="op.userName"
@@ -50,7 +50,7 @@ const options = ref<{ userName: string; userId: string }[]>([])
 const emit = defineEmits<{ (e: 'reset'): void }>()
 
 const ruleFormRef = ref<FormInstance>()
-const ruleForm = ref({})
+const ruleForm = ref<any>({})
 
 const rules = reactive<FormRules>({
   departmentName: [{ required: true, message: '请输入系名', trigger: 'blur' }],
@@ -73,3 +73,4 @@ watch(dialogVisible, async vi => {
 })
 </script>
 <style scoped></style>
+

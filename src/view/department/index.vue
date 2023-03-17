@@ -24,10 +24,7 @@
               </svg>
               <div
                 class="department-name"
-                @click.self="
-                  activeDep =
-                    activeDep === dp.departmentId ? undefined : dp.departmentId
-                "
+                @click.self="checkDep(dp.departmentId)"
               >
                 <template v-if="editDep !== dp.departmentId">
                   {{ dp.departmentName }}
@@ -64,13 +61,24 @@
           ></ElScrollbar>
         </div>
       </div>
-      <div class="h-full overflow-y-auto flex-grow content">
+      <div class="h-full overflow-y-auto flex-grow content flex flex-col">
+        <div class="font-bold" v-if="activeDep">
+          系主任 :
+          <ElSelect
+            v-model="targetTeacher"
+            class="w-32"
+            placeholder="选择系主任"
+            clearable
+          >
+            <ElOption
+              :value="op.userId"
+              v-for="op in teacherList"
+              :key="op.userId"
+              :label="op.userName"
+            />
+          </ElSelect>
+        </div>
         <ElScrollbar>
-          <div v-if="activeDepInfo?.user">
-            辅导员：{{ activeDepInfo.user.userName }}
-          </div>
-          <div>fds</div>
-          <div>fds</div>
           <div>fds</div>
         </ElScrollbar>
       </div>
@@ -86,7 +94,12 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { deleteDepartment, getDepartment, updateDepartment } from '@/http/api'
+import {
+  deleteDepartment,
+  getDepartment,
+  updateDepartment,
+  getTeacher,
+} from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 const departmentList = ref<
@@ -97,20 +110,18 @@ const departmentList = ref<
   }[]
 >([])
 
-const activeDepInfo = computed(() => {
-  const find = departmentList.value.find(
-    d => d.departmentId === activeDep.value,
-  )
-  return find ?? null
-})
+const targetTeacher = ref<string>()
 const activeDep = ref<string>()
 const editDep = ref<string>()
 const depLoading = ref(false)
 const depName = ref()
 const selectInpt = ref('')
-
+const teacherList = ref<any>([])
 onMounted(() => {
   getData()
+  getTeacher().then(({ data }) => {
+    teacherList.value = data
+  })
 })
 
 const getData = async () => {
@@ -138,6 +149,27 @@ const updateDepName = async (e: any, departmentName: string, id: string) => {
   await updateDepartment({ id, departmentName: selectInpt.value })
 
   await getData()
+}
+
+watch(targetTeacher, async n => {
+  if (!activeDep.value) return
+  const find = departmentList.value.find(
+    d => d.departmentId === activeDep.value,
+  )
+  if (find?.user?.userId !== n) {
+    await updateDepartment({ id: activeDep.value, userId: n || null })
+    await getData()
+  }
+})
+
+const checkDep = (id: string) => {
+  activeDep.value = activeDep.value === id ? undefined : id
+
+  const find = departmentList.value.find(
+    d => d.departmentId === activeDep.value,
+  )
+
+  targetTeacher.value = find?.user?.userId ?? undefined
 }
 </script>
 
@@ -188,3 +220,4 @@ const updateDepName = async (e: any, departmentName: string, id: string) => {
   }
 }
 </style>
+
