@@ -62,11 +62,11 @@
         </div>
       </div>
       <div class="h-full overflow-y-auto flex-grow content flex flex-col">
-        <div class="font-bold" v-if="activeDep">
+        <div class="font-bold flex mb-4 items-center" v-if="activeDep">
           系主任 :
           <ElSelect
             v-model="targetTeacher"
-            class="w-32"
+            class="w-32 ml-3"
             placeholder="选择系主任"
             clearable
           >
@@ -79,7 +79,9 @@
           </ElSelect>
         </div>
         <ElScrollbar>
-          <div>fds</div>
+          <div>
+            <Table :data="data" :colums="classTabColum"></Table>
+          </div>
         </ElScrollbar>
       </div>
     </div>
@@ -102,6 +104,7 @@ import {
 } from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
+import Table, { TableColumType, TableActionType } from '@/components/Table.vue'
 const departmentList = ref<
   {
     departmentName: string
@@ -109,6 +112,74 @@ const departmentList = ref<
     user: { userName: string; userId: string }
   }[]
 >([])
+
+const classTabColum: TableColumType = [
+  {
+    prop: 'picture',
+    label: '照片',
+    type: 'default',
+  },
+  {
+    prop: 'className',
+    label: '班级名字',
+  },
+  {
+    prop: 'userId',
+    label: '辅导员',
+  },
+  {
+    prop: 'remarks',
+    label: '备注',
+  },
+  {
+    prop: 'departmentId',
+    label: '系',
+  },
+  {
+    prop: 'createdAt',
+    label: '创建时间',
+    fixed:'right'
+  },
+]
+
+const data = [
+  {
+    remarks: 'keyikeyi',
+    picture: null,
+    className: '计算机科学与技术一班',
+    classId: '1679039091450',
+    code: 1,
+    createdAt: '2023-03-17T07:46:33.000Z',
+    updatedAt: '2023-03-17T07:46:33.000Z',
+    deletedAt: null,
+    teacherId: null,
+    departmentId: null,
+  },
+  {
+    remarks: '测试2',
+    picture: null,
+    className: '计算机科学与技术三班',
+    classId: '5339fe3e-b212-4fe9-823a-49e7f1fb95e0',
+    code: 102,
+    createdAt: '2023-03-17T07:48:08.000Z',
+    updatedAt: '2023-03-17T07:48:08.000Z',
+    deletedAt: null,
+    teacherId: null,
+    departmentId: null,
+  },
+  {
+    remarks: '测试',
+    picture: null,
+    className: '计算机科学与技术二班',
+    classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
+    code: 101,
+    createdAt: '2023-03-17T07:47:54.000Z',
+    updatedAt: '2023-03-17T07:47:54.000Z',
+    deletedAt: null,
+    teacherId: null,
+    departmentId: null,
+  },
+]
 
 const targetTeacher = ref<string>()
 const activeDep = ref<string>()
@@ -132,6 +203,7 @@ const getData = async () => {
 }
 
 const delDepartment = async (id: string) => {
+  if (id === activeDep.value) activeDep.value = undefined
   await deleteDepartment(id)
   await getData()
 }
@@ -181,7 +253,6 @@ const checkDep = (id: string) => {
     overflow-y: auto;
     padding: 0;
   }
-
   .sider {
     border-right: 1px solid var(--el-card-border-color);
 
