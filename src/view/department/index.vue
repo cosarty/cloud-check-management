@@ -81,9 +81,9 @@
         <ElScrollbar>
           <div>
             <Table
-              :data="data"
               :colums="classTabColum"
               :action="defaultAtion"
+              :request="request"
             ></Table>
           </div>
         </ElScrollbar>
@@ -127,22 +127,21 @@ const classTabColum: TableColumType = [
     prop: 'className',
     label: '班级名字',
     isSearch: true,
-    searcherPlaceHolder: '请输入班级姓名',
+    searcherPlaceHolder: '请输入班级',
   },
   {
     prop: 'userId',
     label: '辅导员',
     isSearch: true,
+    searcherPlaceHolder: '请输入辅导员',
   },
   {
     prop: 'remarks',
     label: '备注',
-    isSearch: true,
   },
   {
     prop: 'departmentId',
     label: '系',
-    isSearch: true,
   },
   {
     prop: 'auth',
@@ -153,16 +152,19 @@ const classTabColum: TableColumType = [
       teacher: '老师',
       admin: '管理员',
     },
+    searcherPlaceHolder: '请选择权限',
     event(e: any, row: any) {
       row.auth = e
     },
     isSearch: true,
+    sort: true,
   },
   {
     prop: 'createdAt',
     label: '创建时间',
     fixed: 'right',
     type: 'date',
+    sort: true,
   },
 ]
 
@@ -178,48 +180,6 @@ const defaultAtion: TableActionType = [
     event(row: any) {
       console.log(row)
     },
-  },
-]
-
-const data = [
-  {
-    remarks: 'keyikeyi',
-    picture:
-      'http://127.0.0.1:3030/image/1679022523231_275c0635-16f6-4f92-8b5c-3b485f99d40e.jpg',
-    className: '计算机科学与技术一班',
-    classId: '1679039091450',
-    code: 1,
-    createdAt: '2023-03-17T07:46:33.000Z',
-    updatedAt: '2023-03-17T07:46:33.000Z',
-    deletedAt: null,
-    teacherId: null,
-    departmentId: null,
-    auth: 'student',
-  },
-  {
-    remarks: '测试2',
-    picture: null,
-    className: '计算机科学与技术三班',
-    classId: '5339fe3e-b212-4fe9-823a-49e7f1fb95e0',
-    code: 102,
-    createdAt: '2023-03-17T07:48:08.000Z',
-    updatedAt: '2023-03-17T07:48:08.000Z',
-    deletedAt: null,
-    teacherId: null,
-    departmentId: null,
-    auth: 'teacher',
-  },
-  {
-    remarks: '测试',
-    picture: null,
-    className: '计算机科学与技术二班',
-    classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
-    code: 101,
-    createdAt: '2023-03-17T07:47:54.000Z',
-    updatedAt: '2023-03-17T07:47:54.000Z',
-    deletedAt: null,
-    teacherId: null,
-    departmentId: null,
   },
 ]
 
@@ -285,6 +245,52 @@ const checkDep = (id: string) => {
 
   targetTeacher.value = find?.user?.userId ?? undefined
 }
+
+// 表格的请求方法
+const request = () => {
+  return [
+    {
+      remarks: 'keyikeyi',
+      picture:
+        'http://127.0.0.1:3030/image/1679022523231_275c0635-16f6-4f92-8b5c-3b485f99d40e.jpg',
+      className: '计算机科学与技术一班',
+      classId: '1679039091450',
+      code: 1,
+      createdAt: '2023-03-17T07:46:33.000Z',
+      updatedAt: '2023-03-17T07:46:33.000Z',
+      deletedAt: null,
+      teacherId: null,
+      departmentId: null,
+      auth: 'student',
+    },
+    {
+      remarks: '测试2',
+      picture: null,
+      className: '计算机科学与技术三班',
+      classId: '5339fe3e-b212-4fe9-823a-49e7f1fb95e0',
+      code: 102,
+      createdAt: '2023-03-17T07:48:08.000Z',
+      updatedAt: '2023-03-17T07:48:08.000Z',
+      deletedAt: null,
+      teacherId: null,
+      departmentId: null,
+      auth: 'teacher',
+    },
+    {
+      remarks: '测试',
+      picture: null,
+      className: '计算机科学与技术二班',
+      classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
+      code: 101,
+      createdAt: '2023-03-17T07:47:54.000Z',
+      updatedAt: '2023-03-17T07:47:54.000Z',
+      deletedAt: null,
+      teacherId: null,
+      departmentId: null,
+    },
+  ]
+  return
+}
 </script>
 
 <style scoped lang="scss">
@@ -333,4 +339,3 @@ const checkDep = (id: string) => {
   }
 }
 </style>
-

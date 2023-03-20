@@ -1,18 +1,31 @@
 <template>
   <div class="w-min mx-auto max-w-full">
-    <TableFilter :filterField="searcheProps" v-if="searcheProps.length" />
-    <ElTable :data="data" style="width: 100%" stripe border>
+    <TableFilter
+      :filterField="searcheProps"
+      v-if="searcheProps.length"
+      @change="filteChangeHanle"
+      @reset="searcherParam = {}"
+    />
+    <ElTable
+      :data="data"
+      style="width: 100%"
+      stripe
+      border
+      v-loading="loading"
+      @sort-change="sortHandle"
+    >
       <ElTableColumn
         :width="width ?? '150px'"
         :prop="prop"
         :label="label"
         v-for="(
-          { label, type, prop, width, fixed, align, options, event }, idx
+          { label, type, prop, width, fixed, align, options, event, sort }, idx
         ) in colums"
         :key="idx"
         v-slot="{ row }"
         :fixed="fixed ?? false"
         :align="align ?? 'center'"
+        :sortable="sort ? 'custom' : false"
       >
         <template v-if="type === 'image'">
           <ElImage
@@ -38,7 +51,7 @@
             ></ElOption>
           </ElSelect>
         </template>
-        <template v-else="!type"> {{ row[prop] }}</template>
+        <template v-else> {{ row[prop] }}</template>
       </ElTableColumn>
 
       <!-- action -->
@@ -68,11 +81,13 @@
         <slot name="button" :row="row"></slot>
       </ElTableColumn>
     </ElTable>
+    <div class="flex justify-end mt-3"><Pagination /></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
+
 /**
  * 1. 搜索自定义
  * 3. action按钮
@@ -99,12 +114,27 @@ export type TableActionType = {
   event?: (row: any) => void
   link?: boolean
 }[]
-
 const props = defineProps<{
   colums: TableColumType
   action?: TableActionType
-  data: any
+  request: (pramData: any) => any
 }>()
+
+const data = ref([])
+const searcherParam = ref<Record<string, any>>({})
+const loading = ref(false)
+
+onMounted(async () => {
+  data.value = await request()
+})
+
+// 请求
+const request = async (pram = {}) => {
+  loading.value = true
+  return Promise.resolve(props.request(pram)).finally(() => {
+    loading.value = false
+  })
+}
 
 // 计算action的宽高
 const buttonWidth = computed(() => {
@@ -122,6 +152,30 @@ const buttonWidth = computed(() => {
 
 // 过来搜索
 const searcheProps = computed(() => props.colums.filter(c => c.isSearch))
+
+const filteChangeHanle = async (pram: any) => {
+  Object.assign(searcherParam.value, pram)
+  console.log('searcherParam.value: ', searcherParam.value)
+
+  const data = await request(toRaw(searcherParam.value))
+  console.log('data: ', data)
+}
+
+const sortHandle = ({ prop, order }: any) => {
+  // 'descending' |'ascending'
+
+  switch (order) {
+    case 'descending':
+      searcherParam.value[prop] = 'desc'
+      break
+    case 'ascending':
+      searcherParam.value[prop] = 'ase'
+      break
+    default:
+      searcherParam.value[prop] = undefined
+      break
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>
