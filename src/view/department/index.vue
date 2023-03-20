@@ -62,7 +62,10 @@
         </div>
       </div>
       <div class="h-full overflow-y-auto flex-grow content flex flex-col">
-        <div class="font-bold flex mb-4 items-center" v-if="activeDep">
+        <div
+          class="font-bold flex mb-4 items-center bg-slate-400 py-4 pl-3"
+          v-if="activeDep"
+        >
           系主任 :
           <ElSelect
             v-model="targetTeacher"
@@ -142,22 +145,6 @@ const classTabColum: TableColumType = [
   {
     prop: 'departmentId',
     label: '系',
-  },
-  {
-    prop: 'auth',
-    label: '权限',
-    type: 'select',
-    options: {
-      student: '学生',
-      teacher: '老师',
-      admin: '管理员',
-    },
-    searcherPlaceHolder: '请选择权限',
-    event(e: any, row: any) {
-      row.auth = e
-    },
-    isSearch: true,
-    sort: true,
   },
   {
     prop: 'createdAt',
@@ -249,47 +236,73 @@ const checkDep = (id: string) => {
 // 表格的请求方法
 const request = () => {
   return [
-    {
-      remarks: 'keyikeyi',
-      picture:
-        'http://127.0.0.1:3030/image/1679022523231_275c0635-16f6-4f92-8b5c-3b485f99d40e.jpg',
-      className: '计算机科学与技术一班',
-      classId: '1679039091450',
-      code: 1,
-      createdAt: '2023-03-17T07:46:33.000Z',
-      updatedAt: '2023-03-17T07:46:33.000Z',
-      deletedAt: null,
-      teacherId: null,
-      departmentId: null,
-      auth: 'student',
-    },
-    {
-      remarks: '测试2',
-      picture: null,
-      className: '计算机科学与技术三班',
-      classId: '5339fe3e-b212-4fe9-823a-49e7f1fb95e0',
-      code: 102,
-      createdAt: '2023-03-17T07:48:08.000Z',
-      updatedAt: '2023-03-17T07:48:08.000Z',
-      deletedAt: null,
-      teacherId: null,
-      departmentId: null,
-      auth: 'teacher',
-    },
-    {
-      remarks: '测试',
-      picture: null,
-      className: '计算机科学与技术二班',
-      classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
-      code: 101,
-      createdAt: '2023-03-17T07:47:54.000Z',
-      updatedAt: '2023-03-17T07:47:54.000Z',
-      deletedAt: null,
-      teacherId: null,
-      departmentId: null,
-    },
+    [
+      {
+        remarks: 'keyikeyi',
+        picture:
+          'http://127.0.0.1:3030/image/1679022523231_275c0635-16f6-4f92-8b5c-3b485f99d40e.jpg',
+        className: '计算机科学与技术一班',
+        classId: '1679039091450',
+        code: 1,
+        createdAt: '2023-03-17T07:46:33.000Z',
+        updatedAt: '2023-03-17T07:46:33.000Z',
+        deletedAt: null,
+        teacherId: null,
+        departmentId: null,
+        auth: 'student',
+      },
+      {
+        remarks: '测试2',
+        picture: null,
+        className: '计算机科学与技术三班',
+        classId: '5339fe3e-b212-4fe9-823a-49e7f1fb95e0',
+        code: 102,
+        createdAt: '2023-03-17T07:48:08.000Z',
+        updatedAt: '2023-03-17T07:48:08.000Z',
+        deletedAt: null,
+        teacherId: null,
+        departmentId: null,
+        auth: 'teacher',
+      },
+      {
+        remarks: '测试',
+        picture: null,
+        className: '计算机科学与技术二班',
+        classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
+        code: 101,
+        createdAt: '2023-03-17T07:47:54.000Z',
+        updatedAt: '2023-03-17T07:47:54.000Z',
+        deletedAt: null,
+        teacherId: null,
+        departmentId: null,
+      },
+      {
+        remarks: '测试',
+        picture: null,
+        className: '计算机科学与技术二班',
+        classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
+        code: 101,
+        createdAt: '2023-03-17T07:47:54.000Z',
+        updatedAt: '2023-03-17T07:47:54.000Z',
+        deletedAt: null,
+        teacherId: null,
+        departmentId: null,
+      },
+      {
+        remarks: '测试',
+        picture: null,
+        className: '计算机科学与技术二班',
+        classId: 'df1b4eab-1b32-46b2-aa1c-a8a99454b79e',
+        code: 101,
+        createdAt: '2023-03-17T07:47:54.000Z',
+        updatedAt: '2023-03-17T07:47:54.000Z',
+        deletedAt: null,
+        teacherId: null,
+        departmentId: null,
+      },
+    ],
+    5,
   ]
-  return
 }
 </script>
 

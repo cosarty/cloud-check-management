@@ -4,7 +4,7 @@
       :filterField="searcheProps"
       v-if="searcheProps.length"
       @change="filteChangeHanle"
-      @reset="searcherParam = {}"
+      @reset="searcherParam = { pageSize, pageCount: 0 }"
     />
     <ElTable
       :data="data"
@@ -81,7 +81,13 @@
         <slot name="button" :row="row"></slot>
       </ElTableColumn>
     </ElTable>
-    <div class="flex justify-end mt-3"><Pagination /></div>
+    <div class="flex justify-end mt-5">
+      <Pagination
+        :total="total"
+        :page-size="pageSize"
+        @pageChange="e => (searcherParam.pageCount = e)"
+      />
+    </div>
   </div>
 </template>
 
@@ -114,26 +120,33 @@ export type TableActionType = {
   event?: (row: any) => void
   link?: boolean
 }[]
-const props = defineProps<{
-  colums: TableColumType
-  action?: TableActionType
-  request: (pramData: any) => any
-}>()
+const props = withDefaults(
+  defineProps<{
+    colums: TableColumType
+    action?: TableActionType
+    request: (pramData: any) => [any, number]
+    pageSize?: number
+  }>(),
+  {
+    pageSize: 10,
+  },
+)
 
 const data = ref([])
-const searcherParam = ref<Record<string, any>>({})
+const searcherParam = ref<Record<string, any>>({ pageSize: props.pageSize })
 const loading = ref(false)
+const total = ref<number>(0)
 
 onMounted(async () => {
-  data.value = await request()
+  await request()
 })
 
 // 请求
 const request = async (pram = {}) => {
   loading.value = true
-  return Promise.resolve(props.request(pram)).finally(() => {
-    loading.value = false
-  })
+  ;[data.value, total.value] = await props.request(pram)
+  console.log('[data.value: ', data.value)
+  loading.value = false
 }
 
 // 计算action的宽高
@@ -155,10 +168,7 @@ const searcheProps = computed(() => props.colums.filter(c => c.isSearch))
 
 const filteChangeHanle = async (pram: any) => {
   Object.assign(searcherParam.value, pram)
-  console.log('searcherParam.value: ', searcherParam.value)
-
-  const data = await request(toRaw(searcherParam.value))
-  console.log('data: ', data)
+  await request(toRaw(searcherParam.value))
 }
 
 const sortHandle = ({ prop, order }: any) => {
