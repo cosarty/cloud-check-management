@@ -4,7 +4,7 @@
       :filterField="searcheProps"
       v-if="searcheProps.length"
       @change="filteChangeHanle"
-      @reset="searcherParam = { pageSize, pageCount: 0 }"
+      @reset="reset"
     />
     <ElTable
       :data="data"
@@ -133,7 +133,10 @@ const props = withDefaults(
 )
 
 const data = ref([])
-const searcherParam = ref<Record<string, any>>({ pageSize: props.pageSize })
+const searcherParam = ref<Record<string, any>>({
+  pageSize: props.pageSize,
+  pageCount: 1,
+})
 const loading = ref(false)
 const total = ref<number>(0)
 
@@ -142,10 +145,9 @@ onMounted(async () => {
 })
 
 // 请求
-const request = async (pram = {}) => {
+const request = async () => {
   loading.value = true
-  ;[data.value, total.value] = await props.request(pram)
-  console.log('[data.value: ', data.value)
+  ;[data.value, total.value] = await props.request(toRaw(searcherParam.value))
   loading.value = false
 }
 
@@ -166,9 +168,14 @@ const buttonWidth = computed(() => {
 // 过来搜索
 const searcheProps = computed(() => props.colums.filter(c => c.isSearch))
 
+const reset = async () => {
+  searcherParam.value = { pageSize: props.pageSize, pageCount: 1 }
+  await request()
+}
+
 const filteChangeHanle = async (pram: any) => {
   Object.assign(searcherParam.value, pram)
-  await request(toRaw(searcherParam.value))
+  await request()
 }
 
 const sortHandle = ({ prop, order }: any) => {

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-const pageCount = ref<number>(0)
+const pageCount = ref<number>(1)
 withDefaults(defineProps<{ pageSize?: number; total: number }>(), {
   pageSize: 10,
 })
