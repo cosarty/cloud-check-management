@@ -80,7 +80,11 @@
         </div>
         <ElScrollbar>
           <div>
-            <Table :data="data" :colums="classTabColum"></Table>
+            <Table
+              :data="data"
+              :colums="classTabColum"
+              :action="defaultAtion"
+            ></Table>
           </div>
         </ElScrollbar>
       </div>
@@ -104,7 +108,7 @@ import {
 } from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
-import Table, { TableColumType, TableActionType } from '@/components/Table.vue'
+import { TableColumType, TableActionType } from '@/components/Table.vue'
 const departmentList = ref<
   {
     departmentName: string
@@ -117,35 +121,71 @@ const classTabColum: TableColumType = [
   {
     prop: 'picture',
     label: '照片',
-    type: 'default',
+    type: 'image',
   },
   {
     prop: 'className',
     label: '班级名字',
+    isSearch: true,
+    searcherPlaceHolder: '请输入班级姓名',
   },
   {
     prop: 'userId',
     label: '辅导员',
+    isSearch: true,
   },
   {
     prop: 'remarks',
     label: '备注',
+    isSearch: true,
   },
   {
     prop: 'departmentId',
     label: '系',
+    isSearch: true,
+  },
+  {
+    prop: 'auth',
+    label: '权限',
+    type: 'select',
+    options: {
+      student: '学生',
+      teacher: '老师',
+      admin: '管理员',
+    },
+    event(e: any, row: any) {
+      row.auth = e
+    },
+    isSearch: true,
   },
   {
     prop: 'createdAt',
     label: '创建时间',
-    fixed:'right'
+    fixed: 'right',
+    type: 'date',
+  },
+]
+
+const defaultAtion: TableActionType = [
+  {
+    type: 'primary',
+    title: '编辑',
+  },
+  {
+    type: 'danger',
+    title: '删除',
+    link: true,
+    event(row: any) {
+      console.log(row)
+    },
   },
 ]
 
 const data = [
   {
     remarks: 'keyikeyi',
-    picture: null,
+    picture:
+      'http://127.0.0.1:3030/image/1679022523231_275c0635-16f6-4f92-8b5c-3b485f99d40e.jpg',
     className: '计算机科学与技术一班',
     classId: '1679039091450',
     code: 1,
@@ -154,6 +194,7 @@ const data = [
     deletedAt: null,
     teacherId: null,
     departmentId: null,
+    auth: 'student',
   },
   {
     remarks: '测试2',
@@ -166,6 +207,7 @@ const data = [
     deletedAt: null,
     teacherId: null,
     departmentId: null,
+    auth: 'teacher',
   },
   {
     remarks: '测试',

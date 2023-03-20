@@ -14,7 +14,7 @@ const createRoot = async () => {
   const pinia = createPinia()
   pinia.use(piniaPluginPersistedstate)
   app.use(pinia)
-  // app.use(components)
+  app.use(components)
   await router.isReady()
   app.mount('#app')
 }
