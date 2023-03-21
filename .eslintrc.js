@@ -65,6 +65,7 @@ module.exports = defineConfig({
     //   { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     // ],
     'vue/html-indent': 'off',
+    'vue/no-parsing-error': 'off',
     'vue/multi-word-component-names': 'off',
     // 关闭此规则 使用 prettier 的格式化规则，
     'vue/max-attributes-per-line': ['off'],

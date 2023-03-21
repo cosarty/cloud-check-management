@@ -92,6 +92,15 @@
               <template #teacher="{ row }">{{
                 row?.teacher?.userName ?? '未知'
               }}</template>
+
+              <template #header
+                ><div class="my-5">
+                  <AddClass
+                    :departList="departmentList"
+                    :departmentId="activeDep"
+                    @reset="() => tableRef.reset()"
+                  /></div
+              ></template>
             </Table>
           </div>
         </ElScrollbar>
@@ -116,7 +125,8 @@ import {
   getClassList,
 } from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
-import { Edit, Delete } from '@element-plus/icons-vue'
+import AddClass from './components/AddClass.vue'
+import { Plus, Delete, Edit } from '@element-plus/icons-vue'
 import { TableColumType, TableActionType } from '@/components/Table.vue'
 const departmentList = ref<
   {
@@ -169,6 +179,7 @@ const defaultAtion: TableActionType = [
   {
     type: 'danger',
     title: '删除',
+    confirmTitle: '确认删除',
     link: true,
     event(row: any) {
       console.log(row)
@@ -244,7 +255,6 @@ const checkDep = (id: string) => {
 
 // 表格的请求方法
 const request = async (pram: any) => {
-  console.log('pram: ', pram)
   const {
     data: { count, rows },
   } = await getClassList({ ...pram, departmentId: activeDep.value })

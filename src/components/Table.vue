@@ -6,6 +6,8 @@
       @change="filteChangeHanle"
       @reset="reset"
     />
+
+    <slot name="header"></slot>
     <ElTable
       :data="data"
       style="width: 100%"
@@ -65,15 +67,35 @@
         fixed="right"
         :width="buttonWidth"
       >
-        <ElButton
-          v-for="({ type, title, event, link }, idx) in action"
-          :size="'small'"
+        <template
+          v-for="({ type, title, event, link, confirmTitle }, idx) in action"
           :key="idx"
-          :link="link"
-          :type="type ?? 'default'"
-          @click="() => event?.(row)"
-          >{{ title }}</ElButton
         >
+          <ElPopconfirm
+            v-if="confirmTitle"
+            :title="confirmTitle"
+            @confirm="() => event?.(row)"
+            confirm-button-text="是"
+            cancel-button-text="否"
+          >
+            <template #reference>
+              <ElButton
+                :size="'small'"
+                :link="link"
+                :type="type ?? 'default'"
+                >{{ title }}</ElButton
+              >
+            </template>
+          </ElPopconfirm>
+          <ElButton
+            v-else
+            :size="'small'"
+            :link="link"
+            :type="type ?? 'default'"
+            @click="() => event?.(row)"
+            >{{ title }}</ElButton
+          >
+        </template>
       </ElTableColumn>
       <ElTableColumn
         v-else-if="$slots.button"
@@ -122,6 +144,7 @@ export type TableActionType = {
   type?: 'primary' | 'success' | 'info' | 'warning' | 'danger'
   event?: (row: any) => void
   link?: boolean
+  confirmTitle?: string
 }[]
 const props = withDefaults(
   defineProps<{
@@ -172,13 +195,23 @@ const buttonWidth = computed(() => {
 const searcheProps = computed(() => props.colums.filter(c => c.isSearch))
 
 const reset = async () => {
-  searcherParam.value = { pageSize: props.pageSize, pageCount: 1 }
+  searcherParam.value = Object.assign(
+    { pageSize: props.pageSize, pageCount: 1 },
+    [...Object.keys(searcherParam.value)]
+      .filter(k => ['DESC', 'ASC'].includes(searcherParam.value[k]))
+      .reduce((p, k) => Object.assign(p, { [k]: searcherParam.value[k] }), {}),
+  )
+
+  console.log('searcherParam.value: ', searcherParam.value)
+
   await request()
 }
 
 const filteChangeHanle = async (pram: any) => {
-  searcherParam.value = { pageSize: props.pageSize, pageCount: 1 }
-  Object.assign(searcherParam.value, pram)
+  Object.assign(searcherParam.value, pram, {
+    pageSize: props.pageSize,
+    pageCount: 1,
+  })
   await request()
 }
 
@@ -187,15 +220,17 @@ const sortHandle = ({ prop, order }: any) => {
 
   switch (order) {
     case 'descending':
-      searcherParam.value[prop] = 'desc'
+      searcherParam.value[prop] = 'DESC'
       break
     case 'ascending':
-      searcherParam.value[prop] = 'ase'
+      searcherParam.value[prop] = 'ASC'
       break
     default:
       searcherParam.value[prop] = undefined
       break
   }
+
+  request()
 }
 
 defineExpose({ request, reset })
