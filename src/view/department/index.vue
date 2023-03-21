@@ -87,7 +87,12 @@
               :colums="classTabColum"
               :action="defaultAtion"
               :request="request"
-            ></Table>
+              ref="tableRef"
+            >
+              <template #teacher="{ row }">{{
+                row?.teacher?.userName ?? '未知'
+              }}</template>
+            </Table>
           </div>
         </ElScrollbar>
       </div>
@@ -134,7 +139,7 @@ const classTabColum: TableColumType = [
     searcherPlaceHolder: '请输入班级',
   },
   {
-    prop: 'userId',
+    prop: 'teacher',
     label: '辅导员',
     isSearch: true,
     searcherPlaceHolder: '请输入辅导员',
@@ -178,6 +183,7 @@ const depLoading = ref(false)
 const depName = ref()
 const selectInpt = ref('')
 const teacherList = ref<any>([])
+const tableRef = ref<any>()
 onMounted(() => {
   getData()
   getTeacher().then(({ data }) => {
@@ -232,6 +238,8 @@ const checkDep = (id: string) => {
   )
 
   targetTeacher.value = find?.user?.userId ?? undefined
+
+  tableRef.value.reset()
 }
 
 // 表格的请求方法
@@ -239,7 +247,7 @@ const request = async (pram: any) => {
   console.log('pram: ', pram)
   const {
     data: { count, rows },
-  } = await getClassList(pram)
+  } = await getClassList({ ...pram, departmentId: activeDep.value })
   return [rows ?? [], count ?? 0]
 }
 </script>

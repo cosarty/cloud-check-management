@@ -27,7 +27,10 @@
         :align="align ?? 'center'"
         :sortable="sort ? 'custom' : false"
       >
-        <template v-if="type === 'image'">
+        <template v-if="$slots[prop]"
+          ><slot :name="prop" :row="row"> {{ row[prop] }}</slot></template
+        >
+        <template v-else-if="type === 'image'">
           <ElImage
             :src="row[prop]"
             fit="fill"
@@ -51,7 +54,7 @@
             ></ElOption>
           </ElSelect>
         </template>
-        <template v-else> {{ row[prop] }}</template>
+        <template v-else>{{ row[prop] }}</template>
       </ElTableColumn>
 
       <!-- action -->
@@ -174,6 +177,7 @@ const reset = async () => {
 }
 
 const filteChangeHanle = async (pram: any) => {
+  searcherParam.value = { pageSize: props.pageSize, pageCount: 1 }
   Object.assign(searcherParam.value, pram)
   await request()
 }
@@ -193,6 +197,8 @@ const sortHandle = ({ prop, order }: any) => {
       break
   }
 }
+
+defineExpose({ request, reset })
 </script>
 
 <style lang="scss" scoped></style>

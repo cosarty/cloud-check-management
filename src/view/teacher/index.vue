@@ -3,7 +3,7 @@
 </template>
 <script lang="ts">
 export default defineComponent({
-  title: '班级',
+  title: '教师',
   icon: 'icon-bumen-department',
   name: 'teacher',
   auth: 'super',
