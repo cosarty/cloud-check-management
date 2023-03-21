@@ -93,14 +93,28 @@
                 row?.teacher?.userName ?? '未知'
               }}</template>
 
+              <template #department="{ row }">{{
+                row?.department?.departmentName ?? '未知'
+              }}</template>
+
               <template #header
                 ><div class="my-5">
                   <AddClass
                     :departList="departmentList"
                     :departmentId="activeDep"
                     @reset="() => tableRef.reset()"
-                  /></div
-              ></template>
+                    v-slot="{ updateVisBale }"
+                    ref="addclassRef"
+                    ><el-button
+                      type="primary"
+                      :icon="Plus"
+                      @click="updateVisBale"
+                    >
+                      添加班级
+                    </el-button></AddClass
+                  >
+                </div></template
+              >
             </Table>
           </div>
         </ElScrollbar>
@@ -123,6 +137,7 @@ import {
   updateDepartment,
   getTeacher,
   getClassList,
+  delClass,
 } from '@/http/api'
 import AddDeparment from './components/AddDeparment.vue'
 import AddClass from './components/AddClass.vue'
@@ -159,7 +174,7 @@ const classTabColum: TableColumType = [
     label: '备注',
   },
   {
-    prop: 'departmentId',
+    prop: 'department',
     label: '系',
   },
   {
@@ -175,18 +190,39 @@ const defaultAtion: TableActionType = [
   {
     type: 'primary',
     title: '编辑',
+    async event({
+      classId,
+      remarks,
+      picture,
+      teacherId,
+      code,
+      className,
+      departmentId,
+    }: any) {
+      addclassRef.value.updateData({
+        classId,
+        remarks,
+        picture,
+        teacherId,
+        code,
+        className,
+        departmentId,
+      })
+    },
   },
   {
     type: 'danger',
     title: '删除',
     confirmTitle: '确认删除',
     link: true,
-    event(row: any) {
-      console.log(row)
+    async event(row: any) {
+      await delClass(row.classId)
+      tableRef.value.reset()
     },
   },
 ]
 
+const addclassRef = ref<any>()
 const targetTeacher = ref<string>()
 const activeDep = ref<string>()
 const editDep = ref<string>()
@@ -228,6 +264,7 @@ const updateDepName = async (e: any, departmentName: string, id: string) => {
   await updateDepartment({ id, departmentName: selectInpt.value })
 
   await getData()
+  tableRef.value.reset()
 }
 
 watch(targetTeacher, async n => {

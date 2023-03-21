@@ -12,3 +12,16 @@ export const createClass = async (prama: any) =>
     method: 'post',
     data: prama,
   })
+
+export const delClass = async (id: any) =>
+  await await http.request({
+    url: `class/delete/${id}`,
+    method: 'delete',
+  })
+
+export const updateClass = async (prama: any) =>
+  await await http.request({
+    url: `class/update`,
+    method: 'post',
+    data: prama,
+  })

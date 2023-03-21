@@ -1,7 +1,5 @@
 <template>
-  <el-button type="primary" :icon="Plus" @click="dialogVisible = true">
-    添加班级
-  </el-button>
+  <slot :updateVisBale="updateVisBale"></slot>
 
   <el-dialog
     v-model="dialogVisible"
@@ -66,10 +64,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { getTeacher, createClass } from '@/http/api'
+import { getTeacher, createClass, updateClass } from '@/http/api'
 import type { FormInstance, FormRules } from 'element-plus'
 
-const porps = defineProps<{ departmentId?: string; departList: any[] }>()
+const porps = defineProps<{
+  departmentId?: string
+  departList: any[]
+  code?: number
+  className?: string
+  teacherId?: string
+  remarks?: string
+}>()
 const dialogVisible = ref(false)
 const options = ref<{ userName: string; userId: string }[]>([])
 
@@ -89,19 +94,41 @@ const submitForm = async () => {
   const valid = await ruleFormRef.value.validate().catch(() => {})
 
   if (!valid) return
+  if (ruleForm.value?.classId) {
+    await updateClass(ruleForm.value)
+  } else {
+    await createClass(ruleForm.value)
+  }
 
-  await createClass(ruleForm.value)
   emit('reset')
   dialogVisible.value = false
 }
+
+const updateVisBale = () => (dialogVisible.value = !dialogVisible.value)
+
+const updateData = (data: any) => {
+  updateVisBale()
+
+  Object.assign(
+    ruleForm.value,
+    [...Object.keys(data)]
+      .filter(k => data[k])
+      .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
+  )
+}
+
 watch(dialogVisible, async vi => {
-  if (vi && porps.departmentId)
-    ruleForm.value = { departmentId: porps.departmentId }
+  const { departmentId } = porps
+  if (vi && departmentId) ruleForm.value = { departmentId }
   if (!vi) ruleForm.value = {}
   else {
     const { data } = await getTeacher()
     options.value = data
   }
+})
+
+defineExpose({
+  updateData,
 })
 </script>
 <style scoped></style>
