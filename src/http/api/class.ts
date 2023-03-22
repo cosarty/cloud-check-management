@@ -25,3 +25,11 @@ export const updateClass = async (prama: any) =>
     method: 'post',
     data: prama,
   })
+
+// /class/get/{classId}
+
+export const getClassInfo = async (classId: any) =>
+  await await http.request({
+    url: `class/get/${classId}`,
+    method: 'get',
+  })

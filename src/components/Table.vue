@@ -107,17 +107,18 @@
         <slot name="button" :row="row"></slot>
       </ElTableColumn>
     </ElTable>
-    <div class="flex justify-end mt-5">
+    <div class="flex justify-end mt-5" v-if="total > pageSize">
       <Pagination
         :total="total"
         :page-size="pageSize"
-        @pageChange="e => (searcherParam.pageCount = e)"
+        @pageChange="pageChange"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { count } from 'console'
 import dayjs from 'dayjs'
 
 /**
@@ -151,7 +152,7 @@ const props = withDefaults(
   defineProps<{
     colums: TableColumType
     action?: TableActionType
-    request: (pramData: any) => [any, number]
+    request?: (pramData: any) => [any, number]
     pageSize?: number
   }>(),
   {
@@ -168,6 +169,7 @@ const loading = ref(false)
 const total = ref<number>(0)
 
 onMounted(async () => {
+  if (!props.request) return
   await request()
 })
 
@@ -192,6 +194,11 @@ const buttonWidth = computed(() => {
   return 0
 })
 
+const pageChange = (count: number) => {
+  searcherParam.value.pageCount = count
+  request()
+}
+
 // 过来搜索
 const searcheProps = computed(() => props.colums.filter(c => c.isSearch))
 
@@ -202,8 +209,6 @@ const reset = async () => {
       .filter(k => ['DESC', 'ASC'].includes(searcherParam.value[k]))
       .reduce((p, k) => Object.assign(p, { [k]: searcherParam.value[k] }), {}),
   )
-
-  console.log('searcherParam.value: ', searcherParam.value)
 
   await request()
 }

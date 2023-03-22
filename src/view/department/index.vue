@@ -1,8 +1,6 @@
 <template>
   <RouterView #default="{ Component }" v-show="hideDepart">
-    <KeepAlive>
-      <component :is="Component"></component>
-    </KeepAlive>
+    <component :is="Component"></component>
   </RouterView>
 
   <ElCard class="card-box h-full flex flex-col" v-show="!hideDepart">

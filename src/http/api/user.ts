@@ -65,3 +65,12 @@ export const getTeacher = async () =>
     url: '/user/getTeacher',
     method: 'get',
   })
+
+// 获取学生未加入班级的学生
+
+export const getStuudent = async (pram?: any) =>
+  await http.request({
+    url: '/user/getstudent',
+    method: 'get',
+    data: pram,
+  })
