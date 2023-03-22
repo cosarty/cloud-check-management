@@ -81,9 +81,17 @@ export const deleteUser = async (userId: string) =>
     data: { userId },
   })
 
-export const bindUser = async (userId: string) =>
+export const bindUser = async (userId: string, isBan: boolean) =>
   await http.request({
     url: '/user/bind',
     method: 'post',
-    data: { userId },
+    data: { userId, isBan },
+  })
+
+// 注册学生 或者老师
+export const register = async (payload: any) =>
+  await http.request<LoginData>({
+    url: '/genIn/register',
+    method: 'post',
+    data: payload,
   })

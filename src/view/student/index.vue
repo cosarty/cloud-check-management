@@ -6,7 +6,7 @@ export default defineComponent({
   title: '学生',
   icon: 'icon-xuesheng',
   name: 'student',
-  auth: 'super',
+  auth: ['admin', 'super'],
   redirect: 'mange',
 })
 </script>

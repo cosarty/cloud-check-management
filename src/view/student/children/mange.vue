@@ -1,12 +1,24 @@
 <template>
   <div style="background-color: white; height: 100%" class="pt-11">
     <Table
-      :action="showStudentAction"
+      :action="
+        user.auth.includes('super') ? showStudentAction : AdminStudenAction
+      "
       ref="showStudneTableRef"
       :colums="studentColums"
       :request="getStudent"
       :page-size="7"
     >
+      <template #header>
+        <CheckStudent
+          @reset="() => showStudneTableRef.reset()"
+          #default="{ updateVisBale }"
+        >
+          <ElButton class="mb-6" type="primary" @click="updateVisBale"
+            >添加学生</ElButton
+          >
+        </CheckStudent>
+      </template>
       <template #class="{ row }">
         {{ row?.class?.className ?? '未加入班级' }}
       </template>
@@ -21,13 +33,15 @@ export default defineComponent({
   title: '学生管理',
   // icon: 'icon-xuesheng',
   name: 'mange',
-  auth: 'super',
+  auth: ['super', 'admin'],
 })
 </script>
 <script setup lang="ts">
 import { TableActionType, TableColumType } from '@/components/Table.vue'
 import { bindUser, deleteUser, getStuudent, getUsersClass } from '@/http/api'
-
+import userStore from '@/store/userStore'
+import CheckStudent from './components/CheckStudent.vue'
+const user = userStore()
 /**
  * 学生列表展示
  * 学生编辑
@@ -64,14 +78,18 @@ const studentColums: TableColumType = [
     label: '封号',
     type: 'switch',
     async event(nv: boolean, row: any) {
-      await bindUser(row.userId)
+      await bindUser(row.userId, nv)
       row.isBan = nv
     },
   },
 ]
 
-const showStudentAction: TableActionType = [
+const AdminStudenAction: TableActionType = [
   { type: 'primary', title: '查看', link: true },
+]
+
+const showStudentAction: TableActionType = [
+  { type: 'primary', title: '编辑', link: true },
   {
     type: 'danger',
     title: '删除',
