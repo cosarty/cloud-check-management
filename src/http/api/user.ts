@@ -67,10 +67,23 @@ export const getTeacher = async () =>
   })
 
 // 获取学生未加入班级的学生
-
 export const getStuudent = async (pram?: any) =>
   await http.request({
     url: '/user/getstudent',
     method: 'get',
     data: pram,
+  })
+
+export const deleteUser = async (userId: string) =>
+  await http.request({
+    url: '/user/delete',
+    method: 'post',
+    data: { userId },
+  })
+
+export const bindUser = async (userId: string) =>
+  await http.request({
+    url: '/user/bind',
+    method: 'post',
+    data: { userId },
   })

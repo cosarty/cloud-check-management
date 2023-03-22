@@ -1,0 +1,24 @@
+<template>
+  <div style="background-color: white; height: 100%">课程管理</div>
+</template>
+
+<script lang="ts">
+export default defineComponent({
+  title: '课程',
+  icon: 'icon-xuesheng',
+  name: 'course',
+  auth: ['admin', 'super', 'teacher'],
+  orderNo: 12,
+})
+</script>
+<script setup lang="ts">
+/**
+ *   管理员 超级管理员 老师共享这个页面
+ *
+ *   管理员和超级管理员和管理课程
+ *
+ *    老师可以创建课程
+ */
+</script>
+
+<style scoped lang="scss"></style>

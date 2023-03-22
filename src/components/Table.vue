@@ -63,6 +63,20 @@
             ></ElOption>
           </ElSelect>
         </template>
+
+        <template v-else-if="type === 'tag'">
+          <ElTag
+            v-if="options[row[prop]]"
+            :type="options[row[prop]]?.type ?? 'info'"
+            >{{ options[row[prop]]?.txt ?? '未知' }}</ElTag
+          >
+        </template>
+        <template v-else-if="type === 'switch'">
+          <ElSwitch
+            :model-value="row[prop]"
+            @change="$event => event?.($event, row)"
+          ></ElSwitch>
+        </template>
         <template v-else>{{ row[prop] }}</template>
       </ElTableColumn>
 
@@ -137,7 +151,7 @@ export type TableColumType = {
   prop: string
   label: string
   isSearch?: boolean
-  type?: 'date' | 'default' | 'image' | 'select'
+  type?: 'date' | 'default' | 'image' | 'select' | 'tag' | 'switch'
   sort?: boolean | 'desc' | 'esc'
   align?: 'left' | 'center' | 'right'
   width?: number

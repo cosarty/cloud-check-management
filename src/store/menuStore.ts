@@ -26,7 +26,7 @@ const menuStore = defineStore('menu', () => {
       }
     }
     return route.sort((a, b) => {
-      return (a.meta?.orderNo ?? 999) - (b.meta?.orderNo ?? 999)
+      return (a.meta?.orderNo ?? 10) - (b.meta?.orderNo ?? 10)
     })
   }
 

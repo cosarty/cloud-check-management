@@ -98,7 +98,21 @@ const studentColums: TableColumType = [
   { prop: 'account', label: '学号', isSearch: true },
   { prop: 'userName', label: '姓名', isSearch: true },
   { prop: 'email', label: '邮箱' },
-  { prop: 'sex', label: '性别' },
+  {
+    prop: 'sex',
+    label: '性别',
+    type: 'tag',
+    options: {
+      0: {
+        txt: '女',
+        type: 'warning',
+      },
+      1: {
+        txt: '男',
+        type: 'success',
+      },
+    },
+  },
 ]
 
 const showStudentAction: TableActionType = [
