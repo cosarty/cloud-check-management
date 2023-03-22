@@ -45,8 +45,17 @@ export const addUsertoClass = async (parm: any) =>
 
 // /getUsers/{classId}
 
-export const getUsersClass = async (classId: any) =>
+export const getUsersClass = async (classId: any, pram: any) =>
   await http.request({
     url: `class/getUsers/${classId}`,
     method: 'get',
+    data: pram,
+  })
+
+// 删除学生
+export const delUsersClass = async (pram: any) =>
+  await http.request({
+    url: `class/delUsers`,
+    method: 'delete',
+    data: pram,
   })

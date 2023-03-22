@@ -23,7 +23,11 @@
         <el-button :icon="Plus" type="primary" @click="studentVisible = true"
           >添加学生</el-button
         >
-        <el-popconfirm confirm-button-text="是" cancel-button-text="否"
+        <el-popconfirm
+          confirm-button-text="是"
+          cancel-button-text="否"
+          title="确认删除"
+          @confirm="deleteUser"
           ><template #reference>
             <el-button type="danger" class="ml-2">删除学生</el-button></template
           ></el-popconfirm
@@ -31,7 +35,16 @@
       </div>
     </div>
 
-    <div>显示表格</div>
+    <div class="my-5">
+      <Table
+        isSelect
+        :action="showStudentAction"
+        ref="showStudneTableRef"
+        :colums="studentColums"
+        :request="getStudent"
+        :page-size="10"
+      ></Table>
+    </div>
     <el-dialog
       v-model="studentVisible"
       title="添加学生"
@@ -62,10 +75,11 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { TableColumType } from '@/components/Table.vue'
+import { TableActionType, TableColumType } from '@/components/Table.vue'
 import closeCurrentTab from '@/hooks/closeCurrentTab'
 import {
   addUsertoClass,
+  delUsersClass,
   getClassInfo,
   getStuudent,
   getUsersClass,
@@ -77,6 +91,7 @@ const classId = ref<string>('')
 const studentVisible = ref(false)
 const classInfo = ref<any>({})
 const studenTableRef = ref<any>()
+const showStudneTableRef = ref<any>()
 
 const studentColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
@@ -86,23 +101,53 @@ const studentColums: TableColumType = [
   { prop: 'sex', label: '性别' },
 ]
 
+const showStudentAction: TableActionType = [
+  { type: 'primary', title: '查看', link: true },
+  {
+    type: 'danger',
+    title: '删除',
+    confirmTitle: '确认删除',
+    link: true,
+    async event(row: any) {
+      await delUsersClass({ classId: classId.value, userId: row.userId })
+      showStudneTableRef.value.reset()
+    },
+  },
+]
+
 const request = async (pram: any) => {
   const {
     data: { count, rows },
   } = await getStuudent(pram)
   return [rows ?? [], count ?? 0]
 }
-const addConfim = async () => {
-  console.log()
 
+const getStudent = async (pram: any) => {
+  const {
+    data: { count, rows },
+  } = await getUsersClass(classId.value, pram)
+  return [rows ?? [], count ?? 0]
+}
+const addConfim = async () => {
   await addUsertoClass({
     classId: classId.value,
     userId: studenTableRef.value.selectValue.map(u => u.userId),
   })
   studentVisible.value = false
 
-  const data = await getUsersClass(classId.value)
-  console.log('data: ', data)
+  showStudneTableRef.value.reset()
+}
+
+const deleteUser = async () => {
+  if (!showStudneTableRef.value.selectValue.length) {
+    ElMessage.warning('请选择学生')
+    return
+  }
+  await delUsersClass({
+    classId: classId.value,
+    userId: showStudneTableRef.value.selectValue.map(u => u.userId),
+  })
+  showStudneTableRef.value.reset()
 }
 
 watch(
