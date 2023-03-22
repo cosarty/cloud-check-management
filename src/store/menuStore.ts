@@ -73,7 +73,7 @@ const menuStore = defineStore('menu', () => {
    *  - 3. 缓存标签页
    */
   const addTab = (r: RouteLocationNormalized) => {
-    const { fullPath, meta, name } = getRawRoute(r)
+    const { fullPath, meta, name, query } = getRawRoute(r)
     if (['forbidden', 'login'].some(n => r.fullPath.includes(n))) return
     if (!r.meta.affix) return
 
@@ -129,7 +129,7 @@ const menuStore = defineStore('menu', () => {
 
   // 关闭方法
   const colseHandle = (path: string) => {
-    const index = tabList.value.findIndex(item => item.fullPath === path)
+    const index = tabList.value.findIndex(item => item.name === path)
     if (index !== -1) {
       tabList.value.splice(index, 1)
     }
@@ -143,10 +143,10 @@ const menuStore = defineStore('menu', () => {
     route: RouteLocationNormalized,
     replace: (to: RouteLocationRaw) => void,
   ) => {
-    const isCurrent = r.fullPath === route.fullPath
+    const isCurrent = r.name === route.name
 
     if (!isCurrent) {
-      colseHandle(r.fullPath)
+      colseHandle(r.name as string)
       return
     }
 
@@ -163,22 +163,29 @@ const menuStore = defineStore('menu', () => {
     route: RouteLocationNormalized,
     replace: (to: RouteLocationRaw) => void,
   ) => {
-    const full = route.fullPath
-    const index = tabList.value.findIndex(item => item.fullPath === full)
+    const full = route.name as string
+    const index = tabList.value.findIndex(item => item.name === full)
+
     let target: RouteLocationRaw | string
     // 如果关闭的是最左侧的就跳到右边
     if (index === 0) {
       if (tabList.value.length === 1) {
         target = '/home'
       } else {
-        target = { name: tabList.value[index + 1].name! }
+        target = {
+          name: tabList.value[index + 1].name!,
+          query: tabList.value[index + 1].query!,
+        }
       }
-    } else {
+      colseHandle(full)
+      replace(target)
+    } else if (index !== -1) {
       // 非最左侧标签 关闭后跳转到左侧标签页
+
       target = { name: tabList.value[index - 1].name! }
+      colseHandle(full)
+      replace(target)
     }
-    colseHandle(full)
-    replace(target)
   }
 
   return {

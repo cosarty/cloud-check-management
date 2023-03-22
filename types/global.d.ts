@@ -16,6 +16,7 @@ declare interface CustomMeta {
   icon?: string
   prent?: string
   coverRouter?: boolean
+  isExactActive?: boolean
 }
 
 export declare module 'vue' {

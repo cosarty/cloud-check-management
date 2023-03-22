@@ -23,6 +23,7 @@ export default defineComponent({
   icon: 'icon-shouye',
   name: 'home',
   coverRouter: true,
+  isExactActive: false,
 })
 </script>
 <script setup lang="ts">

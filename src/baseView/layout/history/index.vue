@@ -2,16 +2,16 @@
   <ElHeader class="content-header" v-if="menu.tabList.length">
     <div class="history-content">
       <RouterLink
-        :to="{name:ro.name!}"
+        :to="{ name: ro.name }"
         v-for="ro in menu.tabList"
         :key="ro.fullPath"
         custom
-        v-slot="{ navigate, isExactActive }"
+        v-slot="{ navigate, isExactActive, isActive }"
       >
         <div
           class="history-link"
-          @click="navigate"
-          :class="{ active: isExactActive }"
+          @click="$router.push({ name: ro.name, query: ro.query })"
+          :class="{ active: ro.meta.isExactActive ? isExactActive : isActive }"
         >
           {{ getRouteTitle(ro) }}
           <ElIcon

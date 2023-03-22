@@ -1,6 +1,8 @@
 <template>
   <RouterView #default="{ Component }" v-show="hideDepart">
-    <component :is="Component"></component>
+    <KeepAlive>
+      <component :is="Component"></component>
+    </KeepAlive>
   </RouterView>
 
   <ElCard class="card-box h-full flex flex-col" v-show="!hideDepart">
@@ -188,7 +190,6 @@ const classTabColum: TableColumType = [
   {
     prop: 'createdAt',
     label: '创建时间',
-    fixed: 'right',
     type: 'date',
     sort: true,
   },
@@ -200,7 +201,10 @@ const defaultAtion: TableActionType = [
     title: '查看',
     link: true,
     async event(row: any) {
-      router.push({ name: 'addUserToClass' })
+      router.push({
+        name: 'addUserToClass',
+        query: { classId: row.classId },
+      })
     },
   },
   {
@@ -316,10 +320,14 @@ const request = async (pram: any) => {
   return [rows ?? [], count ?? 0]
 }
 
-watch(route, nr => {
-  if (nr.name === 'addUserToClass') hideDepart.value = true
-  else hideDepart.value = false
-})
+watch(
+  route,
+  nr => {
+    if (nr.name === 'addUserToClass') hideDepart.value = true
+    else hideDepart.value = false
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped lang="scss">

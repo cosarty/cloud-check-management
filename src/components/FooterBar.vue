@@ -2,7 +2,9 @@
   <ElFooter class="footer">底部</ElFooter>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// 50px
+</script>
 
 <style scoped lang="scss">
 .footer {

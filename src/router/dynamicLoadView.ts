@@ -25,6 +25,7 @@ const getMeta = (meta: CustomMeta, prentPath?: string): any => {
     ignoreStorage,
     icon,
     coverRouter,
+    isExactActive,
   } = meta as CustomMeta
 
   return {
@@ -41,6 +42,7 @@ const getMeta = (meta: CustomMeta, prentPath?: string): any => {
       icon: icon ?? 'icon-gailan',
       prent: prentPath ?? undefined,
       coverRouter: coverRouter ?? false,
+      isExactActive: isExactActive ?? true,
     },
   }
 }
