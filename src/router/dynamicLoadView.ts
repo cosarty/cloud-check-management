@@ -24,6 +24,7 @@ const getMeta = (meta: CustomMeta, prentPath?: string): any => {
     ignoreKeepAlive,
     ignoreStorage,
     icon,
+    coverRouter,
   } = meta as CustomMeta
 
   return {
@@ -39,6 +40,7 @@ const getMeta = (meta: CustomMeta, prentPath?: string): any => {
       ignoreStorage: ignoreStorage ?? false,
       icon: icon ?? 'icon-gailan',
       prent: prentPath ?? undefined,
+      coverRouter: coverRouter ?? false,
     },
   }
 }
@@ -84,4 +86,3 @@ const getChildrenRoutes = (children: string[], prentPath: string) => {
 }
 
 export { viewComponent, getDynamicRouter }
-

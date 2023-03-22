@@ -78,6 +78,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '基本资料',
+  coverRouter: true,
 })
 </script>
 

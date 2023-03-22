@@ -1,13 +1,12 @@
 <template>
-  <RouterView></RouterView>
+  <div style="background-color: white; height: 100%">签到统计</div>
 </template>
 <script lang="ts">
 export default defineComponent({
-  title: '学生',
-  icon: 'icon-xuesheng',
-  name: 'student',
+  title: '签到统计',
+  // icon: 'icon-xuesheng',
+  name: 'statis',
   auth: 'super',
-  redirect: 'mange',
 })
 </script>
 <script setup lang="ts"></script>

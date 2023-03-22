@@ -1,13 +1,14 @@
 <template>
-  <RouterView></RouterView>
+  <div style="background-color: white; height: 100%">班级管理</div>
 </template>
+
+<!-- 辅导员 -->
 <script lang="ts">
 export default defineComponent({
-  title: '学生',
+  title: '班级',
   icon: 'icon-xuesheng',
-  name: 'student',
-  auth: 'super',
-  redirect: 'mange',
+  name: 'class',
+  auth: 'teacher',
 })
 </script>
 <script setup lang="ts"></script>

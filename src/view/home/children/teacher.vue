@@ -5,6 +5,7 @@
 export default defineComponent({
   auth: 'teacher',
   hideMenu: true,
+  coverRouter: true,
 })
 </script>
 <script setup lang="ts"></script>

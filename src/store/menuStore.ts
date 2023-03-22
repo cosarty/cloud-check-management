@@ -85,11 +85,12 @@ const menuStore = defineStore('menu', () => {
       updateIndex = index
       return (
         tab.name === name ||
-        // 子集覆盖父集
-        (meta.prent &&
-          (tab.name === meta.prent || tab.meta.prent === meta.prent)) ||
-        // 父集覆盖 子集
-        tab.fullPath.includes(name as string)
+        (meta.coverRouter &&
+          // 子集覆盖父集
+          ((meta.prent &&
+            (tab.name === meta.prent || tab.meta.prent === meta.prent)) ||
+            // 父集覆盖 子集
+            tab.fullPath.includes(name as string)))
       )
     })
 

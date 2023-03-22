@@ -48,6 +48,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '更改密码',
+  coverRouter: true,
 })
 </script>
 <script setup lang="ts">

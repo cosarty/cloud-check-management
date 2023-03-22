@@ -22,6 +22,7 @@ export default defineComponent({
   orderNo: -1,
   icon: 'icon-shouye',
   name: 'home',
+  coverRouter: true,
 })
 </script>
 <script setup lang="ts">

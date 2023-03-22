@@ -6,6 +6,7 @@
 export default defineComponent({
   auth: 'admin',
   hideMenu: true,
+  coverRouter: true,
 })
 </script>
 
