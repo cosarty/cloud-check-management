@@ -37,6 +37,7 @@
             :src="row[prop]"
             fit="fill"
             lazy
+            preview-teleported
             :hide-on-click-modal="true"
             :preview-src-list="[row[prop]!]"
             class="w-16 h-16 rounded-full"

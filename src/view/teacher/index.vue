@@ -4,7 +4,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '教师',
-  icon: 'icon-bumen-department',
+  icon: 'icon-jiaoshilaoshi',
   name: 'teacher',
   auth: 'super',
 })

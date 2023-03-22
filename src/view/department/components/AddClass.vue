@@ -14,6 +14,25 @@
       class="max-w-md"
       label-width="100px"
     >
+      <ElFormItem>
+        <ElUpload
+          :show-file-list="false"
+          :before-upload="beforeAvatarUpload"
+          :on-success="handleAvatarSuccess"
+          :headers="{ Authorization: `Bearer ${user.token}` }"
+          :action="actionUrl"
+          name="classAvatarDir"
+        >
+          <ElAvatar
+            :size="100"
+            :src="
+              ruleForm.picture ??
+              'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+            "
+            shape="square"
+          />
+        </ElUpload>
+      </ElFormItem>
       <ElFormItem label="班级编号" required prop="code">
         <ElInput v-model.number="ruleForm.code" placeholder="请输入班级编号" />
       </ElFormItem>
@@ -65,8 +84,13 @@
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getTeacher, createClass, updateClass } from '@/http/api'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, UploadProps } from 'element-plus'
+import userStore from '@/store/userStore'
 
+const actionUrl =
+  import.meta.env.VITE_APP_API_BASE_URL + '/upload/classAvatarDir'
+
+const user = userStore()
 const porps = defineProps<{
   departmentId?: string
   departList: any[]
@@ -95,9 +119,19 @@ const submitForm = async () => {
 
   if (!valid) return
   if (ruleForm.value?.classId) {
-    await updateClass(ruleForm.value)
+    await updateClass({
+      ...ruleForm.value,
+      ...(ruleForm.value.picture
+        ? { picture: ruleForm.value.picture.split('/').pop() }
+        : {}),
+    })
   } else {
-    await createClass(ruleForm.value)
+    await createClass({
+      ...ruleForm.value,
+      ...(ruleForm.value.picture
+        ? { picture: ruleForm.value.picture.split('/').pop() }
+        : {}),
+    })
   }
 
   emit('reset')
@@ -115,6 +149,22 @@ const updateData = (data: any) => {
       .filter(k => data[k])
       .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
   )
+}
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    return false
+  }
+  return true
+}
+
+const handleAvatarSuccess = async (response: any, uploadFile: any) => {
+  ElMessage.success(response.message)
+  ruleForm.value.picture = response.data
 }
 
 watch(dialogVisible, async vi => {
