@@ -6,12 +6,12 @@
         v-for="ro in menu.tabList"
         :key="ro.fullPath"
         custom
-        v-slot="{ navigate, isActive }"
+        v-slot="{ navigate, isExactActive }"
       >
         <div
           class="history-link"
           @click="navigate"
-          :class="{ active: isActive }"
+          :class="{ active: isExactActive }"
         >
           {{ getRouteTitle(ro) }}
           <ElIcon

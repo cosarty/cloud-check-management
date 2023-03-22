@@ -9,6 +9,15 @@ export default defineComponent({
   auth: 'super',
 })
 </script>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+/**
+ * 学生列表展示
+ * 学生添加班级  多个和单个
+ * 学生编辑
+ * 学生添加
+ * 学生删除
+ *
+ */
+</script>
 
 <style scoped></style>

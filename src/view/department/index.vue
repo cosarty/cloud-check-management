@@ -1,5 +1,9 @@
 <template>
-  <ElCard class="card-box h-full flex flex-col">
+  <RouterView #default="{ Component }" v-show="hideDepart">
+    <component :is="Component"></component>
+  </RouterView>
+
+  <ElCard class="card-box h-full flex flex-col" v-show="!hideDepart">
     <template #header>
       <h1>院系组织架构</h1>
     </template>
@@ -143,6 +147,10 @@ import AddDeparment from './components/AddDeparment.vue'
 import AddClass from './components/AddClass.vue'
 import { Plus, Delete, Edit } from '@element-plus/icons-vue'
 import { TableColumType, TableActionType } from '@/components/Table.vue'
+
+const router = useRouter()
+const route = useRoute()
+
 const departmentList = ref<
   {
     departmentName: string
@@ -189,6 +197,14 @@ const classTabColum: TableColumType = [
 const defaultAtion: TableActionType = [
   {
     type: 'primary',
+    title: '查看',
+    link: true,
+    async event(row: any) {
+      router.push({ name: 'addUserToClass' })
+    },
+  },
+  {
+    type: 'primary',
     title: '编辑',
     async event({
       classId,
@@ -221,6 +237,8 @@ const defaultAtion: TableActionType = [
     },
   },
 ]
+
+const hideDepart = ref(false)
 
 const addclassRef = ref<any>()
 const targetTeacher = ref<string>()
@@ -297,6 +315,11 @@ const request = async (pram: any) => {
   } = await getClassList({ ...pram, departmentId: activeDep.value })
   return [rows ?? [], count ?? 0]
 }
+
+watch(route, nr => {
+  if (nr.name === 'addUserToClass') hideDepart.value = true
+  else hideDepart.value = false
+})
 </script>
 
 <style scoped lang="scss">
