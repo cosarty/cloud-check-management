@@ -11,11 +11,17 @@
     <ElTable
       :data="data"
       style="width: 100%"
+      @selection-change="selectChange"
       stripe
       border
       v-loading="loading"
       @sort-change="sortHandle"
     >
+      <ElTableColumn
+        v-if="isSelect"
+        type="selection"
+        width="55"
+      ></ElTableColumn>
       <ElTableColumn
         :width="width ?? '150px'"
         :prop="prop"
@@ -154,6 +160,7 @@ const props = withDefaults(
     action?: TableActionType
     request?: (pramData: any) => [any, number]
     pageSize?: number
+    isSelect?: boolean
   }>(),
   {
     pageSize: 10,
@@ -167,16 +174,23 @@ const searcherParam = ref<Record<string, any>>({
 })
 const loading = ref(false)
 const total = ref<number>(0)
-
+const selectValue = ref<any>([])
 onMounted(async () => {
   if (!props.request) return
   await request()
 })
 
+const selectChange = (value: any) => {
+  if (!props.isSelect) return
+  selectValue.value = value
+}
+
 // 请求
 const request = async () => {
+  if (!props.request) return
+  selectValue.value = []
   loading.value = true
-  ;[data.value, total.value] = await props.request(toRaw(searcherParam.value))
+  ;[data.value, total.value] = await props.request?.(toRaw(searcherParam.value))
   loading.value = false
 }
 
@@ -239,7 +253,7 @@ const sortHandle = ({ prop, order }: any) => {
   request()
 }
 
-defineExpose({ request, reset })
+defineExpose({ request, reset, selectValue })
 </script>
 
 <style lang="scss" scoped></style>

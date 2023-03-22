@@ -33,3 +33,20 @@ export const getClassInfo = async (classId: any) =>
     url: `class/get/${classId}`,
     method: 'get',
   })
+
+// 添加学生到班级
+
+export const addUsertoClass = async (parm: any) =>
+  await http.request({
+    url: `/class/addUser`,
+    method: 'post',
+    data: parm,
+  })
+
+// /getUsers/{classId}
+
+export const getUsersClass = async (classId: any) =>
+  await http.request({
+    url: `class/getUsers/${classId}`,
+    method: 'get',
+  })

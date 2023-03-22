@@ -35,15 +35,19 @@
     <el-dialog
       v-model="studentVisible"
       title="添加学生"
-      width="55%"
+      width="58%"
       destroy-on-close
     >
-      <Table :colums="studentColums" :request="request" :page-size="4"></Table>
+      <Table
+        ref="studenTableRef"
+        isSelect
+        :colums="studentColums"
+        :request="request"
+        :page-size="4"
+      ></Table>
       <template #footer>
         <el-button @click="studentVisible = false">取消</el-button>
-        <el-button type="primary" @click="studentVisible = false">
-          确认
-        </el-button>
+        <el-button type="primary" @click="addConfim"> 确认 </el-button>
       </template>
     </el-dialog>
   </div>
@@ -60,18 +64,24 @@ export default defineComponent({
 <script setup lang="ts">
 import { TableColumType } from '@/components/Table.vue'
 import closeCurrentTab from '@/hooks/closeCurrentTab'
-import { getClassInfo, getStuudent } from '@/http/api'
+import {
+  addUsertoClass,
+  getClassInfo,
+  getStuudent,
+  getUsersClass,
+} from '@/http/api'
 import { Plus } from '@element-plus/icons-vue'
 const route = useRoute()
 const close = closeCurrentTab()
 const classId = ref<string>('')
 const studentVisible = ref(false)
 const classInfo = ref<any>({})
+const studenTableRef = ref<any>()
 
 const studentColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
-  { prop: 'account', label: '学号' },
-  { prop: 'userName', label: '姓名' },
+  { prop: 'account', label: '学号', isSearch: true },
+  { prop: 'userName', label: '姓名', isSearch: true },
   { prop: 'email', label: '邮箱' },
   { prop: 'sex', label: '性别' },
 ]
@@ -81,6 +91,18 @@ const request = async (pram: any) => {
     data: { count, rows },
   } = await getStuudent(pram)
   return [rows ?? [], count ?? 0]
+}
+const addConfim = async () => {
+  console.log()
+
+  await addUsertoClass({
+    classId: classId.value,
+    userId: studenTableRef.value.selectValue.map(u => u.userId),
+  })
+  studentVisible.value = false
+
+  const data = await getUsersClass(classId.value)
+  console.log('data: ', data)
 }
 
 watch(

@@ -142,13 +142,14 @@ const updateVisBale = () => (dialogVisible.value = !dialogVisible.value)
 
 const updateData = (data: any) => {
   updateVisBale()
-
-  Object.assign(
-    ruleForm.value,
-    [...Object.keys(data)]
-      .filter(k => data[k])
-      .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
-  )
+  nextTick().then(() => {
+    Object.assign(
+      ruleForm.value,
+      [...Object.keys(data)]
+        .filter(k => data[k])
+        .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
+    )
+  })
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
