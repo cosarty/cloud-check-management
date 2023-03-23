@@ -7,6 +7,12 @@
       点名管理系统
     </div>
     <div class="extra">
+      <div class="extra-item" @click="classRef?.updateDrawer()">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-time"></use>
+        </svg>
+        <div class="lable">上课时间</div>
+      </div>
       <div class="extra-item">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-xiaoxi"></use>
@@ -40,13 +46,16 @@
       </ElDropdown>
     </div>
   </ElHeader>
+  <ClassTime ref="classRef" />
 </template>
 
 <script setup lang="ts">
 import { ArrowDown } from '@element-plus/icons-vue'
 import userStore from '@/store/userStore'
+import ClassTime from './components/ClassTime.vue'
 const user = userStore()
 const router = useRouter()
+const classRef = ref<InstanceType<typeof ClassTime>>()
 const handleCommand = async (command: string) => {
   switch (command) {
     case 'logout':

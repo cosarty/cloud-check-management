@@ -5,7 +5,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '课程',
-  icon: 'icon-xuesheng',
+  icon: 'icon-kecheng',
   name: 'course',
   auth: ['admin', 'super', 'teacher'],
   orderNo: 12,
