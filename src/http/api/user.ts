@@ -60,10 +60,11 @@ export const updatePassword = async (payload: {
 
 // 获取老师
 
-export const getTeacher = async () =>
+export const getTeacher = async (pram?: any) =>
   await http.request({
     url: '/user/getTeacher',
     method: 'get',
+    data: pram,
   })
 
 // 获取学生未加入班级的学生
@@ -94,4 +95,11 @@ export const register = async (payload: any) =>
     url: '/genIn/register',
     method: 'post',
     data: payload,
+  })
+
+export const setAdmin = async (userId: string, isAdmin: boolean) =>
+  await http.request({
+    url: '/user/setAdmin',
+    method: 'post',
+    data: { userId, isAdmin },
   })

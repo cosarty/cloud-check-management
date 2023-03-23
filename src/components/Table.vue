@@ -1,140 +1,145 @@
 <template>
-  <div class="w-min mx-auto max-w-full">
-    <TableFilter
-      :filterField="searcheProps"
-      v-if="searcheProps.length"
-      @change="filteChangeHanle"
-      @reset="reset"
-    />
-
-    <slot name="header"></slot>
-    <ElTable
-      :data="data"
-      style="width: 100%"
-      @selection-change="selectChange"
-      stripe
-      border
-      v-loading="loading"
-      @sort-change="sortHandle"
-    >
-      <ElTableColumn
-        v-if="isSelect"
-        type="selection"
-        width="55"
-      ></ElTableColumn>
-      <ElTableColumn
-        :width="width ?? '150px'"
-        :prop="prop"
-        :label="label"
-        v-for="(
-          { label, type, prop, width, fixed, align, options, event, sort }, idx
-        ) in colums"
-        :key="idx"
-        v-slot="{ row }"
-        :fixed="fixed ?? false"
-        :align="align ?? 'center'"
-        :sortable="sort ? 'custom' : false"
-      >
-        <template v-if="$slots[prop]"
-          ><slot :name="prop" :row="row"> {{ row[prop] }}</slot></template
-        >
-        <template v-else-if="type === 'image'">
-          <ElImage
-            :src="row[prop]"
-            fit="fill"
-            lazy
-            preview-teleported
-            :hide-on-click-modal="true"
-            :preview-src-list="[row[prop]!]"
-            class="w-16 h-16 rounded-full"
-          />
-        </template>
-        <template v-else-if="type === 'date'">
-          {{ dayjs(row[prop]).format('YYYY-mm-DD') }}
-        </template>
-
-        <template v-else-if="type === 'select'">
-          <ElSelect :model-value="row[prop]" @change="e => event?.(e, row)">
-            <ElOption
-              v-for="(op, k) in options"
-              :value="k"
-              :label="op"
-              :key="k"
-            ></ElOption>
-          </ElSelect>
-        </template>
-
-        <template v-else-if="type === 'tag'">
-          <ElTag
-            v-if="options[row[prop]]"
-            :type="options[row[prop]]?.type ?? 'info'"
-            >{{ options[row[prop]]?.txt ?? '未知' }}</ElTag
-          >
-        </template>
-        <template v-else-if="type === 'switch'">
-          <ElSwitch
-            :model-value="row[prop]"
-            @change="$event => event?.($event, row)"
-          ></ElSwitch>
-        </template>
-        <template v-else>{{ row[prop] }}</template>
-      </ElTableColumn>
-
-      <!-- action -->
-      <ElTableColumn
-        v-if="action && action.length"
-        #default="{ row }"
-        align="center"
-        fixed="right"
-        :width="buttonWidth"
-      >
-        <template
-          v-for="({ type, title, event, link, confirmTitle }, idx) in action"
-          :key="idx"
-        >
-          <ElPopconfirm
-            v-if="confirmTitle"
-            :title="confirmTitle"
-            @confirm="() => event?.(row)"
-            confirm-button-text="是"
-            cancel-button-text="否"
-          >
-            <template #reference>
-              <ElButton
-                :size="'small'"
-                :link="link"
-                :type="type ?? 'default'"
-                >{{ title }}</ElButton
-              >
-            </template>
-          </ElPopconfirm>
-          <ElButton
-            v-else
-            :size="'small'"
-            :link="link"
-            :type="type ?? 'default'"
-            @click="() => event?.(row)"
-            >{{ title }}</ElButton
-          >
-        </template>
-      </ElTableColumn>
-      <ElTableColumn
-        v-else-if="$slots.button"
-        #default="{ row }"
-        align="center"
-        fixed="right"
-      >
-        <slot name="button" :row="row"></slot>
-      </ElTableColumn>
-    </ElTable>
-    <div class="flex justify-end mt-5" v-if="total > pageSize">
-      <Pagination
-        :total="total"
-        :page-size="pageSize"
-        @pageChange="pageChange"
+  <ElScrollbar style="padding-right: 10px">
+    <div class="w-min mx-auto max-w-full">
+      <TableFilter
+        :filterField="searcheProps"
+        v-if="searcheProps.length"
+        @change="filteChangeHanle"
+        @reset="reset"
       />
+
+      <slot name="header"></slot>
+
+      <ElTable
+        :data="data"
+        style="width: 100%"
+        @selection-change="selectChange"
+        stripe
+        border
+        v-loading="loading"
+        @sort-change="sortHandle"
+      >
+        <ElTableColumn
+          v-if="isSelect"
+          type="selection"
+          width="55"
+        ></ElTableColumn>
+        <ElTableColumn
+          :width="width ?? '150px'"
+          :prop="prop"
+          :label="label"
+          v-for="(
+            { label, type, prop, width, fixed, align, options, event, sort },
+            idx
+          ) in colums"
+          :key="idx"
+          v-slot="{ row }"
+          :fixed="fixed ?? false"
+          :align="align ?? 'center'"
+          :sortable="sort ? 'custom' : false"
+        >
+          <template v-if="$slots[prop]"
+            ><slot :name="prop" :row="row"> {{ row[prop] }}</slot></template
+          >
+          <template v-else-if="type === 'image'">
+            <ElImage
+              :src="row[prop]"
+              fit="fill"
+              lazy
+              preview-teleported
+              :hide-on-click-modal="true"
+              :preview-src-list="[row[prop]!]"
+              class="w-10 h-10 rounded-full"
+            />
+          </template>
+          <template v-else-if="type === 'date'">
+            {{ dayjs(row[prop]).format('YYYY-mm-DD') }}
+          </template>
+
+          <template v-else-if="type === 'select'">
+            <ElSelect :model-value="row[prop]" @change="e => event?.(e, row)">
+              <ElOption
+                v-for="(op, k) in options"
+                :value="k"
+                :label="op"
+                :key="k"
+              ></ElOption>
+            </ElSelect>
+          </template>
+
+          <template v-else-if="type === 'tag'">
+            <ElTag
+              v-if="options[row[prop]]"
+              :type="options[row[prop]]?.type ?? 'info'"
+              >{{ options[row[prop]]?.txt ?? '未知' }}</ElTag
+            >
+          </template>
+          <template v-else-if="type === 'switch'">
+            <ElSwitch
+              :model-value="row[prop]"
+              @change="$event => event?.($event, row)"
+            ></ElSwitch>
+          </template>
+          <template v-else>{{ row[prop] }}</template>
+        </ElTableColumn>
+
+        <!-- action -->
+        <ElTableColumn
+          v-if="action && action.length"
+          #default="{ row }"
+          align="center"
+          fixed="right"
+          :width="buttonWidth"
+        >
+          <template
+            v-for="({ type, title, event, link, confirmTitle }, idx) in action"
+            :key="idx"
+          >
+            <ElPopconfirm
+              v-if="confirmTitle"
+              :title="confirmTitle"
+              @confirm="() => event?.(row)"
+              confirm-button-text="是"
+              cancel-button-text="否"
+            >
+              <template #reference>
+                <ElButton
+                  :size="'small'"
+                  :link="link"
+                  :type="type ?? 'default'"
+                  >{{ title }}</ElButton
+                >
+              </template>
+            </ElPopconfirm>
+            <ElButton
+              v-else
+              :size="'small'"
+              :link="link"
+              :type="type ?? 'default'"
+              @click="() => event?.(row)"
+              >{{ title }}</ElButton
+            >
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          v-else-if="$slots.button"
+          #default="{ row }"
+          align="center"
+          fixed="right"
+        >
+          <slot name="button" :row="row"></slot>
+        </ElTableColumn>
+      </ElTable>
+
+      <div class="flex justify-end mt-5" v-if="total > pageSize">
+        <Pagination
+          :total="total"
+          :page-size="pageSize"
+          @pageChange="pageChange"
+        />
+      </div>
     </div>
-  </div>
+  </ElScrollbar>
 </template>
 
 <script setup lang="ts">

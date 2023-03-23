@@ -254,7 +254,7 @@ const tableRef = ref<any>()
 onMounted(() => {
   getData()
   getTeacher().then(({ data }) => {
-    teacherList.value = data
+    teacherList.value = data.rows
   })
 })
 

@@ -3,7 +3,7 @@
 
   <el-dialog
     v-model="dialogVisible"
-    title="添加学生"
+    title="添加教师"
     width="30%"
     destroy-on-close
   >
@@ -33,8 +33,11 @@
           />
         </ElUpload>
       </ElFormItem>
-      <ElFormItem label="学号" required prop="account">
-        <ElInput v-model.number="ruleForm.account" placeholder="请输入学号" />
+      <ElFormItem label="教师编号" required prop="account">
+        <ElInput
+          v-model.number="ruleForm.account"
+          placeholder="请输入教师编号"
+        />
       </ElFormItem>
       <ElFormItem label="姓名" required prop="userName">
         <ElInput v-model="ruleForm.userName" placeholder="请输入名字" />
@@ -42,20 +45,7 @@
       <ElFormItem label="邮箱" required prop="email">
         <ElInput v-model="ruleForm.email" placeholder="请输入邮箱" />
       </ElFormItem>
-      <ElFormItem label="班级" prop="classId">
-        <ElSelect
-          v-model="ruleForm.classId"
-          class="w-full"
-          placeholder="选择班级"
-        >
-          <ElOption
-            :label="op.className"
-            :value="op.classId"
-            v-for="op in options"
-            :key="op.classId"
-          />
-        </ElSelect>
-      </ElFormItem>
+
       <ElFormItem label="性别" prop="sex">
         <ElRadioGroup class="ml-3" v-model="ruleForm.sex">
           <ElRadio :label="0">女</ElRadio>
@@ -91,7 +81,6 @@ const porps = defineProps<{
   remarks?: string
 }>()
 const dialogVisible = ref(false)
-const options = ref<any>([])
 
 const emit = defineEmits<{ (e: 'reset'): void }>()
 
@@ -100,7 +89,7 @@ const ruleForm = ref<any>({})
 
 const rules = reactive<FormRules>({
   userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  account: [{ required: true, message: '请输入学号', trigger: 'blur' }],
+  account: [{ required: true, message: '请输入教师编号', trigger: 'blur' }],
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
   sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
 })
@@ -111,7 +100,7 @@ const submitForm = async () => {
   //   register
   if (!valid) return
 
-  await register({ ...ruleForm.value, auth: 'student' })
+  await register({ ...ruleForm.value, auth: 'teacher' })
   //   if (ruleForm.value?.classId) {
   //     await updateClass({
   //       ...ruleForm.value,
@@ -163,11 +152,9 @@ const handleAvatarSuccess = async (response: any, uploadFile: any) => {
 }
 
 watch(dialogVisible, async vi => {
-  if (vi) {
-    const { data } = await getClassList()
-    options.value = data.rows
-  } else {
+  if (!vi) {
     ruleForm.value = {}
+  } else {
   }
 })
 

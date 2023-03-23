@@ -5,19 +5,19 @@
         user.auth.includes('super') ? showStudentAction : AdminStudenAction
       "
       ref="showStudneTableRef"
-      :colums="studentColums"
-      :request="getStudent"
+      :colums="teacherColumsComp"
+      :request="gettec"
       :page-size="7"
     >
       <template #header>
-        <CheckStudent
+        <CheckTeacher
           @reset="() => showStudneTableRef.reset()"
           #default="{ updateVisBale }"
         >
           <ElButton class="mb-6" type="primary" @click="updateVisBale"
-            >添加学生</ElButton
+            >添加教师</ElButton
           >
-        </CheckStudent>
+        </CheckTeacher>
       </template>
       <template #class="{ row }">
         {{ row?.class?.className ?? '未加入班级' }}
@@ -30,17 +30,17 @@
 </template>
 <script lang="ts">
 export default defineComponent({
-  title: '学生管理',
+  title: '教师管理',
   // icon: 'icon-xuesheng',
-  name: 'mange',
+  name: 'teacherMange',
   auth: ['super', 'admin'],
 })
 </script>
 <script setup lang="ts">
 import { TableActionType, TableColumType } from '@/components/Table.vue'
-import { bindUser, deleteUser, getStuudent, getUsersClass } from '@/http/api'
+import { bindUser, deleteUser, getTeacher, setAdmin } from '@/http/api'
 import userStore from '@/store/userStore'
-import CheckStudent from './components/CheckStudent.vue'
+import CheckTeacher from './components/CheckTeacher.vue'
 const user = userStore()
 /**
  * 学生列表展示
@@ -51,9 +51,9 @@ const user = userStore()
  */
 
 const showStudneTableRef = ref<any>()
-const studentColums: TableColumType = [
+const teacherColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
-  { prop: 'account', label: '学号', isSearch: true },
+  { prop: 'account', label: '教师编号', isSearch: true },
   { prop: 'userName', label: '姓名', isSearch: true },
   { prop: 'email', label: '邮箱' },
   {
@@ -81,6 +81,17 @@ const studentColums: TableColumType = [
       await bindUser(row.userId, nv)
       row.isBan = nv
     },
+    fixed: 'right',
+  },
+  {
+    prop: 'isAdmin',
+    label: '管理员',
+    type: 'switch',
+    async event(nv: boolean, row: any) {
+      await setAdmin(row.userId, nv)
+      row.isAdmin = nv
+    },
+    fixed: 'right',
   },
 ]
 
@@ -103,10 +114,21 @@ const showStudentAction: TableActionType = [
   },
 ]
 
-const getStudent = async (pram: any) => {
+const teacherColumsComp = computed(() => {
+  if (user.auth.includes('admin')) {
+    return teacherColums.slice(0, -1)
+  }
+  return teacherColums
+})
+
+const gettec = async (pram: any) => {
+  console.log('pram: ', pram)
   const {
     data: { count, rows },
-  } = await getStuudent({ ...pram, flag: 'all' })
+  } = await getTeacher({
+    ...pram,
+    ...(user.auth.includes('admin') ? {} : { flag: 'all' }),
+  })
   return [rows ?? [], count ?? 0]
 }
 </script>

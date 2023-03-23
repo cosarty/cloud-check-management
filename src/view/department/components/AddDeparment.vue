@@ -68,9 +68,8 @@ watch(dialogVisible, async vi => {
   if (!vi) ruleForm.value = {}
   else {
     const { data } = await getTeacher()
-    options.value = data
+    options.value = data.rows
   }
 })
 </script>
 <style scoped></style>
-

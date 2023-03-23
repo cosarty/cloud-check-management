@@ -1,12 +1,13 @@
 <template>
-  <div>班级管理</div>
+  <RouterView></RouterView>
 </template>
 <script lang="ts">
 export default defineComponent({
   title: '教师',
   icon: 'icon-jiaoshilaoshi',
   name: 'teacher',
-  auth: 'super',
+  auth: ['admin', 'super'],
+  redirect: 'teacherMange',
 })
 </script>
 <script setup lang="ts"></script>

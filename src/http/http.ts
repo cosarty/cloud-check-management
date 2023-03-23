@@ -198,6 +198,7 @@ export default new Request({
             type: 'error',
             message: '请先登录',
           })
+          userStore().logout(false)
           break
         case 400:
           const { error } = response.data
