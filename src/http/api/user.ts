@@ -103,3 +103,10 @@ export const setAdmin = async (userId: string, isAdmin: boolean) =>
     method: 'post',
     data: { userId, isAdmin },
   })
+
+export const updateOtherUser = async (pram: any) =>
+  await http.request({
+    url: '/user/updateUser',
+    method: 'post',
+    data: pram,
+  })

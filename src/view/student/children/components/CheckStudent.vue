@@ -3,7 +3,7 @@
 
   <el-dialog
     v-model="dialogVisible"
-    title="添加学生"
+    :title="coTitle"
     width="30%"
     destroy-on-close
   >
@@ -22,6 +22,8 @@
           :headers="{ Authorization: `Bearer ${user.token}` }"
           :action="actionUrl"
           name="userAvatarDir"
+          :data="{ flag: 'update' }"
+          :disabled="readonly"
         >
           <ElAvatar
             :size="100"
@@ -34,16 +36,29 @@
         </ElUpload>
       </ElFormItem>
       <ElFormItem label="学号" required prop="account">
-        <ElInput v-model.number="ruleForm.account" placeholder="请输入学号" />
+        <ElInput
+          :disabled="readonly"
+          v-model.number="ruleForm.account"
+          placeholder="请输入学号"
+        />
       </ElFormItem>
       <ElFormItem label="姓名" required prop="userName">
-        <ElInput v-model="ruleForm.userName" placeholder="请输入名字" />
+        <ElInput
+          :disabled="readonly"
+          v-model="ruleForm.userName"
+          placeholder="请输入名字"
+        />
       </ElFormItem>
       <ElFormItem label="邮箱" required prop="email">
-        <ElInput v-model="ruleForm.email" placeholder="请输入邮箱" />
+        <ElInput
+          :disabled="readonly"
+          v-model="ruleForm.email"
+          placeholder="请输入邮箱"
+        />
       </ElFormItem>
       <ElFormItem label="班级" prop="classId">
         <ElSelect
+          :disabled="readonly"
           v-model="ruleForm.classId"
           class="w-full"
           placeholder="选择班级"
@@ -57,7 +72,7 @@
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="性别" prop="sex">
-        <ElRadioGroup class="ml-3" v-model="ruleForm.sex">
+        <ElRadioGroup :disabled="readonly" class="ml-3" v-model="ruleForm.sex">
           <ElRadio :label="0">女</ElRadio>
           <ElRadio :label="1">男</ElRadio>
         </ElRadioGroup>
@@ -75,7 +90,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { getClassList, register } from '@/http/api'
+import { getClassList, register, updateOtherUser } from '@/http/api'
 import type { FormInstance, FormRules, UploadProps } from 'element-plus'
 import userStore from '@/store/userStore'
 
@@ -89,15 +104,16 @@ const porps = defineProps<{
   className?: string
   teacherId?: string
   remarks?: string
+  title: string
 }>()
 const dialogVisible = ref(false)
 const options = ref<any>([])
-
+const coTitle = ref(porps.title)
 const emit = defineEmits<{ (e: 'reset'): void }>()
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = ref<any>({})
-
+const readonly = ref(false)
 const rules = reactive<FormRules>({
   userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   account: [{ required: true, message: '请输入学号', trigger: 'blur' }],
@@ -106,27 +122,28 @@ const rules = reactive<FormRules>({
 })
 const submitForm = async () => {
   if (!ruleFormRef.value) return
-
+  if (readonly.value) {
+    dialogVisible.value = false
+    return
+  }
   const valid = await ruleFormRef.value.validate().catch(() => {})
   //   register
   if (!valid) return
+  if (!ruleForm.value.userId) {
+    await register({
+      ...ruleForm.value,
+      auth: 'student',
+      ...(ruleForm.value.pic
+        ? { pic: ruleForm.value.pic.split('/').pop() }
+        : {}),
+    })
+    return
+  }
 
-  await register({ ...ruleForm.value, auth: 'student' })
-  //   if (ruleForm.value?.classId) {
-  //     await updateClass({
-  //       ...ruleForm.value,
-  //       ...(ruleForm.value.picture
-  //         ? { picture: ruleForm.value.picture.split('/').pop() }
-  //         : {}),
-  //     })
-  //   } else {
-  //     await createClass({
-  //       ...ruleForm.value,
-  //       ...(ruleForm.value.picture
-  //         ? { picture: ruleForm.value.picture.split('/').pop() }
-  //         : {}),
-  //     })
-  //   }
+  await updateOtherUser({
+    ...ruleForm.value,
+    ...(ruleForm.value.pic ? { pic: ruleForm.value.pic.split('/').pop() } : {}),
+  })
 
   emit('reset')
   dialogVisible.value = false
@@ -134,13 +151,15 @@ const submitForm = async () => {
 
 const updateVisBale = () => (dialogVisible.value = !dialogVisible.value)
 
-const updateData = (data: any) => {
+const updateData = (data: any, title: string, isReadonly: boolean) => {
   updateVisBale()
+  if (title) coTitle.value = title
+  if (isReadonly) readonly.value = isReadonly
   nextTick().then(() => {
     Object.assign(
       ruleForm.value,
       [...Object.keys(data)]
-        .filter(k => data[k])
+        .filter(k => data[k] === 0 || data[k])
         .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
     )
   })
@@ -168,6 +187,8 @@ watch(dialogVisible, async vi => {
     options.value = data.rows
   } else {
     ruleForm.value = {}
+    coTitle.value = porps.title
+    readonly.value = false
   }
 })
 

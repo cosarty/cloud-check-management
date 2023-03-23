@@ -11,8 +11,10 @@
     >
       <template #header>
         <CheckStudent
+          title="添加学生"
           @reset="() => showStudneTableRef.reset()"
           #default="{ updateVisBale }"
+          ref="checkStudentRef"
         >
           <ElButton class="mb-6" type="primary" @click="updateVisBale"
             >添加学生</ElButton
@@ -51,6 +53,7 @@ const user = userStore()
  */
 
 const showStudneTableRef = ref<any>()
+const checkStudentRef = ref<any>()
 const studentColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
   { prop: 'account', label: '学号', isSearch: true },
@@ -85,11 +88,25 @@ const studentColums: TableColumType = [
 ]
 
 const AdminStudenAction: TableActionType = [
-  { type: 'primary', title: '查看', link: true },
+  {
+    type: 'primary',
+    title: '查看',
+    link: true,
+    event(row) {
+      // checkStudentRef.value.updateData(row, '查看学生', true)
+    },
+  },
 ]
 
 const showStudentAction: TableActionType = [
-  { type: 'primary', title: '编辑', link: true },
+  {
+    type: 'primary',
+    title: '编辑',
+    link: true,
+    event(row) {
+      checkStudentRef.value.updateData(row, '编辑学生')
+    },
+  },
   {
     type: 'danger',
     title: '删除',

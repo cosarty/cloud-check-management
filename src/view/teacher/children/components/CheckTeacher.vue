@@ -3,7 +3,7 @@
 
   <el-dialog
     v-model="dialogVisible"
-    title="添加教师"
+    :title="coTitle"
     width="30%"
     destroy-on-close
   >
@@ -22,6 +22,7 @@
           :headers="{ Authorization: `Bearer ${user.token}` }"
           :action="actionUrl"
           name="userAvatarDir"
+          :data="{ flag: 'update' }"
         >
           <ElAvatar
             :size="100"
@@ -65,28 +66,27 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { getClassList, register } from '@/http/api'
+import { getClassList, register, updateOtherUser } from '@/http/api'
 import type { FormInstance, FormRules, UploadProps } from 'element-plus'
 import userStore from '@/store/userStore'
+import { title } from 'process'
 
 const actionUrl =
   import.meta.env.VITE_APP_API_BASE_URL + '/upload/userAvatarDir'
 
 const user = userStore()
 const porps = defineProps<{
-  departmentId?: string
-  code?: number
-  className?: string
-  teacherId?: string
-  remarks?: string
+  title: string
 }>()
 const dialogVisible = ref(false)
+
+const coTitle = ref(porps.title)
 
 const emit = defineEmits<{ (e: 'reset'): void }>()
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = ref<any>({})
-
+const readonly = ref(false)
 const rules = reactive<FormRules>({
   userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   account: [{ required: true, message: '请输入教师编号', trigger: 'blur' }],
@@ -95,27 +95,30 @@ const rules = reactive<FormRules>({
 })
 const submitForm = async () => {
   if (!ruleFormRef.value) return
-
+  if (readonly.value) {
+    dialogVisible.value = false
+    return
+  }
   const valid = await ruleFormRef.value.validate().catch(() => {})
   //   register
   if (!valid) return
 
-  await register({ ...ruleForm.value, auth: 'teacher' })
-  //   if (ruleForm.value?.classId) {
-  //     await updateClass({
-  //       ...ruleForm.value,
-  //       ...(ruleForm.value.picture
-  //         ? { picture: ruleForm.value.picture.split('/').pop() }
-  //         : {}),
-  //     })
-  //   } else {
-  //     await createClass({
-  //       ...ruleForm.value,
-  //       ...(ruleForm.value.picture
-  //         ? { picture: ruleForm.value.picture.split('/').pop() }
-  //         : {}),
-  //     })
-  //   }
+  if (!ruleForm.value.userId) {
+    await register({
+      ...ruleForm.value,
+      auth: 'teacher',
+      ...(ruleForm.value.pic
+        ? { pic: ruleForm.value.pic.split('/').pop() }
+        : {}),
+    })
+  } else {
+    await updateOtherUser({
+      ...ruleForm.value,
+      ...(ruleForm.value.pic
+        ? { pic: ruleForm.value.pic.split('/').pop() }
+        : {}),
+    })
+  }
 
   emit('reset')
   dialogVisible.value = false
@@ -123,13 +126,15 @@ const submitForm = async () => {
 
 const updateVisBale = () => (dialogVisible.value = !dialogVisible.value)
 
-const updateData = (data: any) => {
+const updateData = (data: any, title?: string, isReadonly?: boolean) => {
   updateVisBale()
+  if (title) coTitle.value = title
+  if (isReadonly) readonly.value = isReadonly
   nextTick().then(() => {
     Object.assign(
       ruleForm.value,
       [...Object.keys(data)]
-        .filter(k => data[k])
+        .filter(k => data[k] === 0 || data[k])
         .reduce((p, k) => Object.assign(p, { [k]: data[k] }), {}),
     )
   })
@@ -154,7 +159,8 @@ const handleAvatarSuccess = async (response: any, uploadFile: any) => {
 watch(dialogVisible, async vi => {
   if (!vi) {
     ruleForm.value = {}
-  } else {
+    coTitle.value = porps.title
+    readonly.value = false
   }
 })
 

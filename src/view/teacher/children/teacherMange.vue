@@ -11,8 +11,10 @@
     >
       <template #header>
         <CheckTeacher
+          title="添加教师"
           @reset="() => showStudneTableRef.reset()"
           #default="{ updateVisBale }"
+          ref="checkTeacherRef"
         >
           <ElButton class="mb-6" type="primary" @click="updateVisBale"
             >添加教师</ElButton
@@ -34,6 +36,7 @@ export default defineComponent({
   // icon: 'icon-xuesheng',
   name: 'teacherMange',
   auth: ['super', 'admin'],
+  orderNo: 1,
 })
 </script>
 <script setup lang="ts">
@@ -51,6 +54,7 @@ const user = userStore()
  */
 
 const showStudneTableRef = ref<any>()
+const checkTeacherRef = ref<any>()
 const teacherColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
   { prop: 'account', label: '教师编号', isSearch: true },
@@ -100,7 +104,14 @@ const AdminStudenAction: TableActionType = [
 ]
 
 const showStudentAction: TableActionType = [
-  { type: 'primary', title: '编辑', link: true },
+  {
+    type: 'primary',
+    title: '编辑',
+    link: true,
+    event(row) {
+      checkTeacherRef.value.updateData(row, '编辑教师')
+    },
+  },
   {
     type: 'danger',
     title: '删除',
@@ -122,7 +133,6 @@ const teacherColumsComp = computed(() => {
 })
 
 const gettec = async (pram: any) => {
-  console.log('pram: ', pram)
   const {
     data: { count, rows },
   } = await getTeacher({
