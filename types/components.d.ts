@@ -48,6 +48,7 @@ declare module '@vue/runtime-core' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FooterBar: typeof import('./../src/components/FooterBar.vue')['default']
     Pagination: typeof import('./../src/components/Pagination.vue')['default']
+    RenderCourse: typeof import('./../src/components/RenderCourse/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SendMailCaptcha: typeof import('./../src/components/SendMailCaptcha.vue')['default']

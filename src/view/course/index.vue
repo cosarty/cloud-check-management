@@ -1,5 +1,7 @@
 <template>
-  <div style="background-color: white; height: 100%">课程管理</div>
+  <div style="background-color: white; height: 100%" class="box-border">
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,6 +11,7 @@ export default defineComponent({
   name: 'course',
   auth: ['admin', 'super', 'teacher'],
   orderNo: 12,
+  redirect: 'courseMange',
 })
 </script>
 <script setup lang="ts">
