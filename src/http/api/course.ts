@@ -5,3 +5,10 @@ export const createCourse = async (prama: any = {}) =>
     method: 'post',
     data: prama,
   })
+
+export const getCourseList = async (prama: any = {}) =>
+  await http.request({
+    url: '/course/get',
+    method: 'get',
+    data: prama,
+  })
