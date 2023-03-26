@@ -137,13 +137,14 @@ const submitForm = async () => {
         ? { pic: ruleForm.value.pic.split('/').pop() }
         : {}),
     })
-    return
+  } else {
+    await updateOtherUser({
+      ...ruleForm.value,
+      ...(ruleForm.value.pic
+        ? { pic: ruleForm.value.pic.split('/').pop() }
+        : {}),
+    })
   }
-
-  await updateOtherUser({
-    ...ruleForm.value,
-    ...(ruleForm.value.pic ? { pic: ruleForm.value.pic.split('/').pop() } : {}),
-  })
 
   emit('reset')
   dialogVisible.value = false

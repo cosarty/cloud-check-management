@@ -29,9 +29,9 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="备注" prop="comment">
+      <ElFormItem label="课程时间" prop="time">
         <el-date-picker
-          v-model="value1"
+          v-model="ruleForm.time"
           type="daterange"
           range-separator="到"
           start-placeholder="请选择上课时间"
@@ -51,15 +51,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import { getClassList } from '@/http/api'
+import { createClassSchedule, getClassList } from '@/http/api'
 import type { FormInstance, FormRules } from 'element-plus'
 import userStore from '@/store/userStore'
 const user = userStore()
-const value1 = ref('')
 
-watch(value1, () => {
-  console.log(value1.value)
-})
 const courseId = ref<string>()
 const dialogVisible = ref(false)
 const options = ref<any>([])
@@ -67,7 +63,8 @@ const ruleFormRef = ref<FormInstance>()
 const ruleForm = ref<any>({})
 const readonly = ref(false)
 const rules = reactive<FormRules>({
-  courseName: [{ required: true, message: '请输入课程名', trigger: 'blur' }],
+  classId: [{ required: true, message: '请选择班级', trigger: 'blur' }],
+  time: [{ required: true, message: '请选择时间', trigger: 'blur' }],
 })
 const submitForm = async () => {
   if (!ruleFormRef.value) return
@@ -82,10 +79,19 @@ const submitForm = async () => {
   if (!courseId.value) {
     return
   }
-  console.log('下发')
 
-  //   emit('reset')
-  //   dialogVisible.value = false
+  const {
+    classId,
+    time: [starDate, endDate],
+  } = ruleForm.value
+  await createClassSchedule({
+    classId,
+    courseId: courseId.value,
+    starDate,
+    endDate,
+  })
+
+  dialogVisible.value = false
 }
 
 const updateVisBale = () => (dialogVisible.value = !dialogVisible.value)
