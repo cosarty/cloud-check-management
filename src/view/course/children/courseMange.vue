@@ -20,6 +20,7 @@
     <ElScrollbar class="p-4 bg-slate-100 h-full">
       <RenderCourse :data="courseList" is-action @action="action" show-time />
     </ElScrollbar>
+    <IssuedCourse ref="issuedCourseRef" />
   </div>
 </template>
 <script lang="ts">
@@ -36,17 +37,19 @@ import { delteCourse, getCourseList } from '@/http/api'
 import userStore from '@/store/userStore'
 import { Plus, Search } from '@element-plus/icons-vue'
 import AddCourse from './components/AddCourse.vue'
+import IssuedCourse from './components/IssuedCourse.vue'
 import RenderCourse from '@/components/RenderCourse/index.vue'
 import { Action, ElMessageBox } from 'element-plus'
 const user = userStore()
 const searchText = ref('')
 const courseList = ref<any>([])
 const coursRef = ref<InstanceType<typeof AddCourse>>()
+const issuedCourseRef = ref<InstanceType<typeof IssuedCourse>>()
 const reset = async () => {
   const { data } = await getCourseList()
   courseList.value = data.rows
 }
-const action = (comd: 'update' | 'delete' | 'issued', data: any) => {
+const action = (comd: 'update' | 'delete' | 'issued' | 'show', data: any) => {
   switch (comd) {
     case 'update':
       coursRef.value?.updateData?.(data, '编辑课程')
@@ -66,6 +69,10 @@ const action = (comd: 'update' | 'delete' | 'issued', data: any) => {
       })
       break
     case 'issued':
+      issuedCourseRef.value?.updateData?.(data.courseId)
+      break
+    case 'show':
+      console.log('查看')
       break
   }
 }

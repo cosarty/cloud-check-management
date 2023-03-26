@@ -25,7 +25,7 @@
         {{ row?.class?.className ?? '未加入班级' }}
       </template>
       <template #department="{ row }">
-        {{ row?.class?.department?.departmentName ?? '暂无' }}
+        {{ row?.department?.departmentName ?? '暂无' }}
       </template>
     </Table>
   </div>
@@ -75,7 +75,6 @@ const teacherColums: TableColumType = [
       },
     },
   },
-  { prop: 'class', label: '班级' },
   { prop: 'department', label: '系别' },
   {
     prop: 'isBan',

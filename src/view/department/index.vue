@@ -253,7 +253,7 @@ const teacherList = ref<any>([])
 const tableRef = ref<any>()
 onMounted(() => {
   getData()
-  getTeacher().then(({ data }) => {
+  getTeacher({ flag: 'all' }).then(({ data }) => {
     teacherList.value = data.rows
   })
 })

@@ -1,7 +1,8 @@
 <template>
   <div class="course-box flex flex-wrap">
     <div
-      v-for="co in data"
+      @click="$emit('action', 'show', co)"
+      v-for="co in list"
       :key="co.courseId"
       class="flex-shrink-0 course-item shadow-xl flex flex-col group rounded-xl overflow-hidden relative basis-1/6"
       style="box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12)"
@@ -47,13 +48,14 @@
       <div
         class="hidden absolute p-1 px-4 group-hover:block items-center bottom-0 right-0 bg-cyan-200 rounded-tl-xl text-cyan-500"
         v-if="isAction"
+        @click.stop="$emit('action', 'issued', co)"
       >
         下发
       </div>
     </div>
   </div>
 
-  <div class="flex justify-end">
+  <div class="flex justify-end my-4 mr-10">
     <el-pagination
       v-model:current-page="currentPage"
       background
@@ -74,39 +76,40 @@ const props = withDefaults(
   defineProps<{
     data: any
     isAction?: boolean
-    pageSize: number
+    pageSize?: number
     showTime?: boolean
   }>(),
   {
-    pageSize: 12,
+    pageSize: 10,
     showTime: false,
   },
 )
-const list = ref<any>(props.data)
+const list = ref<any>([])
 defineEmits<{
-  (e: 'action', comd: 'update' | 'delete' | 'issued', data: any): void
+  (e: 'action', comd: 'update' | 'delete' | 'issued' | 'show', data: any): void
 }>()
-
+const getList = () =>
+  props.data.slice(
+    props.pageSize * (currentPage.value - 1),
+    props.pageSize * currentPage.value,
+  )
 watch(
   currentPage,
   np => {
-    if (list.value.length <= props.pageSize * currentPage.value) return
-
-    list.value = props.data.slice(
-      props.pageSize * (currentPage.value - 1),
-      props.pageSize * currentPage.value,
-    )
+    if (props.data.length <= props.pageSize) return
+    list.value = getList()
   },
   {
-    immediate: true,
     deep: true,
+    immediate: true,
   },
 )
 
 watch(
   () => props.data,
+
   np => {
-    list.value = np
+    list.value = getList()
     currentPage.value = 1
   },
   {

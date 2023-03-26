@@ -6,7 +6,7 @@ export default defineComponent({
   title: '下发课程',
   icon: 'icon-kecheng',
   name: 'curriculum',
-  auth: ['admin', 'super', 'teacher'],
+  auth: ['admin', 'super'],
 })
 </script>
 <script setup lang="ts"></script>

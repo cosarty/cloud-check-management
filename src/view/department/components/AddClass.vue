@@ -173,7 +173,7 @@ watch(dialogVisible, async vi => {
   if (vi && departmentId) ruleForm.value = { departmentId }
   if (!vi) ruleForm.value = {}
   else {
-    const { data } = await getTeacher()
+    const { data } = await getTeacher({ flag: 'all' })
     options.value = data.rows
   }
 })

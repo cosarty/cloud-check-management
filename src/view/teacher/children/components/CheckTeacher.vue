@@ -40,13 +40,27 @@
           placeholder="请输入教师编号"
         />
       </ElFormItem>
+
       <ElFormItem label="姓名" required prop="userName">
         <ElInput v-model="ruleForm.userName" placeholder="请输入名字" />
       </ElFormItem>
       <ElFormItem label="邮箱" required prop="email">
         <ElInput v-model="ruleForm.email" placeholder="请输入邮箱" />
       </ElFormItem>
-
+      <ElFormItem label="系别" prop="departmentId">
+        <ElSelect
+          v-model="ruleForm.departmentId"
+          class="w-full"
+          placeholder="选择系别"
+        >
+          <ElOption
+            :label="op.departmentName"
+            :value="op.departmentId"
+            v-for="op in options"
+            :key="op.departmentId"
+          />
+        </ElSelect>
+      </ElFormItem>
       <ElFormItem label="性别" prop="sex">
         <ElRadioGroup class="ml-3" v-model="ruleForm.sex">
           <ElRadio :label="0">女</ElRadio>
@@ -66,7 +80,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { getClassList, register, updateOtherUser } from '@/http/api'
+import {
+  getClassList,
+  getDepartment,
+  register,
+  updateOtherUser,
+} from '@/http/api'
 import type { FormInstance, FormRules, UploadProps } from 'element-plus'
 import userStore from '@/store/userStore'
 import { title } from 'process'
@@ -83,7 +102,7 @@ const dialogVisible = ref(false)
 const coTitle = ref(porps.title)
 
 const emit = defineEmits<{ (e: 'reset'): void }>()
-
+const options = ref<any>([])
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = ref<any>({})
 const readonly = ref(false)
@@ -161,6 +180,9 @@ watch(dialogVisible, async vi => {
     ruleForm.value = {}
     coTitle.value = porps.title
     readonly.value = false
+  } else {
+    const { data } = await getDepartment()
+    options.value = data
   }
 })
 
