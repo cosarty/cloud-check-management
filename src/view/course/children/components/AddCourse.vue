@@ -76,11 +76,11 @@ import {
   getClassList,
   getTeacher,
   register,
+  updateCourse,
   updateOtherUser,
 } from '@/http/api'
 import type { FormInstance, FormRules, UploadProps } from 'element-plus'
 import userStore from '@/store/userStore'
-import { title } from 'process'
 
 const actionUrl =
   import.meta.env.VITE_APP_API_BASE_URL + '/upload/courseAvatarDir'
@@ -118,7 +118,7 @@ const submitForm = async () => {
         : {}),
     })
   } else {
-    await updateOtherUser({
+    await updateCourse({
       ...ruleForm.value,
       ...(ruleForm.value.picture
         ? { picture: ruleForm.value.picture.split('/').pop() }
@@ -169,7 +169,7 @@ watch(dialogVisible, async vi => {
     readonly.value = false
   } else {
     if (user.auth.includes('super')) {
-      const { data } = await getTeacher()
+      const { data } = await getTeacher({ flag: 'all' })
       options.value = data.rows
     }
   }

@@ -12,3 +12,16 @@ export const getCourseList = async (prama: any = {}) =>
     method: 'get',
     data: prama,
   })
+
+export const updateCourse = async (prama: any = {}) =>
+  await http.request({
+    url: '/course/update',
+    method: 'post',
+    data: prama,
+  })
+
+export const delteCourse = async (id: string) =>
+  await http.request({
+    url: `/course/delete/${id}`,
+    method: 'post',
+  })
