@@ -25,3 +25,9 @@ export const delteCourse = async (id: string) =>
     url: `/course/delete/${id}`,
     method: 'post',
   })
+
+export const getCourse = async (id: string) =>
+  await http.request({
+    url: `/course/getInfo/${id}`,
+    method: 'get',
+  })

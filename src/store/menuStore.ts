@@ -109,6 +109,19 @@ const menuStore = defineStore('menu', () => {
     updateCacheTab()
   }
 
+  const getCircularReplacer = () => {
+    const seen = new WeakSet()
+    return (key: any, value: any) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return
+        }
+        seen.add(value)
+      }
+      return value
+    }
+  }
+
   // 更新缓存
   const updateCacheTab = () => {
     const cacheKeep = toRaw(tabList.value)
@@ -118,22 +131,21 @@ const menuStore = defineStore('menu', () => {
 
     // 过滤keepAlive
     cacheTabList.value = [...new Set(cacheKeep)]
+    const list = [
+      ...toRaw(tabList.value)
+        .filter(tab => !tab.meta.ignoreStorage)
+        .map(({ fullPath, name, params, query, path, meta }) => ({
+          fullPath,
+          name,
+          params,
+          query,
+          path,
+          meta,
+        })),
+    ]
+
     // 过滤storage
-    storage.set(
-      CacheEnum.HISTORY_MENU,
-      JSON.stringify([
-        ...toRaw(tabList.value)
-          .filter(tab => !tab.meta.ignoreStorage)
-          .map(({ fullPath, name, meta, path, params, query }) => ({
-            fullPath,
-            name,
-            meta,
-            path,
-            params,
-            query,
-          })),
-      ]),
-    )
+    storage.set(CacheEnum.HISTORY_MENU, JSON.stringify(list))
   }
 
   // 关闭方法

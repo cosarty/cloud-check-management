@@ -1,6 +1,6 @@
 <template>
   <ElDrawer v-model="drawer" :with-header="false" append-to-body size="27%">
-    <div class="mb-3 font-bold text-lg">设置上课时间</div>
+    <div class="mb-3 font-bold text-lg">上课时间</div>
     <div>
       <div v-for="jo in defaultJoint" :key="jo" class="mb-3">
         <div class="mb-3">第 {{ jo }} 节课</div>

@@ -5,16 +5,13 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
-
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return {
     plugins: [
       vue(),
       AutoImport({
-        resolvers: [
-          ElementPlusResolver(),
-        ],
+        resolvers: [ElementPlusResolver()],
         imports: ['vue', 'vue-router', 'pinia'],
         dts: 'types/auto-imports.d.ts',
       }),
@@ -24,7 +21,6 @@ export default defineConfig(({ mode }) => {
         dts: 'types/components.d.ts',
         dirs: ['src/components'],
       }),
-
     ],
     css: {
       preprocessorOptions: {
@@ -50,4 +46,3 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
-

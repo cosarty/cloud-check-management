@@ -45,9 +45,13 @@ watch(
   { immediate: true },
 )
 
-watch(route, taget => {
-  if (taget.name === 'home') router.push({ name: currentAuth.value as any })
-})
+watch(
+  route,
+  taget => {
+    if (taget!.name === 'home') router.push({ name: currentAuth.value as any })
+  },
+  { deep: false },
+)
 </script>
 
 <style scoped lang="scss"></style>

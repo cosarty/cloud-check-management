@@ -17,10 +17,12 @@
         <div class="pb-2 text-sm text-gray-400">
           {{ co.comment ?? '暂无备注' }}
         </div>
-        <div class="text-sm pb-2">{{ co.user.userName }}</div>
-        <div class="text-xs pb-2">
-          班级: <span class="text-amber-600 align-middle">计算机一班</span>
+        <div class="text-sm" :class="{ 'mb-2': showTime }">
+          指导教师: {{ co.user?.userName ?? ' 未知' }}
         </div>
+        <!-- <div class="text-xs pb-2">
+          班级: <span class="text-amber-600 align-middle">计算机一班</span>
+        </div> -->
         <div class="text-xs text-slate-600" v-if="showTime">
           创建时间:
           <span class="text-amber-600 align-middle">{{
@@ -51,6 +53,13 @@
         @click.stop="$emit('action', 'issued', co)"
       >
         下发
+      </div>
+
+      <div
+        class="absolute p-1 px-4 items-center bottom-0 right-3 bg-cyan-200"
+        v-if="$slots.default"
+      >
+        <slot :co="co"></slot>
       </div>
     </div>
   </div>
@@ -96,7 +105,7 @@ const getList = () =>
 watch(
   currentPage,
   np => {
-    if (props.data.length <= props.pageSize) return
+    if (props.data.length <= props.pageSize) return (list.value = props.data)
     list.value = getList()
   },
   {
@@ -107,9 +116,9 @@ watch(
 
 watch(
   () => props.data,
-
   np => {
     list.value = getList()
+
     currentPage.value = 1
   },
   {
