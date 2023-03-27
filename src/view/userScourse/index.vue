@@ -14,11 +14,7 @@
 export default defineComponent({
   title: '教学',
   icon: 'icon-xuesheng',
-<<<<<<< HEAD:src/view/userCourse/index.vue
-  name: 'userCourse',
-=======
   name: 'userScourse',
->>>>>>> a:src/view/userScourse/index.vue
   auth: ['teacher', 'student'],
   isExactActive: false,
   coverRouter: true,
@@ -59,14 +55,6 @@ watch(
   { immediate: true },
 )
 
-<<<<<<< HEAD:src/view/userCourse/index.vue
-watch(route, taget => {
-  if (taget.name === 'userCourse')
-    router.push({
-      name: comp.value as any,
-    })
-})
-=======
 watch(
   route,
   taget => {
@@ -77,7 +65,6 @@ watch(
   },
   { deep: false },
 )
->>>>>>> a:src/view/userScourse/index.vue
 </script>
 
 <style scoped lang="scss"></style>
