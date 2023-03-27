@@ -180,7 +180,7 @@ watch(
       classInfo.value = data
     }
   },
-  { immediate: true, deep: false },
+  { immediate: true, deep: true },
 )
 </script>
 
