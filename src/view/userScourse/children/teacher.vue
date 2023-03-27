@@ -12,17 +12,19 @@
             {{ showClassInfo?.className }}
           </span>
         </template>
-        <template #extra>
-          <div class="flex items-center">
-            <el-button type="primary" @click="dialogVisible = true"
-              >设置课表</el-button
-            >
-          </div>
-        </template>
       </el-page-header>
       <el-divider style="margin: 10px 0" />
 
-      <RenderCourse :data="showClassInfo?.course ?? []" @action="showScourse" />
+      <RenderCourse :data="showClassInfo?.course ?? []" @action="showScourse">
+        <template #default="{ co }">
+          <el-button
+            type="primary"
+            @click.stop=";(dialogVisible = true), (tagetCourseInfo = co)"
+            link
+            >设置课表</el-button
+          ></template
+        >
+      </RenderCourse>
     </div>
     <RenderClassList v-else @click="checkClass" :class-list="classList" />
     <el-dialog
@@ -30,7 +32,17 @@
       title="设置课表"
       width="70%"
       destroy-on-close
+      @close="tagetCourseInfo = undefined"
     >
+      <div class="mb-4 text-lg">
+        课程时间：{{
+          dayjs(tagetCourseInfo?.ClassSchedule?.starDate).format('YYYY-MM-DD')
+        }}
+        到
+        {{
+          dayjs(tagetCourseInfo?.ClassSchedule?.endDate).format('YYYY-MM-DD')
+        }}
+      </div>
       <Curriculum />
     </el-dialog>
   </div>
@@ -48,6 +60,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import RenderCourse from '@/components/RenderCourse/index.vue'
 import { getTeacherClass } from '@/http/api'
 import RenderClassList from './components/RenderClassList.vue'
@@ -56,6 +69,7 @@ const classList = ref<any>([])
 const showClassInfo = ref<any>()
 const router = useRouter()
 const dialogVisible = ref(false)
+const tagetCourseInfo = ref<any>()
 
 onMounted(() => {
   getTeacherClass().then(({ data }) => {
