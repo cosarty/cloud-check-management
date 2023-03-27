@@ -4,7 +4,7 @@
       @click="$emit('click', cl)"
       v-for="cl in classList"
       :key="cl.classId"
-      class="flex flex-col m-6 w-1/6 cursor-pointer"
+      class="flex flex-col m-6 w-1/6 cursor-pointer flex-shrink-0"
       style="box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2)"
     >
       <ElImage
@@ -12,13 +12,13 @@
         :src="cl.picture ?? classEmptyIcon"
       />
       <div class="relative h-36 pt-14">
-        <div>
+        <div class="mb-2">
           <ElAvatar
             :size="60"
             :src="cl?.teacher?.pic ?? avatarDefault"
             class="absolute -top-0 -translate-y-1/2 left-4"
           />
-          <div class="ml-20 -mt-10 text-xs text-slate-500">
+          <div class="ml-24 -mt-12 text-xs text-slate-500">
             {{ cl?.teacher?.userName ?? '暂无辅导员' }}
           </div>
         </div>
