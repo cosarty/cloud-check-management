@@ -7,7 +7,7 @@
 export default defineComponent({
   title: '班级',
   icon: 'icon-xuesheng',
-  name: 'class',
+  name: 'userCourse',
   auth: ['teacher', 'student'],
   isExactActive: false,
   coverRouter: true,
@@ -49,7 +49,7 @@ watch(
 )
 
 watch(route, taget => {
-  if (taget.name === 'class')
+  if (taget.name === 'userCourse')
     router.push({
       name: comp.value as any,
     })
