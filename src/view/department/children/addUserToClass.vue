@@ -167,7 +167,7 @@ const deleteUser = async () => {
 watch(
   () => route,
   async nq => {
-    if (nq.name === 'addUserToClass') {
+    if (nq!.name === 'addUserToClass') {
       if (!nq.query?.classId) {
         close()
         ElMessage.warning('班级id无效')
@@ -180,7 +180,7 @@ watch(
       classInfo.value = data
     }
   },
-  { immediate: true },
+  { immediate: true, deep: false },
 )
 </script>
 

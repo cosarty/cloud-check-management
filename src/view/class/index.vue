@@ -48,12 +48,16 @@ watch(
   { immediate: true },
 )
 
-watch(route, taget => {
-  if (taget.name === 'class')
-    router.push({
-      name: comp.value as any,
-    })
-})
+watch(
+  route,
+  taget => {
+    if (taget.name === 'class')
+      router.push({
+        name: comp.value as any,
+      })
+  },
+  { deep: false },
+)
 </script>
 
 <style scoped></style>

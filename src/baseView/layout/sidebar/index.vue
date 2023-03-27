@@ -50,9 +50,13 @@ const setWidthVar = computed<CSSProperties>(() => ({
 
 const routerList = computed(() => menu.menuRoute)
 
-watch(route, newRoute => {
-  menu.addTab(newRoute)
-})
+watch(
+  route,
+  newRoute => {
+    menu.addTab(newRoute)
+  },
+  { deep: false },
+)
 </script>
 
 <style scoped lang="scss">

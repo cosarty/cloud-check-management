@@ -17,7 +17,7 @@
         <div class="pb-2 text-sm text-gray-400">
           {{ co.comment ?? '暂无备注' }}
         </div>
-        <div class="text-sm pb-2">{{ co.user.userName }}</div>
+        <div class="text-sm pb-2">{{ co.user?.userName ?? ' 未知' }}</div>
         <div class="text-xs pb-2">
           班级: <span class="text-amber-600 align-middle">计算机一班</span>
         </div>

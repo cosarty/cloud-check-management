@@ -35,12 +35,16 @@ const props = defineProps<{
   tabList: TabItemType[]
 }>()
 
-watch(route, newR => {
-  const ac = props.tabList.find(t => t.name === newR.name)
-  if (ac && ac.route) {
-    avtiveItem.value = ac
-  }
-})
+watch(
+  route,
+  newR => {
+    const ac = props.tabList.find(t => t.name === newR.name)
+    if (ac && ac.route) {
+      avtiveItem.value = ac
+    }
+  },
+  { deep: false },
+)
 
 onMounted(() => {
   avtiveItem.value = props.tabList[0]

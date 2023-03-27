@@ -5,7 +5,7 @@
 export default defineComponent({
   title: '教师',
   icon: 'icon-jiaoshilaoshi',
-  name: 'teacher',
+  name: 'teacherCom',
   auth: ['admin', 'super'],
   redirect: 'teacherMange',
 })
