@@ -122,7 +122,16 @@ const menuStore = defineStore('menu', () => {
     storage.set(
       CacheEnum.HISTORY_MENU,
       JSON.stringify([
-        ...toRaw(tabList.value).filter(tab => !tab.meta.ignoreStorage),
+        ...toRaw(tabList.value)
+          .filter(tab => !tab.meta.ignoreStorage)
+          .map(({ fullPath, name, meta, path, params, query }) => ({
+            fullPath,
+            name,
+            meta,
+            path,
+            params,
+            query,
+          })),
       ]),
     )
   }
