@@ -1,5 +1,12 @@
 <template>
-  <div style="background-color: white; height: 100%">班级管理</div>
+  <div style="background-color: white; height: 100%">
+    <el-scrollbar
+      ><router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive> </router-view
+    ></el-scrollbar>
+  </div>
 </template>
 
 <!-- 辅导员 -->
@@ -60,4 +67,4 @@ watch(
 )
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

@@ -1,5 +1,7 @@
 <template>
-  <div style="background-color: white; height: 100%">学生班级</div>
+  <div style="background-color: white; height: 100%">
+    <RenderClassList :class-list="classList" />
+  </div>
 </template>
 
 <!-- 辅导员 -->
@@ -13,6 +15,17 @@ export default defineComponent({
   coverRouter: true,
 })
 </script>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getTeacherClass } from '@/http/api'
+import RenderClassList from './components/RenderClassList.vue'
+const classList = ref<any>([])
 
-<style scoped></style>
+onMounted(() => {
+  getTeacherClass().then(({ data }) => {
+    console.log('data: ', data)
+    classList.value = data
+  })
+})
+</script>
+
+<style scoped lang="scss"></style>
