@@ -12,9 +12,9 @@
 <!-- 辅导员 -->
 <script lang="ts">
 export default defineComponent({
-  title: '班级',
+  title: '教学',
   icon: 'icon-xuesheng',
-  name: 'class',
+  name: 'userScourse',
   auth: ['teacher', 'student'],
   isExactActive: false,
   coverRouter: true,
@@ -58,7 +58,7 @@ watch(
 watch(
   route,
   taget => {
-    if (taget.name === 'class')
+    if (taget.name === 'userScourse')
       router.push({
         name: comp.value as any,
       })

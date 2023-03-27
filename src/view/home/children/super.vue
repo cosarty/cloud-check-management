@@ -7,6 +7,7 @@ export default defineComponent({
   auth: 'super',
   hideMenu: true,
   affix: false,
+  coverRouter: true,
 })
 </script>
 <script setup lang="ts"></script>

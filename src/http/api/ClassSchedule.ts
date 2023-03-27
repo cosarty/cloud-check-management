@@ -12,3 +12,10 @@ export const getTeacherClass = async (prama: any = {}) =>
     method: 'get',
     data: prama,
   })
+
+export const getStudentClass = async (prama: any = {}) =>
+  await http.request({
+    url: '/classSchedule/getStudentClass',
+    method: 'get',
+    data: prama,
+  })
