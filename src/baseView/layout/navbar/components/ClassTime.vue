@@ -11,9 +11,9 @@
             :max-time="timeList[jo].endTime"
             class="mr-1"
             placeholder="Start time"
-            start="08:30"
-            step="00:15"
-            end="18:30"
+            start="08:00"
+            step="00:05"
+            end="21:30"
             @change="timeChange"
           />
           <el-time-select
@@ -21,9 +21,9 @@
             v-model="timeList[jo].endTime"
             :min-time="timeList[jo].startTime"
             placeholder="End time"
-            start="08:30"
-            step="00:15"
-            end="18:30"
+            start="08:00"
+            step="00:05"
+            end="21:30"
             @change="timeChange"
           />
         </div>

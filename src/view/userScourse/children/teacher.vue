@@ -43,7 +43,10 @@
           dayjs(tagetCourseInfo?.ClassSchedule?.endDate).format('YYYY-MM-DD')
         }}
       </div>
-      <Curriculum />
+      <Curriculum
+        :schedule="tagetCourseInfo?.ClassSchedule"
+        :classId="showClassInfo?.classId"
+      />
     </el-dialog>
   </div>
 </template>
