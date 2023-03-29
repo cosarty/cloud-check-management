@@ -1,5 +1,6 @@
 <template>
   <div style="background-color: white; height: 100%" class="box-border">
+    <ElButton @click="submit">发起签到</ElButton>
     {{ courseInfo?.courseName }}
     {{ courseId }}
   </div>
@@ -17,10 +18,15 @@ export default defineComponent({
 <script setup lang="ts">
 import closeCurrentTab from '@/hooks/closeCurrentTab'
 import { getCourse } from '@/http/api'
+import { createSingTask } from '@/http/api/singTask'
 const close = closeCurrentTab()
 const route = useRoute()
 const courseId = ref<string>('')
 const courseInfo = ref<any>({})
+
+const submit = () => {
+  createSingTask({ classScheduleId: courseId.value })
+}
 
 watch(
   () => route,

@@ -17,12 +17,12 @@
 
       <RenderCourse :data="showClassInfo?.course ?? []" @action="showScourse">
         <template #default="{ co }">
-          <el-button
-            type="primary"
-            @click.stop=";(dialogVisible = true), (tagetCourseInfo = co)"
-            link
-            >设置课表</el-button
-          ></template
+          <div
+            @click.stop="showKb(co)"
+            class="w-full h-full flex items-center justify-center"
+          >
+            <el-button type="primary" link>设置课表</el-button>
+          </div></template
         >
       </RenderCourse>
     </div>
@@ -81,12 +81,21 @@ onMounted(() => {
 })
 const showScourse = (comd: string, data: any) => {
   if (comd === 'show') {
-    router.push({ name: 'scoursInfo', query: { courseId: data.courseId } })
+    router.push({
+      name: 'scoursInfo',
+      query: { courseId: data.ClassSchedule.classScheduleId },
+    })
   }
 }
 
 const checkClass = (data: any) => {
   showClassInfo.value = data
+}
+
+const showKb = async (co: any) => {
+  await nextTick()
+  tagetCourseInfo.value = co
+  dialogVisible.value = true
 }
 </script>
 

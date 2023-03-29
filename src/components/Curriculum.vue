@@ -39,7 +39,7 @@
           class="w-full h-full bg-green-300 flex items-center justify-center flex-col relative"
           :class="{
             'bg-sky-400':
-              getHours(k, id)?.classScheduleId === schedule.classScheduleId,
+              getHours(k, id)?.classScheduleId === schedule?.classScheduleId,
           }"
         >
           <div>{{ getHours(k, id)?.courseName }}</div>
@@ -48,7 +48,9 @@
           </div>
           <el-icon
             @click="removeHours(getHours(k, id)?.classHoursId)"
-            v-if="getHours(k, id)?.classScheduleId === schedule.classScheduleId"
+            v-if="
+              getHours(k, id)?.classScheduleId === schedule?.classScheduleId
+            "
             :size="20"
             class="right-1 top-1"
             style="position: absolute"
@@ -137,7 +139,9 @@ onMounted(async () => {
   })
   await getdata()
 })
-
+onUnmounted(() => {
+  employhourseList.value = []
+})
 const weekKey = computed(
   () => [...Object.keys(WeekNum)] as (keyof typeof WeekNum)[],
 )
@@ -148,18 +152,24 @@ const getdata = async () => {
 
   employhourseList.value = data
     .map(({ classHours, course }: any) =>
-      classHours.map((cl: any) => ({ ...cl, ...course })),
+      classHours && classHours.length === 0
+        ? []
+        : classHours.map((cl: any) => ({ ...cl, ...course })),
     )
     .flat(Infinity)
 }
 
-const getHours = (day: string, did: number) =>
-  employhourseList.value.find(
-    ({ weekDay, time: { id } }: any) => weekDay === day && id === did,
-  )
+const getHours = computed(
+  () => (day: any, did: any) =>
+    employhourseList.value.find(
+      ({ weekDay, time }: any) => weekDay === day && time?.id === did,
+    ),
+)
 
 const setHours = async () => {
   await addHourse({
+    isPeriod: formSelect.value.isPeriod,
+    keepTime: formSelect.value.keepTime ?? 0,
     weekDay: selectKey.value,
     classScheduleId: props.schedule.classScheduleId,
     timeId: timeList.value.find((t: any) => t.id === formSelect.value.id)

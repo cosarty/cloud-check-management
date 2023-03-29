@@ -56,7 +56,7 @@
       </div>
 
       <div
-        class="absolute p-1 px-4 items-center bottom-0 right-3 bg-cyan-200"
+        class="absolute h-8 w-20 flex justify-center items-center bottom-0 right-3 bg-cyan-200"
         v-if="$slots.default"
       >
         <slot :co="co"></slot>
