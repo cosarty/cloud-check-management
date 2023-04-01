@@ -1,24 +1,19 @@
 <template>
-  <div v-loading="mapLoading" style="width: 100%; height: 100%">
-    <div id="allmap"></div>
+  <div
+    v-loading="loading"
+    style="width: 100%; height: 100%"
+    element-loading-text="定位中"
+  >
+    <div :id="id" class="map"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import useMap from '@/hooks/userMap/index'
-
-const { loadScript, mapLoading, loadCurrentLocal } = useMap()
-
-onMounted(async () => {
-  await nextTick()
-  loadScript().then(async () => {
-    await loadCurrentLocal()
-  })
-})
+defineProps<{ loading: boolean; id: string }>()
 </script>
 
 <style scoped lang="scss">
-#allmap {
+.map {
   // 注意给dom宽高，不然地图不出来
   width: inherit;
   height: inherit;

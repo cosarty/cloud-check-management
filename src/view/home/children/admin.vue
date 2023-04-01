@@ -1,5 +1,9 @@
 <template>
-  <BdMap />
+  <MapPopUp title="选择位置" id="allmap">
+    <template #extra="{ toggle }">
+      <el-button @click="toggle"> 选择位置 </el-button>
+    </template>
+  </MapPopUp>
 </template>
 
 <script lang="ts">
@@ -12,7 +16,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import BdMap from '@/components/BdMap/BdMap.vue'
+import MapPopUp from '@/components/BdMap/MapPopUp.vue'
 // var a = ['114.066392,22.748699', '114.07991,22.640074']
 </script>
 
