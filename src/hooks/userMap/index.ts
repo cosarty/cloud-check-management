@@ -7,7 +7,7 @@ type MapInjectType = {
   mapLoading: Readonly<Ref<boolean>>
 }
 
-const useMap = (id: string): MapInjectType => {
+const useMap = (id: string, searchEvent: any): MapInjectType => {
   let BMap: any
   let mapImp: any // 地图示例
   const mapLoading = ref(false)
@@ -56,11 +56,23 @@ const useMap = (id: string): MapInjectType => {
     // 启用地图拖拽，默认启用
     mapImp.enableDragging(true)
     mapImp.addEventListener('click', function (e: any) {
-      console.log('e: ', e)
-      var clickpt = e.point // 点击的坐标
+      let clickpt = e.point // 点击的坐标
       mapImp.clearOverlays() // 移除地图上的标注
-      var marker = new BMap.Marker(clickpt) // 创建标注
+      let marker = new BMap.Marker(clickpt) // 创建标注
       mapImp.addOverlay(marker) // 将标注添加到地图中
+      mapImp.panTo(clickpt)
+      mapImp.centerAndZoom(clickpt)
+      // 搜索点击后的地址信息
+      let myGeo = new BMap.Geocoder()
+      // 根据坐标得到地址描述
+      myGeo.getLocation(
+        new BMap.Point(clickpt.lng, clickpt.lat),
+        function (result: any) {
+          if (result) {
+            // console.log('result: ', result)
+          }
+        },
+      )
     })
 
     // const cityControl = new BMap.CityListControl({
@@ -144,7 +156,6 @@ const useMap = (id: string): MapInjectType => {
       // console.log('onconfirm: ', e)
       //鼠标点击下拉列表后的事件
       let _value = e.item.value
-      console.log('_value: ', _value)
       var myValue =
         _value.province +
         _value.city +
@@ -162,9 +173,8 @@ const useMap = (id: string): MapInjectType => {
     var local = new BMap.LocalSearch(mapImp, {
       //智能搜索
       onSearchComplete: function () {
-        console.log('local.getResults(): ', local.getResults())
-
-        var getpo = local.getResults().getPoi(0).point //获取第一个智能搜索的结果
+        let getpo = local.getResults().getPoi(0).point //获取第一个智能搜索的结果
+        searchEvent({ info: local.getResults(), getpo })
         mapImp.centerAndZoom(getpo, 18)
         mapImp.addOverlay(new BMap.Marker(getpo)) //添加标注
       },
