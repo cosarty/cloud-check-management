@@ -7,8 +7,10 @@ import router, { setupRouterGuard } from '@/router'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import components from './components'
+
 const createRoot = async () => {
   const app = createApp(App)
+
   setupRouterGuard(router)
   app.use(router)
   const pinia = createPinia()

@@ -124,28 +124,30 @@ const menuStore = defineStore('menu', () => {
 
   // 更新缓存
   const updateCacheTab = () => {
-    const cacheKeep = toRaw(tabList.value)
-      .filter(tab => !tab.meta.ignoreKeepAlive)
-      .map(tab => (tab.meta.prent || tab.name) as string)
-      .filter(Boolean)
+    Promise.resolve().then(() => {
+      const cacheKeep = toRaw(tabList.value)
+        .filter(tab => !tab.meta.ignoreKeepAlive)
+        .map(tab => (tab.meta.prent || tab.name) as string)
+        .filter(Boolean)
 
-    // 过滤keepAlive
-    cacheTabList.value = [...new Set(cacheKeep)]
-    const list = [
-      ...toRaw(tabList.value)
-        .filter(tab => !tab.meta.ignoreStorage)
-        .map(({ fullPath, name, params, query, path, meta }) => ({
-          fullPath,
-          name,
-          params,
-          query,
-          path,
-          meta,
-        })),
-    ]
+      // 过滤keepAlive
+      cacheTabList.value = [...new Set(cacheKeep)]
+      const list = [
+        ...toRaw(tabList.value)
+          .filter(tab => !tab.meta.ignoreStorage)
+          .map(({ fullPath, name, params, query, path, meta }) => ({
+            fullPath,
+            name,
+            params,
+            query,
+            path,
+            meta,
+          })),
+      ]
 
-    // 过滤storage
-    storage.set(CacheEnum.HISTORY_MENU, JSON.stringify(list))
+      // 过滤storage
+      storage.set(CacheEnum.HISTORY_MENU, JSON.stringify(list))
+    })
   }
 
   // 关闭方法

@@ -12,7 +12,11 @@
       </ElButtonGroup>
     </div>
     <div class="h-full bg-slate-300 rounded-md p-4">
-      <RouterView></RouterView>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
 </template>
