@@ -2,7 +2,7 @@ import { Ref } from 'vue'
 
 type MapInjectType = {
   loadScript: () => Promise<void>
-  loadCurrentLocal: () => Promise<any>
+  loadCurrentLocal: (lng?: number, lat?: number) => Promise<any>
   LocalSearch: () => Promise<void>
   mapLoading: Readonly<Ref<boolean>>
 }
@@ -91,7 +91,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
   }
 
   // 获取当前定位信息
-  const loadCurrentLocal = () =>
+  const loadCurrentLocal = (lng?: number, lat?: number) =>
     new Promise<void>(async resolve => {
       if (!document.head.contains(document.getElementById('loadmap')))
         await loadScript()
@@ -101,6 +101,25 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
       createImp()
 
       mapLoading.value = true
+
+      if (lng && lat) {
+        var myGeo = new BMap.Geocoder()
+        myGeo.getLocation(new BMap.Point(lng, lat), (result: any) => {
+          var mk = new BMap.Marker({ lng, lat })
+          mapImp.centerAndZoom(new BMap.Point(lng, lat), 18)
+          mapImp.addOverlay(mk)
+          mapImp.panTo({ lng, lat })
+          mapImp.panBy(0, 0)
+          mapLoading.value = false
+          // 获取当前定位信息
+          resolve(result)
+
+          if (result) {
+            // alert(result.address)
+          }
+        })
+        return
+      }
       var geolocation = new BMap.Geolocation()
       // 开启SDK辅助定位
       // geolocation.enableSDKLocation()

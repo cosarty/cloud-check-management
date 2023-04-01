@@ -23,25 +23,21 @@
           </el-col>
           <el-col :span="14">
             <el-form-item label="当前地址">
-              <el-input
-                placeholder="请输入内容"
-                v-model="currentLocaltion.address"
-                readonly
-              >
-                <template #prepend>
-                  <div v-if="currentLocaltion.city">
-                    {{ currentLocaltion.province }}{{ currentLocaltion.city
-                    }}{{ currentLocaltion.district }}
-                  </div>
-                  <div v-else>
-                    {{ currentLocaltion.province }}
-                  </div>
-                </template>
-              </el-input>
+              <div>
+                {{ currentLocaltion.address }}
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row v-if="isArea">
+          <el-col :span="10">
+            <el-form-item label="区域名称">
+              <ElInput placeholder="请输入区域名称" v-model="areaName" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
+
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="confirmSelect">确 定</el-button>
@@ -53,7 +49,7 @@
           class="refresh-icon"
           size="25"
           style="cursor: pointer"
-          @click="reloadLocaltion"
+          @click="() => reloadLocaltion()"
           ><Refresh
         /></el-icon>
         <BdMap :id="id" :loading="mapLoading"></BdMap>
@@ -69,18 +65,19 @@ import useMap from '@/hooks/userMap/index'
 
 const searchAddresKeywords = ref('')
 const dialogVisible = ref(false)
+const areaName = ref('')
 
 const defCon = () => ({ city: '', district: '', province: '', lat: 0, lng: 0 })
-const props = defineProps<{ title: string; id: string }>()
+const props = defineProps<{ title: string; id: string; isArea?: boolean }>()
 const emit = defineEmits<{ (e: 'confirm', data: any): void }>()
 const { loadCurrentLocal, mapLoading, LocalSearch } = useMap(
   props.id,
   ({ info, getpo }: any) => {
-    currentLocaltion.value = {}
-    currentLocaltion.value.province = info.province
-    currentLocaltion.value.address = info.keyword
+    currentLocaltion.value = { areaId: currentLocaltion.value.areaId }
+    currentLocaltion.value.address = info.province + info.keyword
     currentLocaltion.value.lng = getpo.lng
     currentLocaltion.value.lat = getpo.lat
+    searchAddresKeywords.value = ''
   },
 )
 const currentLocaltion = ref<
@@ -97,40 +94,75 @@ const currentLocaltion = ref<
 const toggerVisible = () => (dialogVisible.value = !dialogVisible.value)
 
 // 加载当前地址
-const reloadLocaltion = async () => {
-  const res = await loadCurrentLocal()
+const reloadLocaltion = async (lng?: number, lat?: number) => {
+  let res: any
+  if (lng && lat) {
+    await loadCurrentLocal(lng, lat)
+  } else {
+    res = await loadCurrentLocal()
+    let addressInfo = res.addressComponents
+    currentLocaltion.value.lng = res.point.lng
+    currentLocaltion.value.lat = res.point.lat
+    currentLocaltion.value.address =
+      addressInfo.province +
+      addressInfo.city +
+      addressInfo.district +
+      addressInfo.street +
+      addressInfo.streetNumber +
+      res.business
+  }
+
   LocalSearch()
-
-  let addressInfo = res.addressComponents
-  currentLocaltion.value.lng = res.point.lng
-  currentLocaltion.value.lat = res.point.lat
-  currentLocaltion.value.province = addressInfo.province
-  currentLocaltion.value.city = addressInfo.city
-  currentLocaltion.value.district = addressInfo.district
-
-  currentLocaltion.value.address =
-    addressInfo.street + addressInfo.streetNumber + res.business
 }
 
 watch(dialogVisible, async vi => {
   if (vi) {
+    const { lat, lng } = currentLocaltion.value
+    if (lat && lng) {
+      await reloadLocaltion(lng, lat)
+      return
+    }
+
     await reloadLocaltion()
   } else {
     currentLocaltion.value = {}
+    searchAddresKeywords.value = ''
+    areaName.value = ''
   }
 })
-
+const updateData = (data: any) => {
+  currentLocaltion.value = data
+  areaName.value = data.areaName
+  toggerVisible()
+}
 const confirmSelect = () => {
-  const { province, city, district, address, lat, lng } = currentLocaltion.value
+  const { province, city, district, address, lat, lng, areaId } =
+    currentLocaltion.value
+
   let text: any
-  if (currentLocaltion.value.city) text = province + city + district + address
-  else text = province + address
+  if (currentLocaltion.value.city)
+    text = (province ?? '') + (city ?? '') + (district ?? '') + address
+  else text = (province ?? '') + address
   if (!lat || !lng) {
     ElMessage.warning('请选择地址！！！')
+    return
   }
+
+  if (!areaName.value) {
+    ElMessage.warning('请输入区域名称')
+    return
+  }
+  emit('confirm', {
+    locationName: text,
+    location: { lng, lat },
+    areaName: areaName.value,
+    areaId,
+  })
+
   dialogVisible.value = false
-  emit('confirm', { text, point: { lng, lat } })
 }
+
+defineExpose({ updateData })
 </script>
 
 <style scoped lang="scss">

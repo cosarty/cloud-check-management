@@ -159,7 +159,7 @@ export type TableColumType = {
   type?: 'date' | 'default' | 'image' | 'select' | 'tag' | 'switch'
   sort?: boolean | 'desc' | 'esc'
   align?: 'left' | 'center' | 'right'
-  width?: number
+  width?: string
   options?: any // 只有当prop 是select的时候才有用
   fixed?: boolean | 'left' | 'right'
   event?: (e: any, row: any) => void // 只有当prop 是select的时候才有用
