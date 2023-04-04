@@ -12,3 +12,10 @@ export const delHourse = async (id: any) =>
     url: `/classHourse/del/${id}`,
     method: 'delete',
   })
+
+export const updateHourse = async (prama: any) =>
+  await http.request({
+    url: '/classHourse/update',
+    method: 'post',
+    data: prama,
+  })

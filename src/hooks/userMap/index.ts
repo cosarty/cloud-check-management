@@ -57,6 +57,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
     mapImp.enableDragging(true)
     mapImp.addEventListener('click', function (e: any) {
       let clickpt = e.point // 点击的坐标
+
       mapImp.clearOverlays() // 移除地图上的标注
       let marker = new BMap.Marker(clickpt) // 创建标注
       mapImp.addOverlay(marker) // 将标注添加到地图中
@@ -132,6 +133,12 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
         // 创建地理编码实例
         var myGeo = new BMap.Geocoder()
 
+        const aaa = mapImp.getDistance(
+          new BMap.Point(r.point.lng, r.point.lat),
+          new BMap.Point(119.27839795210372, 26.084229526919582),
+        )
+
+        console.log('aaa: ', aaa)
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           // 根据坐标得到地址描述
           myGeo.getLocation(
@@ -161,6 +168,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
     if (!mapImp) createImp()
 
     await nextTick()
+
     let Aco = new BMap.Autocomplete({
       // 输入框的id
       input: 'searchAddres',

@@ -27,7 +27,7 @@
         <div>{{ startTime ?? '未知' }} - {{ endTime ?? '未知' }}</div></el-col
       >
       <el-col
-        @click="!getHours(k, id) && checkTime(k, id)"
+        @click="clickHandle(k, id)"
         :span="3"
         v-for="k in weekKey"
         :key="k"
@@ -47,7 +47,7 @@
             [{{ getHours(k, id)?.user?.userName }}]
           </div>
           <el-icon
-            @click="removeHours(getHours(k, id)?.classHoursId)"
+            @click.stop="removeHours(getHours(k, id)?.classHoursId)"
             v-if="
               getHours(k, id)?.classScheduleId === schedule?.classScheduleId
             "
@@ -97,9 +97,17 @@
             />
           </div>
           <div class="my-3" v-if="formSelect.isPeriod">
-            上课前
+            是否开启人脸签到
+            <el-switch
+              v-model="formSelect.isFace"
+              class="ml-2"
+              style="--el-switch-on-color: #13ce66"
+            />
+          </div>
+          <div class="my-3" v-if="formSelect.isPeriod">
+            持续
             <el-input-number v-model="formSelect.keepTime" :min="1" :max="10" />
-            分钟自动发起签到
+            分钟
           </div>
         </div>
       </div>
@@ -116,7 +124,13 @@
 
 <script setup lang="ts">
 import { WeekNum } from '@/enum/weekEnum'
-import { addHourse, checkClassCourse, delHourse, getTime } from '@/http/api'
+import {
+  addHourse,
+  checkClassCourse,
+  delHourse,
+  getTime,
+  updateHourse,
+} from '@/http/api'
 import { CirclePlus, CircleClose, Close } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 export type SchoolTimeType = Record<keyof typeof WeekNum, string[]>
@@ -127,8 +141,11 @@ const selectKey = ref<keyof typeof WeekNum>()
 const defaultConf = () => ({
   id: undefined,
   isPeriod: false,
-  keepTime: undefined,
+  keepTime: 1,
+  isFace: false,
 })
+
+let isUpdate = false
 
 const formSelect = ref<any>(defaultConf())
 const timeList = ref<any>([])
@@ -167,16 +184,29 @@ const getHours = computed(
 )
 
 const setHours = async () => {
-  await addHourse({
-    isPeriod: formSelect.value.isPeriod,
-    keepTime: formSelect.value.keepTime ?? 0,
-    weekDay: selectKey.value,
-    classScheduleId: props.schedule.classScheduleId,
-    timeId: timeList.value.find((t: any) => t.id === formSelect.value.id)
-      ?.timeId,
-  })
+  if (isUpdate) {
+    await updateHourse({
+      isPeriod: formSelect.value.isPeriod,
+      keepTime: formSelect.value.keepTime ?? 1,
+      isFace: formSelect.value.isFace,
+      classHoursId: formSelect.value.classHoursId,
+      classScheduleId: props.schedule.classScheduleId,
+    })
+  } else {
+    await addHourse({
+      isPeriod: formSelect.value.isPeriod,
+      keepTime: formSelect.value.keepTime ?? 1,
+      weekDay: selectKey.value,
+      classScheduleId: props.schedule.classScheduleId,
+      timeId: timeList.value.find((t: any) => t.id === formSelect.value.id)
+        ?.timeId,
+      isFace: formSelect.value.isFace,
+    })
+  }
+
   await getdata()
   innerVisible.value = false
+  formSelect.value = defaultConf()
 }
 
 const removeHours = (id: string) => {
@@ -192,7 +222,37 @@ const removeHours = (id: string) => {
 const checkTime = (k: keyof typeof WeekNum, id: any) => {
   innerVisible.value = true
   selectKey.value = k
+  formSelect.value = { id, keepTime: 1, isFace: true }
+}
+
+// 更新数据
+const update = (data: any, k: keyof typeof WeekNum, id: any) => {
+  selectKey.value = k
   formSelect.value = { id }
+
+  if (data.timing) {
+    formSelect.value.isPeriod = data.timing?.isPeriod ?? false
+    formSelect.value.keepTime = (data.timing.integral ?? 60) / 60
+    formSelect.value.isFace = data.timing.isFace ?? false
+  }
+  formSelect.value.classHoursId = data.classHoursId
+  innerVisible.value = true
+}
+
+const clickHandle = (k: keyof typeof WeekNum, id: any) => {
+  isUpdate = false
+  // 是否是空位
+  if (!getHours.value(k, id)) {
+    checkTime(k, id)
+    return
+  }
+
+  if (
+    getHours.value(k, id)?.classScheduleId === props.schedule.classScheduleId
+  ) {
+    isUpdate = true
+    update(getHours.value(k, id), k, id)
+  }
 }
 </script>
 

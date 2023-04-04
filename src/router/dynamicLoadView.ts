@@ -1,4 +1,3 @@
-import { CustomMeta } from 'types/global'
 import { RouteRecordRaw } from 'vue-router'
 
 const viewComponent = import.meta.glob(
