@@ -109,6 +109,10 @@
             <el-input-number v-model="formSelect.keepTime" :min="1" :max="10" />
             分钟
           </div>
+          <div class="my-3" v-if="formSelect.isPeriod">
+            签到分数
+            <el-input-number v-model="formSelect.sustain" :min="1" :max="10" />
+          </div>
         </div>
       </div>
 
@@ -142,6 +146,7 @@ const defaultConf = () => ({
   id: undefined,
   isPeriod: false,
   keepTime: 1,
+  sustain: 1,
   isFace: false,
 })
 
@@ -191,6 +196,7 @@ const setHours = async () => {
       isFace: formSelect.value.isFace,
       classHoursId: formSelect.value.classHoursId,
       classScheduleId: props.schedule.classScheduleId,
+      sustain: formSelect.value.sustain,
     })
   } else {
     await addHourse({
@@ -201,6 +207,7 @@ const setHours = async () => {
       timeId: timeList.value.find((t: any) => t.id === formSelect.value.id)
         ?.timeId,
       isFace: formSelect.value.isFace,
+      sustain: formSelect.value.sustain,
     })
   }
 
@@ -222,7 +229,7 @@ const removeHours = (id: string) => {
 const checkTime = (k: keyof typeof WeekNum, id: any) => {
   innerVisible.value = true
   selectKey.value = k
-  formSelect.value = { id, keepTime: 1, isFace: true }
+  formSelect.value = { id, keepTime: 1, isFace: true, sustain: 1 }
 }
 
 // 更新数据
@@ -234,6 +241,7 @@ const update = (data: any, k: keyof typeof WeekNum, id: any) => {
     formSelect.value.isPeriod = data.timing?.isPeriod ?? false
     formSelect.value.keepTime = (data.timing.integral ?? 60) / 60
     formSelect.value.isFace = data.timing.isFace ?? false
+    formSelect.value.sustain = data.timing.sustain ?? 1
   }
   formSelect.value.classHoursId = data.classHoursId
   innerVisible.value = true
