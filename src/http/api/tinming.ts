@@ -20,3 +20,15 @@ export const endTaskTiming = async (prama: any = {}) =>
     method: 'post',
     data: prama,
   })
+
+
+  // 更新定时任务
+
+  
+
+export const updateTaskTiming = async (prama: any = {}) =>
+await http.request({
+  url: '/timing/updateTask',
+  method: 'post',
+  data: prama,
+})

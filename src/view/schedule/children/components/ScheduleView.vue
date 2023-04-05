@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Table :action="props.isHistory ? hisoryAction : timingAction" ref="timingRef" :colums="timingColum" :request="request"
-      :page-size="7">
+    <Table :action="props.isHistory ? hisoryAction : timingAction" ref="timingRef" :colums="props.isHistory?timingColum.slice(0,-2):timingColum" :request="request"
+      >
       <template #courseName="{ row }">
         {{ row?.classSchedule?.course?.courseName }}
       </template>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { TableActionType, TableColumType } from '@/components/Table.vue';
-import { delTaskTiming, endTaskTiming, getTimingList } from '@/http/api';
+import { delTaskTiming, endTaskTiming, getTimingList, updateTaskTiming } from '@/http/api';
 const props = defineProps<{ isHistory: boolean }>()
 const timingRef = ref<any>()
 const getTimingTask = async (params: any = {}) => {
@@ -88,8 +88,8 @@ const timingColum: TableColumType = [
     label: '人脸识别',
     type: 'switch',
     async event(nv: boolean, row: any) {
-
-      row.isBan = nv
+      await updateTaskTiming({ timingId: row.timingId,isFace:nv })
+      row.isFace = nv
     },
   },
   {
@@ -97,8 +97,9 @@ const timingColum: TableColumType = [
     label: '定时',
     type: 'switch',
     async event(nv: boolean, row: any) {
+      await updateTaskTiming({ timingId: row.timingId,isPeriod:nv })
 
-      row.isBan = nv
+      row.isPeriod = nv
     },
   },
 ]

@@ -61,6 +61,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SendMailCaptcha: typeof import('./../src/components/SendMailCaptcha.vue')['default']
+    SendTask: typeof import('./../src/components/SendTask.vue')['default']
     Table: typeof import('./../src/components/Table.vue')['default']
     TableFilter: typeof import('./../src/components/TableFilter.vue')['default']
     Tabs: typeof import('./../src/components/Tabs.vue')['default']
