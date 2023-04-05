@@ -150,7 +150,7 @@ const confirmSelect = () => {
     return
   }
 
-  if (!areaName.value) {
+  if (props.isArea && !areaName.value) {
     ElMessage.warning('请输入区域名称')
     return
   }

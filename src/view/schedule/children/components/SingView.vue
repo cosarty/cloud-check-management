@@ -2,14 +2,9 @@
   <div v-if="!isHistory">
     <div class=" mb-3">
       <SendTask>
-        <MapPopUp ref="mapRef" title="选择位置" id="allmap" @confirm="add" is-scope>
-          <template #extra="{ toggle }">
-            <el-button @click="toggle" type="primary">
+        <el-button  type="primary">
               发起签到
             </el-button>
-          </template>
-        </MapPopUp>
-
       </SendTask>
     </div>
     <div>
@@ -38,13 +33,10 @@
 
 <script setup lang="ts">
 const props = defineProps<{ isHistory: boolean }>()
-const mapRef = ref<any>()
+
 const tableRef = ref<any>()
 
-const add = async (data: any) => {
-  data.location = JSON.stringify(data.location)
-  tableRef.value.reset()
-}
+
 </script>
 
 <style scoped lang="scss"></style>
