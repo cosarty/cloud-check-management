@@ -1,21 +1,10 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex justify-between p-4 px-10">
-      <AddCourse
-        @reset="reset"
-        title="添加课程"
-        #default="{ updateVisBale }"
-        ref="coursRef"
-      >
+      <AddCourse @reset="reset" title="添加课程" #default="{ updateVisBale }" ref="coursRef">
         <ElButton :icon="Plus" @click="updateVisBale">添加课程</ElButton>
       </AddCourse>
-      <ElInput
-        v-model="searchText"
-        placeholder="搜索"
-        style="width: 16rem"
-        :prefix-icon="Search"
-        clearable
-      />
+      <ElInput v-model="searchText" placeholder="搜索" style="width: 16rem" :prefix-icon="Search" clearable />
     </div>
     <ElScrollbar class="p-4 bg-slate-100 h-full">
       <RenderCourse :data="courseList" is-action @action="action" show-time />
@@ -49,6 +38,7 @@ const reset = async () => {
   const { data } = await getCourseList()
   courseList.value = data.rows
 }
+
 const action = (comd: 'update' | 'delete' | 'issued' | 'show', data: any) => {
   switch (comd) {
     case 'update':

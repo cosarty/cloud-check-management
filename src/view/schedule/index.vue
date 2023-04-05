@@ -1,6 +1,12 @@
 <template>
   <div style="background-color: white; height: 100%" class="box-border">
-    <RouterView></RouterView>
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+
+
   </div>
 </template>
 

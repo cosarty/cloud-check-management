@@ -29,7 +29,7 @@
           :prop="prop"
           :label="label"
           v-for="(
-            { label, type, prop, width, fixed, align, options, event, sort },
+            { label, type, prop, width, fixed, align, options, event, sort,opTrans },
             idx
           ) in colums"
           :key="idx"
@@ -69,9 +69,9 @@
 
           <template v-else-if="type === 'tag'">
             <ElTag
-              v-if="options[row[prop]]"
-              :type="options[row[prop]]?.type ?? 'info'"
-              >{{ options[row[prop]]?.txt ?? '未知' }}</ElTag
+              v-if="options[opTrans?.(row[prop]) ?? row[prop]]"
+              :type="options[opTrans?.(row[prop]) ?? row[prop]]?.type ?? 'info'"
+              >{{ options[opTrans?.(row[prop]) ?? row[prop]]?.txt ?? '未知' }}</ElTag
             >
           </template>
           <template v-else-if="type === 'switch'">
@@ -165,6 +165,7 @@ export type TableColumType = {
   event?: (e: any, row: any) => void // 只有当prop 是select的时候才有用
   labelWidth?: string
   searcherPlaceHolder?: string
+  opTrans?:(data:any)=>any
 }[]
 export type TableActionType = {
   title: string
