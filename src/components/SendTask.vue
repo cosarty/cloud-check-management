@@ -22,10 +22,10 @@
                 v-for="(data, idx) in option" :key="idx">
                 <span style="float: left">{{ data.courseName }}</span>
                 <span style="
-                                          float: right;
-                                          color: var(--el-text-color-secondary);
-                                          font-size: 13px;
-                                        ">{{ data.className }}</span>
+                                            float: right;
+                                            color: var(--el-text-color-secondary);
+                                            font-size: 13px;
+                                          ">{{ data.className }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -56,7 +56,7 @@
               <ElButton @click="selectLocation(toggle)" link type="primary">选择地址</ElButton>
             </el-form-item>
             <el-form-item label="位置名称" required v-if="info.locationName !== undefined">
-              <ElInput v-model="info.locationName"  />
+              <ElInput v-model="info.locationName" />
             </el-form-item>
             <el-form-item label="范围">
               <ElInputNumber v-model="info.distance" :min="1" /> (米)
@@ -85,6 +85,7 @@
 import { getAreaList, getClassChedule } from '@/http/api';
 import { createSingTask } from '@/http/api/singTask';
 
+const emit = defineEmits<{ (e: 'submit'): void }>()
 
 const mapRef = ref<any>()
 const dialogVisible = ref(false)
@@ -95,10 +96,10 @@ const info = ref<any>({ isCustom: false })
 const option = ref<any[]>([])
 const araeOption = ref<any[]>([])
 const submit = async (toggle: any) => {
-
-
   dialogVisible.value = false
   await createSingTask({ ...info.value, isCurrent: check.value })
+  // 
+  emit('submit')
 }
 
 watch(dialogVisible, (nv) => {
