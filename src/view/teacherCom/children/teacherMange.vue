@@ -2,7 +2,7 @@
   <div style="background-color: white; height: 100%" class="p-11">
     <Table
       :action="
-        user.auth.includes('super') ? showStudentAction : AdminStudenAction
+        user.auth.includes('super') ? showStudentAction : []
       "
       ref="showStudneTableRef"
       :colums="teacherColumsComp"
@@ -12,6 +12,7 @@
       <template #header>
         <CheckTeacher
           title="添加教师"
+          v-if="user.auth.includes('super')"
           @reset="() => showStudneTableRef.reset()"
           #default="{ updateVisBale }"
           ref="checkTeacherRef"

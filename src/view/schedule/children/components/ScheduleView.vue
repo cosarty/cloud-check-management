@@ -112,7 +112,7 @@ const request = async (params: any) => {
   const {
     data: { count, rows },
   } = await getTimingTask(params)
-  console.log('data: ', rows);
+
 
   return [rows ?? [], count ?? 0]
 }

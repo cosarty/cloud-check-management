@@ -1,5 +1,6 @@
 <template>
   <div style="background-color: white; height: 100%">
+    <div class="text-2xl font-bold p-3">授课班级</div>
     <div v-if="showClassInfo">
       <el-page-header
         @back="showClassInfo = undefined"
@@ -16,6 +17,7 @@
       <el-divider style="margin: 10px 0" />
 
       <RenderCourse :data="showClassInfo?.course ?? []" @action="showScourse">
+        
         <template #default="{ co }">
           <div
             @click.stop="showKb(co)"
