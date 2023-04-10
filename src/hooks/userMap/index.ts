@@ -5,14 +5,14 @@ type MapInjectType = {
   loadCurrentLocal: (lng?: number, lat?: number) => Promise<any>
   LocalSearch: () => Promise<void>
   mapLoading: Readonly<Ref<boolean>>
-  circleOverlay:(radius: number, lng: number, lat: number)=>void
+  circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>
 }
 
 const useMap = (id: string, searchEvent: any): MapInjectType => {
   let BMap: any
   let mapImp: any // 地图示例
   const mapLoading = ref(false)
-  let circle:any
+  let circle: any
 
   // 创建实例
   const loadScript = () =>
@@ -35,6 +35,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
 
         document.head.appendChild(script)
       } else if ((window as any).BMap) {
+        console.log(1)
         ;({ BMap } = window as any)
         resolve()
       }
@@ -195,19 +196,19 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
     })
   }
 
- 
-
   // 绘制区域  半径
-  const circleOverlay = (radius: number, lng: number, lat: number) => {
+  const circleOverlay = async (radius: number, lng: number, lat: number) => {
+    if (!mapImp) return
     if (circle) {
       mapImp.removeOverlay(circle)
     }
-     circle = new BMap.Circle(new BMap.Point(lng, lat), radius, {
+
+    circle = new BMap.Circle(new BMap.Point(lng, lat), radius, {
       strokeColor: 'blue',
       strokeWeight: 6,
-      strokeOpacity: 0.5
-  });
-  mapImp.addOverlay(circle);
+      strokeOpacity: 0.5,
+    })
+    mapImp.addOverlay(circle)
   }
 
   // 设置位置
@@ -230,7 +231,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
     mapLoading: readonly(mapLoading),
     loadCurrentLocal,
     LocalSearch,
-    circleOverlay
+    circleOverlay,
   }
 }
 

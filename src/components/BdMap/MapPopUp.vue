@@ -8,14 +8,27 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="搜索地址">
-              <el-input :prefix-icon="Search" type="text" v-model="searchAddresKeywords" placeholder="请输入地点">
+              <el-input
+                :prefix-icon="Search"
+                type="text"
+                v-model="searchAddresKeywords"
+                placeholder="请输入地点"
+              >
               </el-input>
-              <input :value="searchAddresKeywords" type="text" id="searchAddres" style="width: 100%; height: 0" />
+              <input
+                :value="searchAddresKeywords"
+                type="text"
+                id="searchAddres"
+                style="width: 100%; height: 0"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="14">
             <el-form-item label="当前地址">
-              <ElInput placeholder="请输入地址名称" v-model="currentLocaltion.address" />
+              <ElInput
+                placeholder="请输入地址名称"
+                v-model="currentLocaltion.address"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -29,7 +42,10 @@
         <el-row v-if="isScope">
           <el-col :span="10">
             <el-form-item label="范围">
-              <ElInputNumber placeholder="请输入范围" v-model.lazy="scopeName" />
+              <ElInputNumber
+                placeholder="请输入范围"
+                v-model.lazy="scopeName"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -42,7 +58,12 @@
         </div>
       </template>
       <div class="map-container">
-        <el-icon class="refresh-icon" size="25" style="cursor: pointer" @click="() => reloadLocaltion()">
+        <el-icon
+          class="refresh-icon"
+          size="25"
+          style="cursor: pointer"
+          @click="() => reloadLocaltion()"
+        >
           <Refresh />
         </el-icon>
         <BdMap :id="id" :loading="mapLoading"></BdMap>
@@ -62,28 +83,33 @@ const areaName = ref('')
 const scopeName = ref<number>()
 
 const defCon = () => ({ city: '', district: '', province: '', lat: 0, lng: 0 })
-const props = defineProps<{ title: string; id: string; isArea?: boolean, isScope?: boolean }>()
+const props = defineProps<{
+  title: string
+  id: string
+  isArea?: boolean
+  isScope?: boolean
+}>()
 const emit = defineEmits<{ (e: 'confirm', data: any): void }>()
 const { loadCurrentLocal, mapLoading, LocalSearch, circleOverlay } = useMap(
   props.id,
-  ({ info, getpo }: any) => {
+  async ({ info, getpo }: any) => {
     currentLocaltion.value = { areaId: currentLocaltion.value.areaId }
     currentLocaltion.value.address = info.province + info.keyword
     currentLocaltion.value.lng = getpo.lng
     currentLocaltion.value.lat = getpo.lat
     searchAddresKeywords.value = ''
 
-    circleOverlay(scopeName.value ?? 0, getpo.lng, getpo.lat)
+    await circleOverlay(scopeName.value ?? 0, getpo.lng, getpo.lat)
   },
 )
 const currentLocaltion = ref<
   | {
-    city?: string
-    district?: string
-    province?: string
-    lat?: number
-    lng?: number
-  }
+      city?: string
+      district?: string
+      province?: string
+      lat?: number
+      lng?: number
+    }
   | any
 >(defCon())
 
@@ -94,6 +120,7 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
   let res: any
   if (lng && lat) {
     await loadCurrentLocal(lng, lat)
+    await circleOverlay(scopeName.value ?? 0, lng, lat)
   } else {
     res = await loadCurrentLocal()
     let addressInfo = res.addressComponents
@@ -106,8 +133,13 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
       addressInfo.street +
       addressInfo.streetNumber +
       res.business
+    await circleOverlay(
+      scopeName.value ?? 0,
+      currentLocaltion.value.lng,
+      currentLocaltion.value.lat,
+    )
   }
-  circleOverlay(scopeName.value ?? 0, lng ?? currentLocaltion.value.lng, lat ?? currentLocaltion.value.lat)
+
   LocalSearch()
 }
 
@@ -128,8 +160,12 @@ watch(dialogVisible, async vi => {
   }
 })
 
-watch(scopeName, () => {
-  circleOverlay(scopeName.value ?? 0, currentLocaltion.value.lng, currentLocaltion.value.lat)
+watch(scopeName, async () => {
+  await circleOverlay(
+    scopeName.value ?? 0,
+    currentLocaltion.value.lng,
+    currentLocaltion.value.lat,
+  )
 })
 const updateData = (data: any) => {
   currentLocaltion.value = data
@@ -159,7 +195,7 @@ const confirmSelect = () => {
     location: { lng, lat },
     areaName: areaName.value,
     areaId,
-    distance: scopeName.value
+    distance: scopeName.value,
   })
 
   dialogVisible.value = false
