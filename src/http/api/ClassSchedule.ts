@@ -32,3 +32,13 @@ export const getClassChedule = async () =>
     url: `/classSchedule/getClassChedule/`,
     method: 'get',
   })
+export const checkCourse = async (id: string) =>
+  await http.request({
+    url: `/classSchedule/checkCourse/${id}`,
+    method: 'get',
+  })
+export const getSchduleStudent = async (id: string) =>
+  await http.request({
+    url: `/classSchedule/getSchduleStudents/${id}`,
+    method: 'get',
+  })

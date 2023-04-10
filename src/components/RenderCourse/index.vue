@@ -1,7 +1,7 @@
 <template>
-  <div class="course-box flex flex-wrap">
+  <div class="course-box flex flex-wrap  ">
     <div @click="$emit('action', 'show', co)" v-for="co in list" :key="co.courseId"
-      class="flex-shrink-0 course-item shadow-xl flex flex-col group rounded-xl overflow-hidden relative basis-1/6"
+      class="flex-shrink-0 course-item shadow-xl flex flex-col group rounded-xl overflow-hidden relative basis-1/6 hover:text-emerald-600 "
       style="box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12)">
       <ElImage class="h-36 w-full object-cover shadow-sm" :src="co.picture ?? emtyCourse" :class="{ fix: co.picture }">
       </ElImage>
