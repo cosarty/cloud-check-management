@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isHistory">
     <div class=" mb-3">
-      <SendTask @submit="resetable">
+      <SendTask ref="sendTaskRef" @submit="resetable">
         <el-button type="primary">
           创建签到
         </el-button>
@@ -86,11 +86,12 @@
 <script setup lang="ts">
 
 import { TableActionType, TableColumType } from '@/components/Table.vue';
-import { getCurrentTask, getSingTask } from '@/http/api/singTask';
+import { getCurrentTask, getSingTask, singDeleteTask, singEndTask } from '@/http/api/singTask';
 import { RefreshLeft } from '@element-plus/icons-vue'
 const props = defineProps<{ isHistory: boolean }>()
 const singRef = ref<any>()
 const runRef = ref<any>()
+const sendTaskRef = ref<any>()
 
 
 const timingAction: TableActionType = [
@@ -99,7 +100,7 @@ const timingAction: TableActionType = [
     title: '编辑',
     link: true,
     event(row) {
-
+      sendTaskRef.value.updateInfo({...row})
     },
   },
   {
@@ -108,12 +109,12 @@ const timingAction: TableActionType = [
     confirmTitle: '确认结束',
     link: true,
     async event(row: any) {
-      //endTaskTiming
-
+      await singEndTask({ singTaskId: row.singTaskId })
       singRef.value.reset()
     },
   },
 ]
+
 
 const hisoryAction: TableActionType = [
   {
@@ -122,7 +123,7 @@ const hisoryAction: TableActionType = [
     confirmTitle: '确认删除',
     link: true,
     async event(row: any) {
-      //  await delTaskTiming({ timingId: row.timingId })
+      await singDeleteTask({ singTaskId: row.singTaskId })
       singRef.value.reset()
 
     },
@@ -131,7 +132,7 @@ const hisoryAction: TableActionType = [
     title: '查看',
     link: true,
     async event(row: any) {
-      //  await delTaskTiming({ timingId: row.timingId })
+
       singRef.value.reset()
 
     },
@@ -160,6 +161,7 @@ const timingColum: TableColumType = [
   },
   { prop: 'taskTime', label: '签到时间', type: 'date' },
   { prop: 'locationName', label: '签到地址' },
+  { prop: 'distance', label: '签到距离(米)' },
   { prop: 'integral', label: '持续时间' },
 
   {
@@ -181,9 +183,20 @@ const runAction: TableActionType = [
     confirmTitle: '确认结束',
     link: true,
     async event(row: any) {
+      console.log('row: ', row);
       //endTaskTiming
+      await singEndTask({ singTaskId: row.singTaskId })
+      runRef.value.reset()
+    },
+  },
+  {
+    type: 'primary',
+    title: '查看',
+    link: true,
+    async event(row: any) {
 
-      singRef.value.reset()
+      runRef.value.reset()
+
     },
   },
 ]

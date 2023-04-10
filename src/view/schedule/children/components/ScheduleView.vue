@@ -11,6 +11,9 @@
       <template #className="{ row }">
         {{ row?.classSchedule?.class?.className }}
       </template>
+      <template #locationName="{ row }">
+        {{ row.locationName ?? row?.area?.areaName }}
+      </template>
     </Table>
   </div>
 </template>
@@ -83,6 +86,8 @@ const timingColum: TableColumType = [
   },
   { prop: 'period', label: 'cornTab' },
   { prop: 'integral', label: '持续时间' },
+  { prop: 'locationName', label: '签到地址' },
+  { prop: 'distance', label: '签到距离(米)' },
   {
     prop: 'isFace',
     label: '人脸识别',
