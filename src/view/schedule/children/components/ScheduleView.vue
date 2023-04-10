@@ -1,28 +1,50 @@
 <template>
   <div>
-    <Table :action="props.isHistory ? hisoryAction : timingAction" ref="timingRef" :colums="props.isHistory?timingColum.slice(0,-2):timingColum" :request="request"
-      >
+    <Table
+      :action="props.isHistory ? hisoryAction : timingAction"
+      ref="timingRef"
+      :colums="
+        props.isHistory
+          ? timingColum.slice(0, -2).filter(d => d.prop !== 'taskTime')
+          : timingColum
+      "
+      :request="request"
+    >
       <template #courseName="{ row }">
         {{ row?.classSchedule?.course?.courseName }}
       </template>
-      <template #integral="{ row }">
-        {{ row?.integral }}秒
-      </template>
+      <template #integral="{ row }"> {{ row?.integral }}秒 </template>
       <template #className="{ row }">
         {{ row?.classSchedule?.class?.className }}
       </template>
       <template #locationName="{ row }">
-        {{ row.locationName ?? row?.area?.areaName }}
+        {{ row?.locationName ?? row?.area?.areaName }}
+      </template>
+      <template #taskTime="{ row }">
+        {{
+          '(星期 ' +
+          row?.classHours?.time?.id +
+          ') ' +
+          row?.classHours?.time?.startTime
+        }}
       </template>
     </Table>
+    <SendTimingTask ref="sendTimingRef" @submit="timingRef.reset()" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { TableActionType, TableColumType } from '@/components/Table.vue';
-import { delTaskTiming, endTaskTiming, getTimingList, updateTaskTiming } from '@/http/api';
+import { TableActionType, TableColumType } from '@/components/Table.vue'
+import {
+  delTaskTiming,
+  endTaskTiming,
+  getTimingList,
+  updateTaskTiming,
+} from '@/http/api'
 const props = defineProps<{ isHistory: boolean }>()
 const timingRef = ref<any>()
+const sendTimingRef = ref<any>()
+
 const getTimingTask = async (params: any = {}) => {
   const data = await getTimingList({ isHistory: props.isHistory, ...params })
   return data
@@ -34,7 +56,7 @@ const timingAction: TableActionType = [
     title: '编辑',
     link: true,
     event(row) {
-
+      sendTimingRef.value.updateInfo({ ...row })
     },
   },
   {
@@ -42,7 +64,7 @@ const timingAction: TableActionType = [
     title: '结束',
     confirmTitle: '确认结束',
     link: true,
-    async event(row: any){
+    async event(row: any) {
       //endTaskTiming
       await endTaskTiming({ timingId: row.timingId })
       timingRef.value.reset()
@@ -57,9 +79,8 @@ const hisoryAction: TableActionType = [
     confirmTitle: '确认删除',
     link: true,
     async event(row: any) {
-       await delTaskTiming({ timingId: row.timingId })
-       timingRef.value.reset()
-
+      await delTaskTiming({ timingId: row.timingId })
+      timingRef.value.reset()
     },
   },
 ]
@@ -84,8 +105,9 @@ const timingColum: TableColumType = [
       },
     },
   },
-  { prop: 'period', label: 'cornTab' },
+  { prop: 'taskTime', label: '签到时间' },
   { prop: 'integral', label: '持续时间' },
+  { prop: 'period', label: 'corntab' },
   { prop: 'locationName', label: '签到地址' },
   { prop: 'distance', label: '签到距离(米)' },
   {
@@ -93,7 +115,7 @@ const timingColum: TableColumType = [
     label: '人脸识别',
     type: 'switch',
     async event(nv: boolean, row: any) {
-      await updateTaskTiming({ timingId: row.timingId,isFace:nv })
+      await updateTaskTiming({ timingId: row.timingId, isFace: nv })
       row.isFace = nv
     },
   },
@@ -102,30 +124,27 @@ const timingColum: TableColumType = [
     label: '定时',
     type: 'switch',
     async event(nv: boolean, row: any) {
-      await updateTaskTiming({ timingId: row.timingId,isPeriod:nv })
+      await updateTaskTiming({ timingId: row.timingId, isPeriod: nv })
 
       row.isPeriod = nv
     },
   },
 ]
 
-watch(() => props.isHistory, async () => {
-  timingRef.value.reset()
-})
+watch(
+  () => props.isHistory,
+  async () => {
+    timingRef.value.reset()
+  },
+)
 
 const request = async (params: any) => {
   const {
     data: { count, rows },
   } = await getTimingTask(params)
 
-
   return [rows ?? [], count ?? 0]
 }
-
-
-
-
-
 </script>
 
 <style scoped lang="scss"></style>

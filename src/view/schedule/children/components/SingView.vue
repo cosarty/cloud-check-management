@@ -86,7 +86,7 @@
 <script setup lang="ts">
 
 import { TableActionType, TableColumType } from '@/components/Table.vue';
-import { getCurrentTask, getSingTask, singDeleteTask, singEndTask } from '@/http/api/singTask';
+import { getCurrentTask, getSingTask, singDeleteTask, singEndTask, updateSingTask } from '@/http/api/singTask';
 import { RefreshLeft } from '@element-plus/icons-vue'
 const props = defineProps<{ isHistory: boolean }>()
 const singRef = ref<any>()
@@ -169,7 +169,7 @@ const timingColum: TableColumType = [
     label: '人脸识别',
     type: 'switch',
     async event(nv: boolean, row: any) {
-      // await updateTaskTiming({ timingId: row.timingId,isFace:nv })
+      await updateSingTask({ singTaskId: row.singTaskId,isFace:nv })
       row.isFace = nv
     },
   }

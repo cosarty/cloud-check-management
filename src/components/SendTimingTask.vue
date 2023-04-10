@@ -6,29 +6,19 @@
     <template #extra="{ toggle }">
       <el-dialog
         v-model="dialogVisible"
-        title="设置"
+        title="设置定时任务"
         width="40%"
         destroy-on-close
       >
-        <el-form label-width="90px" class="w-2/3 mx-auto">
+        <el-form label-width="90px" class="w-2/3 mx-auto form-cous">
           <el-form-item label="任务名称" required>
             <el-input v-model="info.taskName" />
           </el-form-item>
-          <el-form-item>
-            <el-checkbox v-model="check" label="立即签到" size="large" />
-          </el-form-item>
-          <el-form-item v-if="!check" label="签到时间" required>
-            <el-date-picker
-              v-model="info.taskTime"
-              type="datetime"
-              placeholder="请选择签到时间"
-            />
-          </el-form-item>
           <el-form-item label="课程" required>
             <el-select
+              disabled
               v-model="info.classScheduleId"
               placeholder="请选择课程"
-              required
             >
               <el-option
                 :label="data.courseName + '(' + data.className + ')'"
@@ -47,6 +37,12 @@
                 >
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="签到时间" required>
+            <el-input
+              readonly
+              :model-value="`(星期 ${info?.classHours?.time?.id}) ${info?.classHours?.time?.startTime}`"
+            />
           </el-form-item>
           <el-form-item label="签到分数" required>
             <ElInputNumber :min="1" v-model="info.sustain" />
@@ -81,13 +77,20 @@
                 >选择地址</ElButton
               >
             </el-form-item>
-            <el-form-item label="位置名称" required v-if="info.locationName">
+            <el-form-item
+              label="位置名称"
+              required
+              v-if="info.locationName !== undefined && info.location"
+            >
               <ElInput v-model="info.locationName" />
             </el-form-item>
             <el-form-item label="范围" v-if="info.locationName || info.areaId">
               <ElInputNumber v-model="info.distance" :min="1" /> (米)
             </el-form-item>
           </template>
+          <el-form-item label="开启定时">
+            <ElSwitch v-model="info.isPeriod" />
+          </el-form-item>
           <el-form-item label="开启人脸">
             <ElSwitch v-model="info.isFace" />
           </el-form-item>
@@ -104,15 +107,14 @@
 </template>
 
 <script setup lang="ts">
-import { getAreaList, getClassChedule } from '@/http/api'
+import { getAreaList, getClassChedule, updateTaskTiming } from '@/http/api'
 import { createSingTask, updateSingTask } from '@/http/api/singTask'
 
 const emit = defineEmits<{ (e: 'submit'): void }>()
 
 const mapRef = ref<any>()
 const dialogVisible = ref(false)
-// 判断是否立即签到
-const check = ref(true)
+
 const info = ref<any>({ isCustom: false })
 
 const option = ref<any[]>([])
@@ -124,15 +126,12 @@ const submit = async () => {
     info.value.locationName = null
     info.value.distance = null
   }
-  if (info.value.singTaskId) {
-    await updateSingTask({
-      ...info.value,
-      isCurrent: check.value,
-      integral: info.value.integral * 60,
-    })
-  } else {
-    await createSingTask({ ...info.value, isCurrent: check.value })
+  if (info.value.timingId) {
+    await updateTaskTiming({ ...info.value,  integral: info.value.integral * 60, })
   }
+  // else {
+  //   await createSingTask({ ...info.value })
+  // }
 
   dialogVisible.value = false
 
@@ -142,7 +141,7 @@ const submit = async () => {
 watch(dialogVisible, nv => {
   if (!nv) {
     info.value = { isCustom: false }
-    check.value = true
+
     option.value = []
     araeOption.value = []
   } else {
@@ -192,7 +191,6 @@ const add = async (data: any) => {
 
 // 更新数据
 const updateInfo = (data: any) => {
-  check.value = false
   info.value = data
   info.value.integral = data.integral / 60
   if (data.areaId) {
@@ -201,6 +199,7 @@ const updateInfo = (data: any) => {
     info.value.isCustom = true
   }
   dialogVisible.value = true
+
 }
 
 watch(
@@ -212,6 +211,7 @@ watch(
       info.value.location = null
       info.value.locationName = null
     }
+
   },
 )
 
@@ -220,4 +220,10 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.form-cous {
+  :deep(.el-input .el-input__wrapper:has(.el-input__inner[readonly])) {
+    box-shadow: none !important;
+  }
+}
+</style>
