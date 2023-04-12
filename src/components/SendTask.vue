@@ -29,6 +29,7 @@
               v-model="info.classScheduleId"
               placeholder="请选择课程"
               required
+              :disabled="!!classScheduleId"
             >
               <el-option
                 :label="data.courseName + '(' + data.className + ')'"
@@ -109,6 +110,8 @@ import { createSingTask, updateSingTask } from '@/http/api/singTask'
 
 const emit = defineEmits<{ (e: 'submit'): void }>()
 
+const props = defineProps<{ classScheduleId: any }>()
+
 const mapRef = ref<any>()
 const dialogVisible = ref(false)
 // 判断是否立即签到
@@ -146,6 +149,9 @@ watch(dialogVisible, nv => {
     option.value = []
     araeOption.value = []
   } else {
+    if (props.classScheduleId) {
+      info.value.classScheduleId = props.classScheduleId
+    }
     getCourse()
     getArea()
   }

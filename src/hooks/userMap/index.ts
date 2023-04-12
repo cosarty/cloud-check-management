@@ -8,7 +8,11 @@ type MapInjectType = {
   circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>
 }
 
-const useMap = (id: string, searchEvent: any): MapInjectType => {
+const useMap = (
+  id: string,
+  searchEvent: any,
+  isLock = false,
+): MapInjectType => {
   let BMap: any
   let mapImp: any // 地图示例
   const mapLoading = ref(false)
@@ -60,7 +64,7 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
     mapImp.enableDragging(true)
     mapImp.addEventListener('click', function (e: any) {
       let clickpt = e.point // 点击的坐标
-
+      if (isLock) return
       mapImp.clearOverlays() // 移除地图上的标注
       let marker = new BMap.Marker(clickpt) // 创建标注
       mapImp.addOverlay(marker) // 将标注添加到地图中
@@ -168,6 +172,8 @@ const useMap = (id: string, searchEvent: any): MapInjectType => {
 
   // 地址搜索
   const LocalSearch = async () => {
+    if (isLock) return
+
     if (!mapImp) createImp()
 
     await nextTick()

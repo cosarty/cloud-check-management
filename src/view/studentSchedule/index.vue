@@ -1,9 +1,9 @@
 <template>
-  <div>活动</div>
+  <div>班级</div>
 </template>
 <script lang="ts">
 export default defineComponent({
-  title: '活动',
+  title: '班级',
   icon: 'icon-jiaoshilaoshi',
   name: 'studentSchedule',
   auth: ['student'],
