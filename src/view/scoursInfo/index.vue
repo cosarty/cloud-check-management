@@ -133,24 +133,23 @@
                 ><span class="px-2">持续时间:{{ info.integral }}</span>
               </div>
             </div>
-
-            <MapPopUp
-              v-if="!info.isEnd && info.isRun && isStudent"
-              id="student-map"
-              title="签到"
-              is-student
-              ref="studenMap"
+            <ElButton
+              link
+              type="primary"
+              class="mr-3"
+              @click="statClick(info)"
+              v-if="
+                !info.isEnd &&
+                info.isRun &&
+                isStudent &&
+                !info?.students?.find(a => a.userId === user.userInfo.userId)
+              "
+              >签到</ElButton
             >
-              <template #extra="{ toggle }">
-                <ElButton
-                  link
-                  type="primary"
-                  class="mr-3"
-                  @click="statClick(info, toggle)"
-                  >签到</ElButton
-                >
-              </template>
-            </MapPopUp>
+
+            <ElButton v-else link type="success" class="mr-3" disabled
+              >已签到</ElButton
+            >
             <ElButton
               v-if="!info.isEnd && info.isRun && !isStudent"
               link
@@ -163,7 +162,7 @@
               link
               type="danger"
               class="mr-3"
-              @click=""
+              @click="endHendle(info)"
               >结束</ElButton
             >
           </div>
@@ -178,6 +177,15 @@
         </div>
       </ElScrollbar>
     </div>
+
+    <MapPopUp
+      @confirm="singStat"
+      id="student-map"
+      title="签到"
+      is-student
+      ref="studenMap"
+    >
+    </MapPopUp>
   </div>
 </template>
 
@@ -194,11 +202,12 @@ export default defineComponent({
 import dayjs from 'dayjs'
 import qiandao from '@/assets/qiandao.png'
 import emptySchdule from '@/assets/empty_schdule.png'
-import { checkCourse, getSchduleStudent } from '@/http/api'
+import { checkCourse, createStat, getSchduleStudent } from '@/http/api'
 import {
   createSingTask,
   getCurrentTask,
   getSingTask,
+  singEndTask,
 } from '@/http/api/singTask'
 import userStore from '@/store/userStore'
 import emtyCourse from '@/assets/emty-course.png'
@@ -238,7 +247,6 @@ const otherInfo = computed(() => {
 })
 
 // 获取当前的激活中的活动
-
 const getActiveSchdule = async () => {
   const {
     data: { rows: run },
@@ -293,7 +301,7 @@ const submit = async () => {
   }
 }
 
-const statClick = (info: any, toggle: any) => {
+const statClick = (info: any) => {
   // 如果已经结束了
   if (!dayjs(info.taskTime).add(info.integral, 'second').isAfter(dayjs())) {
     singTaskinfo.value = singTaskinfo.value.filter(
@@ -323,25 +331,50 @@ const statClick = (info: any, toggle: any) => {
     console.log('开启地图')
 
     if (info.location) {
-      studenMap.value[0].updateData({
+      studenMap.value.updateData({
         ...info,
         ...JSON.parse(info.location),
         address: info.locationName,
       })
+      return
     }
 
     if (info.area) {
-      studenMap.value[0].updateData({
+      studenMap.value.updateData({
         ...info,
         ...JSON.parse(info.area.location),
         address: info.area.locationName,
       })
+
+      return
     }
 
+    return
   }
 
   // 如果都没有的话那就直接签到
   console.log('info: ', info)
+}
+
+// 区域签到
+const singStat = async ({
+  location,
+  locationName,
+  tagetScope,
+  singTaskId,
+  sustain,
+}: any) => {
+  await createStat({
+    location: JSON.stringify(location),
+    locationName,
+    singTaskId,
+    type: 1,
+    classScheduleId: courseId.value,
+    sustain,
+    tagetScope,
+  })
+
+  await getActiveSchdule()
 }
 
 // 选择学生
@@ -351,6 +384,14 @@ const checkUser = (userId: any) => {
   } else {
     activeStudent.value = userId
   }
+}
+
+// 结束签到
+const endHendle = async (info: any) => {
+  await singEndTask({ singTaskId: info.singTaskId })
+  singTaskinfo.value = singTaskinfo.value.filter(
+    (s: any) => s.singTaskId !== info.singTaskId,
+  )
 }
 
 watch(

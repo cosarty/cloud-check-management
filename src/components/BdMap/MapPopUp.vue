@@ -146,6 +146,8 @@ const currentLocaltion = ref<
 >(defCon())
 
 const singDistance = computed(() => {
+  if (!props.isStudent) return
+
   const s = scopeName.value ?? 0
 
   if (signLocation.value.distance <= s) return signLocation.value.distance
@@ -240,8 +242,17 @@ const updateData = (data: any) => {
   toggerVisible()
 }
 const confirmSelect = () => {
-  const { province, city, district, address, lat, lng, areaId } =
-    currentLocaltion.value
+  const {
+    province,
+    city,
+    district,
+    address,
+    lat,
+    lng,
+    areaId,
+    singTaskId,
+    sustain,
+  } = currentLocaltion.value
 
   let text: any
   if (currentLocaltion.value.city)
@@ -257,17 +268,15 @@ const confirmSelect = () => {
     return
   }
 
-  // 如果是学生就计算距离
-  if (props.isStudent) {
-    // 距离不足就提示
-  }
-
   emit('confirm', {
     locationName: text,
     location: { lng, lat },
     areaName: areaName.value,
     areaId,
     distance: scopeName.value,
+    tagetScope: singDistance.value,
+    singTaskId,
+    sustain,
   })
 
   dialogVisible.value = false
