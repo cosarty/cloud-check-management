@@ -64,9 +64,14 @@
               </div>
             </div>
             <div
-              class="p-2 flex items-center border-b-2 cursor-pointer bg-slate-100"
+              class="p-2 flex items-center border-b-2 cursor-pointer"
+              :class="{
+                'bg-amber-500': activeStudent === ot.userId,
+                'bg-slate-100': activeStudent !== ot.userId,
+              }"
               v-for="ot in otherInfo"
               :key="ot.userId"
+              @click="!myInfo && checkUser(ot.userId)"
             >
               <ElAvatar
                 :size="40"
@@ -122,33 +127,47 @@
                 <span class="px-2 pl-0"
                   >共{{ info.students?.length }}人参与</span
                 ><span class="px-2">{{
-                  dayjs(info.taskTime).format('YYYY-MM-DD')
+                  dayjs(info.taskTime).format('YYYY-MM-DD hh:mm')
                 }}</span
                 ><span class="px-2">积分:{{ info.sustain }}</span
                 ><span class="px-2">持续时间:{{ info.integral }}</span>
               </div>
             </div>
 
-            <ElButton
-              link
-              type="primary"
-              class="mr-3"
+            <MapPopUp
               v-if="!info.isEnd && info.isRun && isStudent"
-              @click="statClick(info)"
-              >签到</ElButton
+              id="student-map"
+              title="签到"
+              is-student
+              ref="studenMap"
             >
+              <template #extra="{ toggle }">
+                <ElButton
+                  link
+                  type="primary"
+                  class="mr-3"
+                  @click="statClick(info, toggle)"
+                  >签到</ElButton
+                >
+              </template>
+            </MapPopUp>
             <ElButton
+              v-if="!info.isEnd && info.isRun && !isStudent"
               link
               type="primary"
               class="mr-3"
-              v-if="!info.isEnd && info.isRun && !isStudent"
+              @click=""
               >查看</ElButton
             >
           </div>
 
-          <div v-if="!singTaskinfo?.length" class="  text-cyan-700 text-lg font-bold flex flex-col items-center">
-            <ElImage :src="emptySchdule" class=" my-4"></ElImage>
-            暂无活动</div>
+          <div
+            v-if="!singTaskinfo?.length"
+            class="text-cyan-700 text-lg font-bold flex flex-col items-center"
+          >
+            <ElImage :src="emptySchdule" class="my-4"></ElImage>
+            暂无活动
+          </div>
         </div>
       </ElScrollbar>
     </div>
@@ -176,12 +195,9 @@ import {
 } from '@/http/api/singTask'
 import userStore from '@/store/userStore'
 import emtyCourse from '@/assets/emty-course.png'
-
-/**
- * 1. 判断时学生还是老师
- * 2. 学生的话只能查看 自己的数据
- * 3. 老师的话可以创建和查看
- */
+import { Action, ElMessageBox } from 'element-plus'
+const studenMap = ref<any>()
+const activeStudent = ref()
 
 const radio = ref(0)
 
@@ -270,9 +286,53 @@ const submit = async () => {
   }
 }
 
+const statClick = (info: any, toggle: any) => {
+  // 如果已经结束了
+  if (!dayjs(info.taskTime).add(info.integral, 'second').isAfter(dayjs())) {
+    singTaskinfo.value = singTaskinfo.value.filter(
+      (s: any) => s.singTaskId !== info.singTaskId,
+    )
+    ElMessage({
+      message: '签到已结束.',
+      type: 'warning',
+    })
+    return
+  }
 
-const statClick = (info:any) => {
- console.log( dayjs(info.taskTime).add(info.integral,'second').isAfter(dayjs()))
+  // 判断是否开启人脸
+  if (info.isFace) {
+    ElMessageBox.alert('当前签到已开启人脸识别功能，请登录小程序签到', '提示', {
+      // if you want to disable its autofocus
+      // autofocus: false,
+      confirmButtonText: '确认',
+      callback: (action: Action) => {},
+    })
+
+    return
+  }
+  // 判断是否开启定位
+
+  if (info.area || (info.locationName && info.location)) {
+    console.log('开启地图')
+    studenMap.value[0].updateData({
+    ...info,
+    ...JSON.parse(info.location),
+    address: info.locationName,
+  })
+  //   mapRef.value
+  }
+
+  // 如果都没有的话那就直接签到
+  console.log('info: ', info)
+}
+
+// 选择学生
+const checkUser = (userId: any) => {
+  if (activeStudent.value === userId) {
+    activeStudent.value = undefined
+  } else {
+    activeStudent.value = userId
+  }
 }
 
 watch(
@@ -297,6 +357,7 @@ watch(
         radio.value = 0
         students.value = stu?.class?.studnets ?? []
         activeName.value = 'member'
+        activeStudent.value = undefined
       }
     }
   },

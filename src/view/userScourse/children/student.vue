@@ -5,6 +5,8 @@
       <ElButton type="primary">查看课表</ElButton>
     </div>
     <div><RenderCourse :data="courseList" @action="showScourse" /></div>
+
+    <VChart class=" h-96 w-96" :option="option" autoresize />
   </div>
 </template>
 
@@ -20,8 +22,68 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+} from 'echarts/components';
+import VChart from 'vue-echarts';
 import RenderCourse from '@/components/RenderCourse/index.vue'
 import { getStudentClass } from '@/http/api'
+
+use([
+  CanvasRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
+
+
+
+
+const option = ref({
+  title: {
+    text: 'Traffic Sources',
+    left: 'center',
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ({d}%)',
+  },
+  legend: { 
+    orient: 'vertical',
+    left: 'left',
+    data: ['Direct', 'Ema', 'Ad Networks', 'Video Ads', 'Search Engines'],
+  },
+  series: [
+    {
+      name: 'Traffic Sources',
+      type: 'pie',
+      radius: '55%',
+      center: ['60%', '60%'],
+      data: [
+        { value: 335, name: 'Direct' },
+        { value: 310, name: 'Ema' },
+        { value: 234, name: 'Ad Networks' },
+        { value: 135, name: 'Video Ads' },
+        { value: 1548, name: 'Search Engines' },
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+    },
+  ],
+});
+
+
 const router = useRouter()
 const courseList = ref<any>([])
 onMounted(() => {

@@ -4,7 +4,7 @@
       <slot name="extra" :toggle="toggerVisible"></slot>
     </div>
     <el-dialog v-model="dialogVisible" width="60%" :title="title">
-      <el-form label-width="80px">
+      <el-form label-width="80px" v-if="!isStudent">
         <el-row>
           <el-col :span="10">
             <el-form-item label="搜索地址">
@@ -50,10 +50,17 @@
           </el-col>
         </el-row>
       </el-form>
-
+      <div v-else>
+        <div class="my-3 text-lg font-bold">{{ tiptext }}</div>
+      </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="confirmSelect">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="confirmSelect"
+            :disabled="isStudent && singDistance >= (scopeName ?? 0)"
+            >确 定</el-button
+          >
           <el-button @click="dialogVisible = false">取 消</el-button>
         </div>
       </template>
@@ -82,17 +89,29 @@ const dialogVisible = ref(false)
 const areaName = ref('')
 const scopeName = ref<number>()
 
+const signLocation = ref<any>({})
+
 const defCon = () => ({ city: '', district: '', province: '', lat: 0, lng: 0 })
 const props = defineProps<{
   title: string
   id: string
   isArea?: boolean
   isScope?: boolean
+  isStudent?: boolean
 }>()
 const emit = defineEmits<{ (e: 'confirm', data: any): void }>()
-const { loadCurrentLocal, mapLoading, LocalSearch, circleOverlay } = useMap(
+const {
+  loadCurrentLocal,
+  mapLoading,
+  LocalSearch,
+  circleOverlay,
+  getDistance,
+} = useMap(
   props.id,
   async ({ info, getpo }: any) => {
+    // 如果是学生禁止搜索
+    if (props.isStudent) return
+
     currentLocaltion.value = { areaId: currentLocaltion.value.areaId }
     currentLocaltion.value.address = info.province + info.keyword
     currentLocaltion.value.lng = getpo.lng
@@ -101,6 +120,7 @@ const { loadCurrentLocal, mapLoading, LocalSearch, circleOverlay } = useMap(
 
     await circleOverlay(scopeName.value ?? 0, getpo.lng, getpo.lat)
   },
+  props.isStudent ?? false,
 )
 const currentLocaltion = ref<
   | {
@@ -113,6 +133,19 @@ const currentLocaltion = ref<
   | any
 >(defCon())
 
+const singDistance = computed(() => {
+  const s = scopeName.value ?? 0
+
+  if (signLocation.value.distance <= s) return signLocation.value.distance
+  return (signLocation.value.distance ?? 0) - s ?? 0
+})
+
+const tiptext = computed(() =>
+  singDistance.value < (scopeName.value ?? 0)
+    ? '当前在签到范围内'
+    : `当前距离签到位置:${singDistance.value} 米`,
+)
+
 const toggerVisible = () => (dialogVisible.value = !dialogVisible.value)
 
 // 加载当前地址
@@ -120,9 +153,22 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
   let res: any
   if (lng && lat) {
     await loadCurrentLocal(lng, lat)
+
+    // 如果是学生禁止
+    if (props.isStudent) return
     await circleOverlay(scopeName.value ?? 0, lng, lat)
   } else {
     res = await loadCurrentLocal()
+    // 如果是学生的话就显示老师画的范围就好
+    if (props.isStudent) {
+      const { lat, lng } = currentLocaltion.value
+      // 记录签到地址
+      signLocation.value = { lat, lng }
+      // 获取距离
+      const distance = getDistance(signLocation.value, res.point)
+      signLocation.value.distance = Math.round(distance)
+      await circleOverlay(scopeName.value ?? 0, lng, lat)
+    }
     let addressInfo = res.addressComponents
     currentLocaltion.value.lng = res.point.lng
     currentLocaltion.value.lat = res.point.lat
@@ -133,6 +179,11 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
       addressInfo.street +
       addressInfo.streetNumber +
       res.business
+
+    // 如果是学生禁止
+    if (props.isStudent) {
+      return
+    }
     await circleOverlay(
       scopeName.value ?? 0,
       currentLocaltion.value.lng,
@@ -146,7 +197,7 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
 watch(dialogVisible, async vi => {
   if (vi) {
     const { lat, lng } = currentLocaltion.value
-    if (lat && lng) {
+    if (lat && lng && !props.isStudent) {
       await reloadLocaltion(lng, lat)
       return
     }
@@ -157,10 +208,13 @@ watch(dialogVisible, async vi => {
     searchAddresKeywords.value = ''
     areaName.value = ''
     scopeName.value = undefined
+    signLocation.value = {}
   }
 })
 
 watch(scopeName, async () => {
+  // 如果是学生禁止
+  if (props.isStudent) return
   await circleOverlay(
     scopeName.value ?? 0,
     currentLocaltion.value.lng,
@@ -181,15 +235,21 @@ const confirmSelect = () => {
   if (currentLocaltion.value.city)
     text = (province ?? '') + (city ?? '') + (district ?? '') + address
   else text = (province ?? '') + address
-  if (!lat || !lng) {
+  if ((!lat || !lng) && !props.isStudent) {
     ElMessage.warning('请选择地址！！！')
     return
   }
 
-  if (props.isArea && !areaName.value) {
+  if (props.isArea && !areaName.value && !props.isStudent) {
     ElMessage.warning('请输入区域名称')
     return
   }
+
+  // 如果是学生就计算距离
+  if (props.isStudent) {
+    // 距离不足就提示
+  }
+
   emit('confirm', {
     locationName: text,
     location: { lng, lat },

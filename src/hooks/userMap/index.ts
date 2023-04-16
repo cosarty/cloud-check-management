@@ -5,7 +5,8 @@ type MapInjectType = {
   loadCurrentLocal: (lng?: number, lat?: number) => Promise<any>
   LocalSearch: () => Promise<void>
   mapLoading: Readonly<Ref<boolean>>
-  circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>
+  circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>,
+  getDistance:(v1:any,v2:any)=>number
 }
 
 const useMap = (
@@ -44,12 +45,7 @@ const useMap = (
         resolve()
       }
     })
-  // .then(async () => {
-  // if (!mapImp && document.getElementById(id)) {
-  //   await nextTick()
-  //   createImp()
-  // }
-  // })
+
 
   // 创建实例
   const createImp = () => {
@@ -57,11 +53,11 @@ const useMap = (
 
     mapImp = new BMap.Map(id)
     // // 启用滚轮放大缩小，默认禁用
-    mapImp.enableScrollWheelZoom(true)
+    mapImp.enableScrollWheelZoom(isLock ?false:true)
     // 启用地图惯性拖拽，默认禁用
-    mapImp.enableContinuousZoom(true)
+    mapImp.enableContinuousZoom(isLock ?false:true)
     // 启用地图拖拽，默认启用
-    mapImp.enableDragging(true)
+    mapImp.enableDragging(isLock ?false:true)
     mapImp.addEventListener('click', function (e: any) {
       let clickpt = e.point // 点击的坐标
       if (isLock) return
@@ -106,7 +102,7 @@ const useMap = (
 
       await nextTick()
       // 创建实例
-      createImp()
+      if (!mapImp) createImp()
 
       mapLoading.value = true
 
@@ -140,12 +136,7 @@ const useMap = (
         // 创建地理编码实例
         var myGeo = new BMap.Geocoder()
 
-        const aaa = mapImp.getDistance(
-          new BMap.Point(r.point.lng, r.point.lat),
-          new BMap.Point(119.27839795210372, 26.084229526919582),
-        )
 
-        console.log('aaa: ', aaa)
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           // 根据坐标得到地址描述
           myGeo.getLocation(
@@ -165,7 +156,7 @@ const useMap = (
             },
           )
         } else {
-          alert(' 定位失败')
+          ElMessage.error('定位失败')
         }
       })
     })
@@ -211,8 +202,10 @@ const useMap = (
 
     circle = new BMap.Circle(new BMap.Point(lng, lat), radius, {
       strokeColor: 'blue',
-      strokeWeight: 6,
+      strokeWeight: 2,
       strokeOpacity: 0.5,
+      fillColor: "blue",
+      fillOpacity: 0.3,
     })
     mapImp.addOverlay(circle)
   }
@@ -232,12 +225,24 @@ const useMap = (
     })
     local.search(value)
   }
+
+
+  // 获取距离
+  const getDistance = (v1:any,v2:any) => {
+    if (!mapImp) createImp()
+    return   mapImp.getDistance(
+      new BMap.Point(v1.lng, v1.lat),
+      new BMap.Point(v2.lng, v2.lat),
+    )
+  }
+
   return {
     loadScript,
     mapLoading: readonly(mapLoading),
     loadCurrentLocal,
     LocalSearch,
     circleOverlay,
+    getDistance
   }
 }
 
