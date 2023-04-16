@@ -83,7 +83,7 @@
               >
             </el-form-item>
             <el-form-item label="位置名称" required v-if="info.locationName">
-              <ElInput v-model="info.locationName" />
+              <ElInput v-model="info.locationName" clearable/>
             </el-form-item>
             <el-form-item label="范围" v-if="info.locationName || info.areaId">
               <ElInputNumber v-model="info.distance" :min="1" /> (米)

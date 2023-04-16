@@ -120,6 +120,18 @@ const {
 
     await circleOverlay(scopeName.value ?? 0, getpo.lng, getpo.lat)
   },
+  async (res: any) => {
+    if (props.isStudent) return
+    const {
+      address,
+      surroundingPois: [{ title } = { title: '' }],
+    } = res
+    currentLocaltion.value = { areaId: currentLocaltion.value.areaId }
+    currentLocaltion.value.address = address + title
+    currentLocaltion.value.lng = res.point.lng
+    currentLocaltion.value.lat = res.point.lat
+    await circleOverlay(scopeName.value ?? 0, res.point.lng, res.point.lat)
+  },
   props.isStudent ?? false,
 )
 const currentLocaltion = ref<

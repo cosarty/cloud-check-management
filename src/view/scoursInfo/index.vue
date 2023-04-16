@@ -155,9 +155,16 @@
               v-if="!info.isEnd && info.isRun && !isStudent"
               link
               type="primary"
-              class="mr-3"
               @click=""
               >查看</ElButton
+            >
+            <ElButton
+              v-if="!info.isEnd && info.isRun && !isStudent"
+              link
+              type="danger"
+              class="mr-3"
+              @click=""
+              >结束</ElButton
             >
           </div>
 
@@ -314,12 +321,23 @@ const statClick = (info: any, toggle: any) => {
 
   if (info.area || (info.locationName && info.location)) {
     console.log('开启地图')
-    studenMap.value[0].updateData({
-    ...info,
-    ...JSON.parse(info.location),
-    address: info.locationName,
-  })
-  //   mapRef.value
+
+    if (info.location) {
+      studenMap.value[0].updateData({
+        ...info,
+        ...JSON.parse(info.location),
+        address: info.locationName,
+      })
+    }
+
+    if (info.area) {
+      studenMap.value[0].updateData({
+        ...info,
+        ...JSON.parse(info.area.location),
+        address: info.area.locationName,
+      })
+    }
+
   }
 
   // 如果都没有的话那就直接签到

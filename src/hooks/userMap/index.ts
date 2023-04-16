@@ -5,14 +5,16 @@ type MapInjectType = {
   loadCurrentLocal: (lng?: number, lat?: number) => Promise<any>
   LocalSearch: () => Promise<void>
   mapLoading: Readonly<Ref<boolean>>
-  circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>,
-  getDistance:(v1:any,v2:any)=>number
+  circleOverlay: (radius: number, lng: number, lat: number) => Promise<void>
+  getDistance: (v1: any, v2: any) => number
 }
 
 const useMap = (
   id: string,
   searchEvent: any,
+  maskClickHandle: any,
   isLock = false,
+
 ): MapInjectType => {
   let BMap: any
   let mapImp: any // 地图示例
@@ -46,18 +48,17 @@ const useMap = (
       }
     })
 
-
   // 创建实例
   const createImp = () => {
     ;({ BMap } = window as any)
 
     mapImp = new BMap.Map(id)
     // // 启用滚轮放大缩小，默认禁用
-    mapImp.enableScrollWheelZoom(isLock ?false:true)
+    mapImp.enableScrollWheelZoom(isLock ? false : true)
     // 启用地图惯性拖拽，默认禁用
-    mapImp.enableContinuousZoom(isLock ?false:true)
+    mapImp.enableContinuousZoom(isLock ? false : true)
     // 启用地图拖拽，默认启用
-    mapImp.enableDragging(isLock ?false:true)
+    mapImp.enableDragging(isLock ? false : true)
     mapImp.addEventListener('click', function (e: any) {
       let clickpt = e.point // 点击的坐标
       if (isLock) return
@@ -73,6 +74,7 @@ const useMap = (
         new BMap.Point(clickpt.lng, clickpt.lat),
         function (result: any) {
           if (result) {
+            maskClickHandle(result)
             // console.log('result: ', result)
           }
         },
@@ -135,7 +137,6 @@ const useMap = (
         // console.log('您的位置：' + r.point.lng + ',' + r.point.lat)
         // 创建地理编码实例
         var myGeo = new BMap.Geocoder()
-
 
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           // 根据坐标得到地址描述
@@ -204,7 +205,7 @@ const useMap = (
       strokeColor: 'blue',
       strokeWeight: 2,
       strokeOpacity: 0.5,
-      fillColor: "blue",
+      fillColor: 'blue',
       fillOpacity: 0.3,
     })
     mapImp.addOverlay(circle)
@@ -226,11 +227,10 @@ const useMap = (
     local.search(value)
   }
 
-
   // 获取距离
-  const getDistance = (v1:any,v2:any) => {
+  const getDistance = (v1: any, v2: any) => {
     if (!mapImp) createImp()
-    return   mapImp.getDistance(
+    return mapImp.getDistance(
       new BMap.Point(v1.lng, v1.lat),
       new BMap.Point(v2.lng, v2.lat),
     )
@@ -242,7 +242,7 @@ const useMap = (
     loadCurrentLocal,
     LocalSearch,
     circleOverlay,
-    getDistance
+    getDistance,
   }
 }
 
