@@ -1,7 +1,7 @@
 <template>
   <div
     style="background-color: white; height: 100%"
-    class="box-border max-w-6xl mx-auto flex flex-col"
+    class="overflow-hidden box-border max-w-6xl mx-auto flex flex-col"
   >
     <!-- <ElButton @click="submit">发起签到</ElButton> -->
     <div class="flex items-center p-5 pl-24 bg-slate-300">
@@ -88,8 +88,41 @@
           </div>
         </ElScrollbar>
       </div>
-      <div class="flex flex-col flex-grow">
-        <div class="basis-20 bg-lime-100">fsfds</div>
+      <div class="flex-grow bg-white">
+        <div
+          class="bg-red-100 h-20 flex items-center justify-center"
+          v-if="activeStudentInfo"
+        >
+          <ElAvatar
+            :size="50"
+            :src="
+              activeStudentInfo?.pic ??
+              'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+            "
+          />
+
+          <div class="text-lg mx-8 flex flex-col">
+            <div>{{ activeStudentInfo?.userName }}</div>
+            <div class="flex">
+              <div class="text-gray-700 mt-1 text-xs">
+                {{ activeStudentInfo?.account }}
+              </div>
+              <div class="text-gray-700 mt-1 text-xs ml-4">
+                {{ activeStudentInfo?.email }}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <ElButton link type="primary" :icon="Tickets">经验值明细</ElButton>
+          </div>
+        </div>
+        <ElScrollbar>
+          <Statistics
+            :class-schedule-id="courseId"
+            :user-id="activeStudentInfo?.userId"
+          ></Statistics>
+        </ElScrollbar>
       </div>
     </div>
 
@@ -147,9 +180,10 @@
               >签到</ElButton
             >
 
-            <ElButton v-else link type="success" class="mr-3" disabled
+            <ElButton v-else-if="isStudent && info?.students?.find(a => a.userId === user.userInfo.userId)" link type="success" class="mr-3" disabled
               >已签到</ElButton
             >
+            <ElButton v-else-if="isStudent " type="warning" link>未签到</ElButton>
             <ElButton
               v-if="!info.isEnd && info.isRun && !isStudent"
               link
@@ -212,6 +246,8 @@ import {
 import userStore from '@/store/userStore'
 import emtyCourse from '@/assets/emty-course.png'
 import { Action, ElMessageBox } from 'element-plus'
+import Statistics from './components/Statistics.vue'
+import { Tickets } from '@element-plus/icons-vue'
 const studenMap = ref<any>()
 const activeStudent = ref()
 
@@ -385,6 +421,12 @@ const checkUser = (userId: any) => {
     activeStudent.value = userId
   }
 }
+
+const activeStudentInfo = computed(
+  () =>
+    otherInfo.value.find((o: any) => o.userId === activeStudent.value) ??
+    myInfo.value,
+)
 
 // 结束签到
 const endHendle = async (info: any) => {

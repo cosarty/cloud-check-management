@@ -17,6 +17,7 @@
 import Layout from '@/baseView/layout/index.vue'
 import menuStore from './store/menuStore'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
 const menu = menuStore()
 </script>
 
