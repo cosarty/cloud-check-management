@@ -194,6 +194,8 @@ const reloadLocaltion = async (lng?: number, lat?: number) => {
       addressInfo.streetNumber +
       res.business
 
+    console.log('  currentLocaltion.value: ',   currentLocaltion.value);
+
     // 如果是学生禁止
     if (props.isStudent) {
       return

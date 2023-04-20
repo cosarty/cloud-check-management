@@ -53,7 +53,7 @@
             />
           </template>
           <template v-else-if="type === 'date'">
-            {{ dayjs(row[prop]).format('YYYY-MM-DD hh:mm') }}
+            {{ dayjs(row[prop]).format('YYYY-MM-DD HH:mm') }}
           </template>
 
           <template v-else-if="type === 'select'">

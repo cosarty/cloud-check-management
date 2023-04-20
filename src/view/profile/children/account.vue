@@ -83,6 +83,13 @@
           >
         </div>
       </ElFormItem>
+      <ElFormItem label="人脸：" v-if="user.auth.includes('student')">
+        <div class="flex items-center">
+          <el-tag :type="user.userInfo.face ? 'success' : 'danger'">{{
+            user.userInfo.face ? '已录入' : '未录入'
+          }}</el-tag>
+        </div>
+      </ElFormItem>
     </ElForm>
 
     <SendMailCaptcha ref="mailRef" />

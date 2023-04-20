@@ -160,7 +160,7 @@
                 <span class="px-2 pl-0"
                   >共{{ info.students?.length }}人参与</span
                 ><span class="px-2">{{
-                  dayjs(info.taskTime).format('YYYY-MM-DD hh:mm')
+                  dayjs(info.taskTime).format('YYYY-MM-DD HH:mm')
                 }}</span
                 ><span class="px-2">积分:{{ info.sustain }}</span
                 ><span class="px-2">持续时间:{{ info.integral }}</span>
@@ -180,10 +180,20 @@
               >签到</ElButton
             >
 
-            <ElButton v-else-if="isStudent && info?.students?.find(a => a.userId === user.userInfo.userId)" link type="success" class="mr-3" disabled
+            <ElButton
+              v-else-if="
+                isStudent &&
+                info?.students?.find(a => a.userId === user.userInfo.userId)
+              "
+              link
+              type="success"
+              class="mr-3"
+              disabled
               >已签到</ElButton
             >
-            <ElButton v-else-if="isStudent " type="warning" link>未签到</ElButton>
+            <ElButton v-else-if="isStudent" type="warning" link
+              >未签到</ElButton
+            >
             <ElButton
               v-if="!info.isEnd && info.isRun && !isStudent"
               link
@@ -337,7 +347,7 @@ const submit = async () => {
   }
 }
 
-const statClick = (info: any) => {
+const statClick = async (info: any) => {
   // 如果已经结束了
   if (!dayjs(info.taskTime).add(info.integral, 'second').isAfter(dayjs())) {
     singTaskinfo.value = singTaskinfo.value.filter(
@@ -390,6 +400,15 @@ const statClick = (info: any) => {
 
   // 如果都没有的话那就直接签到
   console.log('info: ', info)
+
+  await createStat({
+    singTaskId: info.singTaskId,
+    type: 1,
+    classScheduleId: courseId.value,
+    sustain: info.sustain,
+  })
+
+  await getActiveSchdule()
 }
 
 // 区域签到
