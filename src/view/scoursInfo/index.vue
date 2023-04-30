@@ -48,31 +48,47 @@
           <div>
             <div
               v-if="myInfo"
-              class="p-2 bg-amber-500 flex items-center border-b-2 cursor-pointer"
+              class="p-2 bg-amber-200 flex items-center border-b-2 cursor-pointer"
             >
+              <span
+                class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white"
+                >{{ myInfo?.idx }}</span
+              >
               <ElAvatar
                 :size="40"
                 :src="
-                  myInfo?.pic ??
+                  myInfo?.info?.pic ??
                   'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
                 "
               />
 
               <div class="text-xs ml-2">
-                <div>{{ myInfo?.userName }}</div>
-                <div class="text-gray-700 mt-1">{{ myInfo?.account }}</div>
+                <div>{{ myInfo?.info?.userName }}</div>
+                <div class="text-gray-700 mt-1">
+                  {{ myInfo?.info?.account }}
+                </div>
               </div>
             </div>
             <div
               class="p-2 flex items-center border-b-2 cursor-pointer"
               :class="{
-                'bg-amber-500': activeStudent === ot.userId,
+                'bg-amber-200': activeStudent === ot.userId,
                 'bg-slate-100': activeStudent !== ot.userId,
               }"
-              v-for="ot in otherInfo"
+              v-for="(ot, index) in otherInfo"
               :key="ot.userId"
               @click="!myInfo && checkUser(ot.userId)"
             >
+              <span
+                class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white"
+                >{{
+                  myInfo?.idx
+                    ? index >= myInfo?.idx-1
+                      ? index + 2
+                      : index+1
+                    : index+1
+                }}</span
+              >
               <ElAvatar
                 :size="40"
                 :src="
@@ -96,7 +112,7 @@
           <ElAvatar
             :size="50"
             :src="
-              activeStudentInfo?.pic ??
+              activeStudentInfo?.pic  ??
               'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             "
           />
@@ -277,11 +293,17 @@ const isStudent = computed(() => user.userInfo.auth?.includes('student'))
 
 // 我的数据
 const myInfo = computed(() => {
-  return isStudent
-    ? students.value?.filter(
-        (s: any) => s?.userId === user?.userInfo?.userId,
-      )?.[0]
-    : null
+  if (!isStudent.value) return null
+
+  let idx
+  const info = students.value?.filter((s: any, index) => {
+    if (s?.userId === user?.userInfo?.userId) {
+      idx = index + 1
+      return true
+    }
+    return false
+  })?.[0]
+  return { info, idx }
 })
 
 // 其他同学
@@ -444,7 +466,7 @@ const checkUser = (userId: any) => {
 const activeStudentInfo = computed(
   () =>
     otherInfo.value.find((o: any) => o.userId === activeStudent.value) ??
-    myInfo.value,
+    myInfo.value?.info,
 )
 
 // 结束签到
@@ -476,6 +498,21 @@ watch(
         courseInfo.value = data
         radio.value = 0
         students.value = stu?.class?.studnets ?? []
+        // 学生按照 签到积分排序
+        students.value = students.value
+          ?.map((s: any) => {
+            s.sustain = s.statInfo.reduce(
+              (pre, nxt) =>
+                pre +
+                (Number.isNaN(Number(nxt?.singTask?.sustain))
+                  ? 1
+                  : nxt?.singTask?.sustain),
+              0,
+            )
+            return s
+          })
+          .sort((a, b) => b.sustain - a.sustain)
+
         activeName.value = 'member'
         activeStudent.value = undefined
       }

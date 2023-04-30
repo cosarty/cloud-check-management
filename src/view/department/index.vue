@@ -44,7 +44,7 @@
                   @keydown.enter="
                     updateDepName($event, dp.departmentName, dp.departmentId)
                   "
-                  @blur=";(editDep = undefined), (selectInpt = '')"
+                  @blur=";(editDep = undefined); (selectInpt = '')"
                 ></ElInput>
               </div>
               <ElPopconfirm
@@ -299,6 +299,7 @@ watch(targetTeacher, async n => {
 })
 
 const checkDep = (id: string) => {
+
   activeDep.value = activeDep.value === id ? undefined : id
 
   const find = departmentList.value.find(

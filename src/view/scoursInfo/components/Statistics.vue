@@ -6,6 +6,7 @@
       autoresize
     />
     <VChart
+    ref="echarts"
       class="h-96 basis-2/5 px-2 box-border flex-shrink-1"
       :option="option2"
       autoresize
@@ -35,16 +36,20 @@ use([
 
 const props = defineProps<{ classScheduleId: string; userId?: string }>()
 
+const echarts = ref()
 watch(
   () => props,
   async () => {
-    if (props.userId) {
+   await nextTick()
+  //  console.log(echarts.value)
+
       const { data } = await statList({ ...props })
       console.log('data: ', data)
-    }
+
   },
   {
     deep: true,
+    immediate:true
   },
 )
 const option = ref({
