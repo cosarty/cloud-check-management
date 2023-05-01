@@ -1,17 +1,10 @@
 <template>
-  <div class="flex max-w-full justify-around px-2 pt-6">
-    <VChart
-      class="h-96 basis-2/5 px-2 box-border flex-shrink-1"
-      :option="option"
-      autoresize
-    />
-    <VChart
-    ref="echarts"
-      class="h-96 basis-2/5 px-2 box-border flex-shrink-1"
-      :option="option2"
-      autoresize
-    />
-  </div>
+  <el-row class="h-96 p-4 pt-8" :gutter="20">
+    <el-col :span="12"><VChart :option="option" autoresize /></el-col>
+    <el-col :span="12">
+      <VChart ref="echarts" :option="option2" autoresize
+    /></el-col>
+  </el-row>
 </template>
 
 <script setup lang="ts">
@@ -35,23 +28,48 @@ use([
 ])
 
 const props = defineProps<{ classScheduleId: string; userId?: string }>()
-
+const echartsData = ref<any>({})
 const echarts = ref()
-watch(
-  () => props,
-  async () => {
-   await nextTick()
-  //  console.log(echarts.value)
+const opComp = computed(() => {
+  const { all = 0, info = [] } = echartsData.value
+  return [
+    {
+      value: info.filter((pre: any) => pre.type === 0)?.[0]?.count ?? 0,
+      name: '迟到',
+    },
+    {
+      value: info.filter((pre: any) => pre.type === 1)?.[0]?.count ?? 0,
+      name: '签到',
+    },
+    {
+      value: all - info.reduce((pre: any, nxt: any) => pre + nxt.count, 0),
+      name: '缺勤',
+    },
+  ]
+})
+const op2Comp = computed(() => {
+  const { allintegral = { sustains: 0 }, integral = [] } = echartsData.value
 
-      const { data } = await statList({ ...props })
-      console.log('data: ', data)
+  const intt = integral.reduce((pre: any, nxt: any) => {
+    if (nxt.type === 1) {
+      return (pre += +nxt?.sustains ?? 0)
+    }
+    if (nxt.type === 0) {
+      return (pre = pre + (+nxt?.sustains ?? 0) * 0.5)
+    }
+  }, 0)
 
-  },
-  {
-    deep: true,
-    immediate:true
-  },
-)
+  return [
+    {
+      value: intt,
+      name: titleComp.value[0],
+    },
+    {
+      value: allintegral.sustains,
+      name: '总积分',
+    },
+  ]
+})
 const option = ref({
   title: {
     text: '参与度',
@@ -65,6 +83,18 @@ const option = ref({
     orient: 'vertical',
     left: 'left',
     data: ['迟到', '缺勤', '签到'],
+    formatter: (...res: any) => {
+      const data = option.value.series[0].data
+
+      switch (res[0]) {
+        case '迟到':
+          return '迟到：' + data[0].value
+        case '缺勤':
+          return '缺勤:' + data[1].value
+        case '签到':
+          return '签到:' + data[2].value
+      }
+    },
   },
   series: [
     {
@@ -72,12 +102,7 @@ const option = ref({
       type: 'pie',
       radius: '55%',
       center: ['43%', '50%'],
-      data: [
-        // { value: 335, name: '缺勤' },
-        { value: 310, name: '迟到' },
-        { value: 234, name: '签到' },
-        { value: 135, name: '缺勤' },
-      ],
+      data: opComp,
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -88,6 +113,8 @@ const option = ref({
     },
   ],
 })
+
+const titleComp = computed(() => [props.userId ? '我的' : '积分基数', '总积分'])
 
 const option2 = ref({
   title: {
@@ -101,7 +128,19 @@ const option2 = ref({
   legend: {
     orient: 'vertical',
     left: 'right',
-    data: ['我的', '总积分'],
+    data: titleComp,
+    formatter: (...res: any) => {
+      const data = option2.value.series[0].data
+
+      switch (res[0]) {
+        case '我的':
+        case '积分基数':
+          return res[0]+':' + data[0].value
+
+        case '总积分':
+          return '总积分:' + data[1].value
+      }
+    },
   },
   series: [
     {
@@ -109,11 +148,7 @@ const option2 = ref({
       type: 'pie',
       radius: '55%',
       center: ['52%', '50%'],
-      data: [
-        // { value: 335, name: '缺勤' },
-        { value: 310, name: '我的' },
-        { value: 234, name: '总积分' },
-      ],
+      data: op2Comp,
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -124,6 +159,21 @@ const option2 = ref({
     },
   ],
 })
+
+watch(
+  () => props,
+  async () => {
+    await nextTick()
+    //  console.log(echarts.value)
+
+    const { data } = await statList({ ...props })
+    echartsData.value = data
+  },
+  {
+    deep: true,
+    immediate: true,
+  },
+)
 </script>
 
 <style scoped></style>

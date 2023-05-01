@@ -1,7 +1,7 @@
 <template>
   <div
     style="background-color: white; height: 100%"
-    class="overflow-hidden box-border max-w-6xl mx-auto flex flex-col"
+    class="overflow-hidden box-border max-w-7xl mx-auto flex flex-col"
   >
     <!-- <ElButton @click="submit">发起签到</ElButton> -->
     <div class="flex items-center p-5 pl-24 bg-slate-300">
@@ -42,7 +42,7 @@
     </div>
     <div class="h-4 flex-grow flex" v-if="activeName === 'member'">
       <div
-        class="basis-64 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500"
+        class="basis-80 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500"
       >
         <ElScrollbar>
           <div>
@@ -68,6 +68,11 @@
                   {{ myInfo?.info?.account }}
                 </div>
               </div>
+              <div class="text-xs ml-auto flex items-center">
+                经验值:<span class="ml-1 text-lg text-orange-500">{{
+                  myInfo?.info?.sustain
+                }}</span>
+              </div>
             </div>
             <div
               class="p-2 flex items-center border-b-2 cursor-pointer"
@@ -83,10 +88,10 @@
                 class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white"
                 >{{
                   myInfo?.idx
-                    ? index >= myInfo?.idx-1
+                    ? index >= myInfo?.idx - 1
                       ? index + 2
-                      : index+1
-                    : index+1
+                      : index + 1
+                    : index + 1
                 }}</span
               >
               <ElAvatar
@@ -100,6 +105,11 @@
                 <div>{{ ot?.userName }}</div>
                 <div class="text-gray-700 mt-1">{{ ot?.account }}</div>
               </div>
+              <div class="text-xs ml-auto flex items-center">
+                经验值:<span class="ml-1 text-lg text-orange-500">{{
+                  ot?.sustain
+                }}</span>
+              </div>
             </div>
           </div>
         </ElScrollbar>
@@ -112,7 +122,7 @@
           <ElAvatar
             :size="50"
             :src="
-              activeStudentInfo?.pic  ??
+              activeStudentInfo?.pic ??
               'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             "
           />
@@ -130,7 +140,17 @@
           </div>
 
           <div>
-            <ElButton link type="primary" :icon="Tickets">经验值明细</ElButton>
+            <ShowStudentPopup v-slot="{ show }">
+              <ElButton
+                link
+                type="primary"
+                @click="
+                  show(activeStudentInfo?.userId, activeStudentInfo?.userName,courseId,!!isStudent)
+                "
+                :icon="Tickets"
+                >经验值明细</ElButton
+              ></ShowStudentPopup
+            >
           </div>
         </div>
         <ElScrollbar>
@@ -210,20 +230,16 @@
             <ElButton v-else-if="isStudent" type="warning" link
               >未签到</ElButton
             >
-            <ElButton
-              v-if="!info.isEnd && info.isRun && !isStudent"
-              link
-              type="primary"
-              @click=""
-              >查看</ElButton
-            >
+
             <ElButton
               v-if="!info.isEnd && info.isRun && !isStudent"
               link
               type="danger"
-              class="mr-3"
               @click="endHendle(info)"
               >结束</ElButton
+            >
+            <ElButton v-if="!isStudent" link type="primary" class="mr-3"
+              >查看</ElButton
             >
           </div>
 
@@ -274,6 +290,8 @@ import emtyCourse from '@/assets/emty-course.png'
 import { Action, ElMessageBox } from 'element-plus'
 import Statistics from './components/Statistics.vue'
 import { Tickets } from '@element-plus/icons-vue'
+import ShowStudentPopup from './components/ShowStudentPopup.vue'
+
 const studenMap = ref<any>()
 const activeStudent = ref()
 
