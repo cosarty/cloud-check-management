@@ -432,7 +432,7 @@ const getData = async () => {
       return s
     })
     .sort((a, b) => b.sustain - a.sustain)
-  console.log(' students.value: ', students.value);
+  // console.log(' students.value: ', students.value);
 }
 
 watch(

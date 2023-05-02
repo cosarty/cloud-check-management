@@ -52,6 +52,7 @@ const singTaskId = ref()
 const stattName = ref('')
 const activeName = ref('1')
 const show = async (id: any, name: any, cid: any) => {
+
   classScheduleId.value = cid
   singTaskId.value = id
   stattName.value = name
@@ -62,14 +63,14 @@ const show = async (id: any, name: any, cid: any) => {
 
 
 const setAction = async (action: number, userId: any, statId: any) => {
-  await setStatType({ action, userId, statId, singTaskId: classScheduleId.value })
+  await setStatType({ action, userId, statId, singTaskId: singTaskId.value, classScheduleId: classScheduleId.value })
   await getData()
   emits('update')
 }
 
 
 const getData = async () => {
-  const { data } = await getSingStat({ singTaskId:  singTaskId.value  })
+  const { data } = await getSingStat({ singTaskId: singTaskId.value })
 
   // 
   statInfo.value = data
