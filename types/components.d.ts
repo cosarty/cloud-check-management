@@ -21,6 +21,8 @@ declare module '@vue/runtime-core' {
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
+    ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
+    ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
@@ -67,6 +69,7 @@ declare module '@vue/runtime-core' {
     Table: typeof import('./../src/components/Table.vue')['default']
     TableFilter: typeof import('./../src/components/TableFilter.vue')['default']
     Tabs: typeof import('./../src/components/Tabs.vue')['default']
+    Tmetable: typeof import('./../src/components/Tmetable.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
