@@ -18,3 +18,9 @@ export const getSduentStat = async (prama: any = {}) =>
     method: 'get',
     data: prama,
   })
+export const setStatType = async (prama: any = {}) =>
+  await http.request({
+    url: '/statinfo/setStatType',
+    method: 'post',
+    data: prama,
+  })

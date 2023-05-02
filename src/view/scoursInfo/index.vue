@@ -1,15 +1,9 @@
 <template>
-  <div
-    style="background-color: white; height: 100%"
-    class="overflow-hidden box-border max-w-7xl mx-auto flex flex-col"
-  >
+  <div style="background-color: white; height: 100%" class="overflow-hidden box-border max-w-7xl mx-auto flex flex-col">
     <!-- <ElButton @click="submit">发起签到</ElButton> -->
     <div class="flex items-center p-5 pl-24 bg-slate-300">
-      <ElImage
-        class="h-36 w-36 rounded-full border-orange-600 border-2 object-cover shadow-sm"
-        :src="courseInfo?.course?.picture ?? emtyCourse"
-        :class="{ fix: courseInfo?.course?.picture }"
-      >
+      <ElImage class="h-36 w-36 rounded-full border-orange-600 border-2 object-cover shadow-sm"
+        :src="courseInfo?.course?.picture ?? emtyCourse" :class="{ fix: courseInfo?.course?.picture }">
       </ElImage>
       <div class="ml-3 self-start mt-5 ml-5">
         <div class="font-bold text-2xl">
@@ -24,12 +18,7 @@
       </div>
 
       <div class="ml-auto mr-6 -mt-16">
-        <SendTask
-          v-if="!isStudent"
-          ref="sendTaskRef"
-          @submit="submit"
-          :class-schedule-id="courseId"
-        >
+        <SendTask v-if="!isStudent" ref="sendTaskRef" @submit="submit" :class-schedule-id="courseId">
           <ElButton type="primary">发起签到</ElButton>
         </SendTask>
       </div>
@@ -41,26 +30,14 @@
       </el-tabs>
     </div>
     <div class="h-4 flex-grow flex" v-if="activeName === 'member'">
-      <div
-        class="basis-80 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500"
-      >
+      <div class="basis-80 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500">
         <ElScrollbar>
           <div>
-            <div
-              v-if="myInfo"
-              class="p-2 bg-amber-200 flex items-center border-b-2 cursor-pointer"
-            >
-              <span
-                class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white"
-                >{{ myInfo?.idx }}</span
-              >
-              <ElAvatar
-                :size="40"
-                :src="
-                  myInfo?.info?.pic ??
-                  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-                "
-              />
+            <div v-if="myInfo" class="p-2 bg-amber-200 flex items-center border-b-2 cursor-pointer">
+              <span class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white">{{ myInfo?.idx }}</span>
+              <ElAvatar :size="40" :src="myInfo?.info?.pic ??
+                'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                " />
 
               <div class="text-xs ml-2">
                 <div>{{ myInfo?.info?.userName }}</div>
@@ -74,33 +51,20 @@
                 }}</span>
               </div>
             </div>
-            <div
-              class="p-2 flex items-center border-b-2 cursor-pointer"
-              :class="{
-                'bg-amber-200': activeStudent === ot.userId,
-                'bg-slate-100': activeStudent !== ot.userId,
-              }"
-              v-for="(ot, index) in otherInfo"
-              :key="ot.userId"
-              @click="!myInfo && checkUser(ot.userId)"
-            >
-              <span
-                class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white"
-                >{{
-                  myInfo?.idx
-                    ? index >= myInfo?.idx - 1
-                      ? index + 2
-                      : index + 1
-                    : index + 1
-                }}</span
-              >
-              <ElAvatar
-                :size="40"
-                :src="
-                  ot?.pic ??
+            <div class="p-2 flex items-center border-b-2 cursor-pointer" :class="{
+                  'bg-amber-200': activeStudent === ot.userId,
+                  'bg-slate-100': activeStudent !== ot.userId,
+                }" v-for="(ot, index) in otherInfo" :key="ot.userId" @click="!myInfo && checkUser(ot.userId)">
+              <span class="w-5 h-5 rounded-full text-sm text-center mr-2 bg-red-300 text-white">{{
+                myInfo?.idx
+                ? index >= myInfo?.idx - 1
+                  ? index + 2
+                  : index + 1
+                : index + 1
+              }}</span>
+              <ElAvatar :size="40" :src="ot?.pic ??
                   'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-                "
-              />
+                  " />
               <div class="text-xs ml-2">
                 <div>{{ ot?.userName }}</div>
                 <div class="text-gray-700 mt-1">{{ ot?.account }}</div>
@@ -115,17 +79,10 @@
         </ElScrollbar>
       </div>
       <div class="flex-grow bg-white">
-        <div
-          class="bg-red-100 h-20 flex items-center justify-center"
-          v-if="activeStudentInfo"
-        >
-          <ElAvatar
-            :size="50"
-            :src="
-              activeStudentInfo?.pic ??
+        <div class="bg-red-100 h-20 flex items-center justify-center" v-if="activeStudentInfo">
+          <ElAvatar :size="50" :src="activeStudentInfo?.pic ??
               'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-            "
-          />
+              " />
 
           <div class="text-lg mx-8 flex flex-col">
             <div>{{ activeStudentInfo?.userName }}</div>
@@ -140,32 +97,19 @@
           </div>
 
           <div>
-            <ShowStudentPopup v-slot="{ show }">
-              <ElButton
-                link
-                type="primary"
-                @click="
-                  show(activeStudentInfo?.userId, activeStudentInfo?.userName,courseId,!!isStudent)
-                "
-                :icon="Tickets"
-                >经验值明细</ElButton
-              ></ShowStudentPopup
-            >
+            <ShowStudentPopup v-slot="{ show }" @update="getData">
+              <ElButton link type="primary" @click="show(activeStudentInfo?.userId, activeStudentInfo?.userName, courseId, !!isStudent)
+                " :icon="Tickets">经验值明细</ElButton>
+            </ShowStudentPopup>
           </div>
         </div>
         <ElScrollbar>
-          <Statistics
-            :class-schedule-id="courseId"
-            :user-id="activeStudentInfo?.userId"
-          ></Statistics>
+          <Statistics :class-schedule-id="courseId" :user-id="activeStudentInfo?.userId"></Statistics>
         </ElScrollbar>
       </div>
     </div>
 
-    <div
-      class="h-4 mt-3 flex-grow flex flex-col"
-      v-if="activeName === 'schdule'"
-    >
+    <div class="h-4 mt-3 flex-grow flex flex-col" v-if="activeName === 'schdule'">
       <ElScrollbar>
         <div class="m-4 my-2">
           <el-radio-group v-model="radio" class="ml-3" @change="radioChange">
@@ -175,78 +119,40 @@
         </div>
         <div class="m-4 flex-1 bg-white rounded-lg">
           <!-- {{ singTaskinfo }} -->
-          <div
-            v-for="info in singTaskinfo"
-            :key="info.singTaskId"
-            class="flex mb-4 rounded-lg bg-blue-100 p-1 h-20 items-center max-w-3xl mx-auto"
-          >
+          <div v-for="info in singTaskinfo" :key="info.singTaskId"
+            class="flex mb-4 rounded-lg bg-blue-100 p-1 h-20 items-center max-w-3xl mx-auto">
             <ElImage :src="qiandao" class="w-12 h-12" />
             <div class="flex-grow flex flex-col pl-3 py-2 h-full">
               <div class="text-lg pb-2 flex items-center">
                 <span class="mr-3"> {{ info.taskName }}</span>
                 <el-tag type="danger" v-if="info.isEnd">已结束</el-tag>
-                <el-tag type="success" v-else-if="!info.isEnd && info.isRun"
-                  >签到中</el-tag
-                >
-                <el-tag type="warning" v-else-if="!info.isEnd && !info.isRun"
-                  >等待签到</el-tag
-                >
+                <el-tag type="success" v-else-if="!info.isEnd && info.isRun">签到中</el-tag>
+                <el-tag type="warning" v-else-if="!info.isEnd && !info.isRun">等待签到</el-tag>
               </div>
               <div class="text-xs divide-x divide-yellow-600 divide-solid">
-                <span class="px-2 pl-0"
-                  >共{{ info.students?.length }}人参与</span
-                ><span class="px-2">{{
+                <span class="px-2 pl-0">共{{ info.students?.length }}人参与</span><span class="px-2">{{
                   dayjs(info.taskTime).format('YYYY-MM-DD HH:mm')
-                }}</span
-                ><span class="px-2">积分:{{ info.sustain }}</span
-                ><span class="px-2">持续时间:{{ info.integral }}</span>
+                }}</span><span class="px-2">积分:{{ info.sustain }}</span><span class="px-2">持续时间:{{ info.integral
+}}</span>
               </div>
             </div>
-            <ElButton
-              link
-              type="primary"
-              class="mr-3"
-              @click="statClick(info)"
-              v-if="
-                !info.isEnd &&
-                info.isRun &&
-                isStudent &&
-                !info?.students?.find(a => a.userId === user.userInfo.userId)
-              "
-              >签到</ElButton
-            >
+            <ElButton link type="primary" class="mr-3" @click="statClick(info)" v-if="!info.isEnd &&
+              info.isRun &&
+              isStudent &&
+              !info?.students?.find(a => a.userId === user.userInfo.userId)
+              ">签到</ElButton>
 
-            <ElButton
-              v-else-if="
-                isStudent &&
-                info?.students?.find(a => a.userId === user.userInfo.userId)
-              "
-              link
-              type="success"
-              class="mr-3"
-              disabled
-              >已签到</ElButton
-            >
-            <ElButton v-else-if="isStudent" type="warning" link
-              >未签到</ElButton
-            >
+            <ElButton v-else-if="isStudent &&
+              info?.students?.find(a => a.userId === user.userInfo.userId)
+              " link type="success" class="mr-3" disabled>已签到</ElButton>
+            <ElButton v-else-if="isStudent" type="warning" link>未签到</ElButton>
 
-            <ElButton
-              v-if="!info.isEnd && info.isRun && !isStudent"
-              link
-              type="danger"
-              @click="endHendle(info)"
-              >结束</ElButton
-            >
-            <ElButton v-if="!isStudent" link type="primary" class="mr-3"
-              >查看</ElButton
-            >
+            <ElButton v-if="!info.isEnd && info.isRun && !isStudent" link type="danger" @click="endHendle(info)">结束
+            </ElButton>
+            <ElButton v-if="!isStudent" link type="primary" class="mr-3">查看</ElButton>
           </div>
 
-          <div
-            v-if="!singTaskinfo?.length"
-            class="text-cyan-700 text-lg font-bold flex flex-col items-center"
-          >
+          <div v-if="!singTaskinfo?.length" class="text-cyan-700 text-lg font-bold flex flex-col items-center">
             <ElImage :src="emptySchdule" class="my-4"></ElImage>
             暂无活动
           </div>
@@ -254,13 +160,7 @@
       </ElScrollbar>
     </div>
 
-    <MapPopUp
-      @confirm="singStat"
-      id="student-map"
-      title="签到"
-      is-student
-      ref="studenMap"
-    >
+    <MapPopUp @confirm="singStat" id="student-map" title="签到" is-student ref="studenMap">
     </MapPopUp>
   </div>
 </template>
@@ -406,7 +306,7 @@ const statClick = async (info: any) => {
       // if you want to disable its autofocus
       // autofocus: false,
       confirmButtonText: '确认',
-      callback: (action: Action) => {},
+      callback: (action: Action) => { },
     })
 
     return
@@ -495,6 +395,36 @@ const endHendle = async (info: any) => {
   )
 }
 
+const getData = async () => {
+  const { data: stu } = await getSchduleStudent(
+    courseId.value as string,
+  )
+  students.value = stu?.class?.studnets ?? []
+  // 学生按照 签到积分排序
+  students.value = students.value
+    ?.map((s: any) => {
+      s.sustain = s.statInfo.reduce(
+        (pre, nxt) => {
+          if (nxt?.type === null || nxt?.type === undefined) return pre
+
+          if (nxt?.type === 0) return pre +
+            (Number.isNaN(Number(nxt?.singTask?.sustain))
+              ? 0.5
+              : nxt?.singTask?.sustain * 0.5)
+          return pre +
+            (Number.isNaN(Number(nxt?.singTask?.sustain))
+              ? 1
+              : nxt?.singTask?.sustain)
+        },
+
+        0,
+      )
+      return s
+    })
+    .sort((a, b) => b.sustain - a.sustain)
+  console.log(' students.value: ', students.value);
+}
+
 watch(
   () => route,
   async nq => {
@@ -508,29 +438,13 @@ watch(
       if (nq.query?.courseId !== courseId.value) {
         courseId.value = nq.query.courseId as string
         const { data } = await checkCourse(nq.query.courseId as string)
-        const { data: stu } = await getSchduleStudent(
-          nq.query.courseId as string,
-        )
 
         await nextTick()
         courseInfo.value = data
         radio.value = 0
-        students.value = stu?.class?.studnets ?? []
-        // 学生按照 签到积分排序
-        students.value = students.value
-          ?.map((s: any) => {
-            s.sustain = s.statInfo.reduce(
-              (pre, nxt) =>
-                pre +
-                (Number.isNaN(Number(nxt?.singTask?.sustain))
-                  ? 1
-                  : nxt?.singTask?.sustain),
-              0,
-            )
-            return s
-          })
-          .sort((a, b) => b.sustain - a.sustain)
 
+
+        await getData()
         activeName.value = 'member'
         activeStudent.value = undefined
       }

@@ -89,10 +89,10 @@ const option = ref({
       switch (res[0]) {
         case '迟到':
           return '迟到：' + data[0].value
-        case '缺勤':
-          return '缺勤:' + data[1].value
         case '签到':
-          return '签到:' + data[2].value
+          return '签到:' + data[1].value
+        case '缺勤':
+          return '缺勤:' + data[2].value
       }
     },
   },
