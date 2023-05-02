@@ -130,9 +130,10 @@
                 <el-tag type="warning" v-else-if="!info.isEnd && !info.isRun">等待签到</el-tag>
               </div>
               <div class="text-xs divide-x divide-yellow-600 divide-solid">
-                <span class="px-2 pl-0">共{{ info.students?.length }}人参与</span><span class="px-2">{{
-                  dayjs(info.taskTime).format('YYYY-MM-DD HH:mm')
-                }}</span><span class="px-2">积分:{{ info.sustain }}</span><span class="px-2">持续时间:{{ info.integral
+                <span class="px-2 pl-0">共{{ info.students?.filter(s => s.type !== null)?.length }}人参与</span><span
+                  class="px-2">{{
+                    dayjs(info.taskTime).format('YYYY-MM-DD HH:mm')
+                  }}</span><span class="px-2">积分:{{ info.sustain }}</span><span class="px-2">持续时间:{{ info.integral
 }}</span>
               </div>
             </div>
@@ -149,7 +150,10 @@
 
             <ElButton v-if="!info.isEnd && info.isRun && !isStudent" link type="danger" @click="endHendle(info)">结束
             </ElButton>
-            <ElButton v-if="!isStudent" link type="primary" class="mr-3">查看</ElButton>
+            <ShowStat v-slot="{ show }" v-if="!isStudent" @update="getSchdule">
+              <ElButton link type="primary" class="mr-3" @click="show(info.singTaskId, info.taskName,courseId)">查看</ElButton>
+
+            </ShowStat>
           </div>
 
           <div v-if="!singTaskinfo?.length" class="text-cyan-700 text-lg font-bold flex flex-col items-center">
@@ -191,6 +195,7 @@ import { Action, ElMessageBox } from 'element-plus'
 import Statistics from './components/Statistics.vue'
 import { Tickets } from '@element-plus/icons-vue'
 import ShowStudentPopup from './components/ShowStudentPopup.vue'
+import ShowStat from './components/ShowStat.vue'
 
 const studenMap = ref<any>()
 const activeStudent = ref()
@@ -201,7 +206,7 @@ const user = userStore()
 
 const activeName = ref('member')
 
-const singTaskinfo = ref<any>([])
+const singTaskinfo = ref<any[]>([])
 // const close = closeCurrentTab()
 const route = useRoute()
 const courseId = ref<string>('')
@@ -246,6 +251,7 @@ const getActiveSchdule = async () => {
     isHistory: false,
     classScheduleId: courseId.value,
   })
+
   singTaskinfo.value = [...run, ...we]
 }
 
@@ -257,6 +263,9 @@ const getSchdule = async () => {
     isHistory: true,
     classScheduleId: courseId.value,
   })
+
+
+
   singTaskinfo.value = [...noAc]
 }
 
@@ -395,6 +404,7 @@ const endHendle = async (info: any) => {
   )
 }
 
+// 获取学生
 const getData = async () => {
   const { data: stu } = await getSchduleStudent(
     courseId.value as string,

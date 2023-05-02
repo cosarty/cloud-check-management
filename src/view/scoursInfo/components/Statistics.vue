@@ -1,9 +1,11 @@
 <template>
   <el-row class="h-96 p-4 pt-8" :gutter="20">
-    <el-col :span="12"><VChart :option="option" autoresize /></el-col>
     <el-col :span="12">
-      <VChart ref="echarts" :option="option2" autoresize
-    /></el-col>
+      <VChart :option="option" autoresize />
+    </el-col>
+    <el-col :span="12">
+      <VChart ref="echarts" :option="option2" autoresize />
+    </el-col>
   </el-row>
 </template>
 
@@ -52,12 +54,14 @@ const op2Comp = computed(() => {
 
   const intt = integral.reduce((pre: any, nxt: any) => {
     if (nxt.type === 1) {
-      return (pre += +nxt?.sustains ?? 0)
+      return pre + (+nxt?.sustains ?? 0)
     }
     if (nxt.type === 0) {
-      return (pre = pre + (+nxt?.sustains ?? 0) * 0.5)
+      return pre + (+nxt?.sustains ?? 0) * 0.5
     }
+    return pre
   }, 0)
+
 
   return [
     {
@@ -135,7 +139,7 @@ const option2 = ref({
       switch (res[0]) {
         case '我的':
         case '积分基数':
-          return res[0]+':' + data[0].value
+          return res[0] + ':' + data[0].value
 
         case '总积分':
           return '总积分:' + data[1].value

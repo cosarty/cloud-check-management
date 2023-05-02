@@ -24,3 +24,9 @@ export const setStatType = async (prama: any = {}) =>
     method: 'post',
     data: prama,
   })
+export const getSingStat = async (prama: any = {}) =>
+  await http.request({
+    url: '/statinfo/getSingStat',
+    method: 'get',
+    data: prama,
+  })
