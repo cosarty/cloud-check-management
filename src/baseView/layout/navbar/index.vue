@@ -13,12 +13,12 @@
         </svg>
         <div class="lable">上课时间</div>
       </div>
-      <div class="extra-item">
+      <!-- <div class="extra-item">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-xiaoxi"></use>
         </svg>
         <div class="lable">消息</div>
-      </div>
+      </div> -->
       <ElDropdown popper-class="profile" @command="handleCommand">
         <div class="extra-item">
           <ElAvatar

@@ -39,7 +39,7 @@ export const setupRouterGuard = (router: Router) => {
         }
 
         if (!$router.isBuildRouter) {
-          await $router.buildRoute(user.auth)
+          await $router.buildRoute([...user.auth,...user.otherAuh])
           return { ...to, replace: true }
         }
 

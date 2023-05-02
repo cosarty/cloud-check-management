@@ -21,6 +21,14 @@ const userStore = defineStore('user', () => {
     return auth
   })
 
+  // 其他权限
+  const otherAuh = computed(() => {
+    const auth: string[] = []
+    if (userInfo.value.department) auth.push('department')
+    if (userInfo.value.instructor.length) auth.push('instructor')
+    return auth
+  })
+
   const $router = routerStore()
   const login = async (payload: any) => {
     const { data } = await loginApi(payload)
@@ -37,7 +45,7 @@ const userStore = defineStore('user', () => {
     await getUserInfo()
 
     // 构建动态路由
-    await $router.buildRoute(auth.value)
+    await $router.buildRoute([...auth.value,...otherAuh.value])
 
     await router.replace('/')
   }
@@ -63,7 +71,7 @@ const userStore = defineStore('user', () => {
         message: '退出登录成功',
       })
   }
-  return { userInfo, token, login, logout, getUserInfo, auth }
+  return { userInfo, token, login, logout, getUserInfo, auth,otherAuh }
 })
 
 export default userStore
