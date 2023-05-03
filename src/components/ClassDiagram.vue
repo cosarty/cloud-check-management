@@ -1,35 +1,5 @@
 <template>
   <div>
-     <el-row v-if="userId" class=" bg-indigo-200 backdrop-blur-lg py-3">
-      <el-col :span="6">
-        <el-statistic title="Daily active users" :value="268500" />
-      </el-col>
-      <el-col :span="6">
-        <el-statistic :value="138">
-          <template #title>
-            <div style="display: inline-flex; align-items: center">
-              Ratio of men to women
-              <el-icon style="margin-left: 4px" :size="12">
-                <Male />
-              </el-icon>
-            </div>
-          </template>
-          <template #suffix>/100</template>
-        </el-statistic>
-      </el-col>
-      <el-col :span="6">
-        <el-statistic title="Total Transactions" :value="172000" />
-      </el-col>
-      <el-col :span="6">
-        <el-statistic title="Feedback number" :value="562">
-          <template #suffix>
-            <el-icon style="vertical-align: -0.125em">
-              <ChatLineRound />
-            </el-icon>
-          </template>
-        </el-statistic>
-      </el-col>
-    </el-row>
     <div class="h-96 mt-14">
       <VChart :option="option" autoresize />
     </div>
@@ -37,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChatLineRound, Male } from '@element-plus/icons-vue'
+
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { BarChart } from 'echarts/charts'
@@ -48,9 +18,10 @@ import {
   GridComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
+import { getClassStat } from '@/http/api'
 
-defineProps<{ userId?: string }>()
-
+const props = defineProps<{ userId?: string, classId: string }>()
+const staDta = ref<any>({})
 use([
   CanvasRenderer,
   BarChart,
@@ -60,7 +31,7 @@ use([
   GridComponent
 ])
 
-const option = ref({
+const option = computed(() => ({
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -77,7 +48,7 @@ const option = ref({
   xAxis: [
     {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: staDta.value?.name ?? []
     }
   ],
   yAxis: [
@@ -93,7 +64,7 @@ const option = ref({
       emphasis: {
         focus: 'series'
       },
-      data: [120, 132, 101, 134, 90, 230, 210]
+      data: staDta.value?.value?.[2] ?? []
     },
     {
       name: '签到',
@@ -102,7 +73,7 @@ const option = ref({
       emphasis: {
         focus: 'series'
       },
-      data: [220, 182, 191, 234, 290, 330, 310]
+      data: staDta.value?.value?.[1] ?? []
     },
     {
       name: '迟到',
@@ -111,9 +82,18 @@ const option = ref({
       emphasis: {
         focus: 'series'
       },
-      data: [150, 232, 201, 154, 190, 330, 410]
+      data: staDta.value?.value?.[0] ?? []
     }
   ]
+}))
+
+
+watch(props, async () => {
+  const { data } = await getClassStat(props.classId, { userId: props.userId })
+  staDta.value = data
+}, {
+  deep: true,
+  immediate: true
 })
 
 </script>

@@ -59,3 +59,9 @@ export const delUsersClass = async (pram: any) =>
     method: 'delete',
     data: pram,
   })
+export const getClassStat = async (classId: any,pram: any) =>
+  await http.request({
+    url: `class/getClassStat/${classId}`,
+    method: 'get',
+    data:pram
+  })

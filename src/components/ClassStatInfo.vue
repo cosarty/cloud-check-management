@@ -31,7 +31,7 @@
 
       <ElScrollbar>
         <!-- <Statistics :class-schedule-id="courseId" :user-id="activeStudentInfo?.userId"></Statistics> -->
-        <ClassDiagram :user-id="activeStudent"></ClassDiagram>
+        <ClassDiagram :user-id="activeStudent" :class-id="classId"></ClassDiagram>
 
       </ElScrollbar>
     </div>
@@ -43,13 +43,13 @@ import { getUsersClass } from '@/http/api';
 import ClassDiagram from './ClassDiagram.vue'
 
 const props = defineProps<{ classId: string }>()
-const activeStudent = ref()
+const activeStudent = ref<any>(undefined)
 const students = ref<any>({})
 const getStudent = async () => {
   const {
     data: { count, rows },
   } = await getUsersClass(props.classId, {})
-  console.log('rows: ', rows);
+  // console.log('rows: ', rows);
   students.value = rows
     ?.map((s: any) => {
       s.sustain = s.statInfo.reduce(
@@ -57,13 +57,13 @@ const getStudent = async () => {
           if (nxt?.type === null || nxt?.type === undefined) return pre
 
           if (nxt?.type === 0) return pre +
-            (Number.isNaN(Number(nxt?.singTask?.sustain))
+            ((Number.isNaN(Number(nxt?.singTask?.sustain))
               ? 0.5
-              : nxt?.singTask?.sustain * 0.5)
+              : nxt?.singTask?.sustain * 0.5))
           return pre +
-            (Number.isNaN(Number(nxt?.singTask?.sustain))
+            ((Number.isNaN(Number(nxt?.singTask?.sustain))
               ? 1
-              : nxt?.singTask?.sustain)
+              : nxt?.singTask?.sustain))
         },
 
         0,
