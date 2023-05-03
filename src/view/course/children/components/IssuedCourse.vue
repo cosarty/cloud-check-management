@@ -1,42 +1,16 @@
 <template>
   <slot :updateVisBale="updateVisBale"></slot>
 
-  <el-dialog
-    v-model="dialogVisible"
-    title="下发课程"
-    width="30%"
-    destroy-on-close
-  >
-    <ElForm
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :rules="rules"
-      class="max-w-md"
-      label-width="100px"
-    >
+  <el-dialog v-model="dialogVisible" title="下发课程" width="30%" destroy-on-close>
+    <ElForm ref="ruleFormRef" :model="ruleForm" :rules="rules" class="max-w-md" label-width="100px">
       <ElFormItem label="班级" prop="classId">
-        <ElSelect
-          :disabled="readonly"
-          v-model="ruleForm.classId"
-          class="w-full"
-          placeholder="选择班级"
-        >
-          <ElOption
-            :label="op.className"
-            :value="op.classId"
-            v-for="op in options"
-            :key="op.classId"
-          />
+        <ElSelect :disabled="readonly" v-model="ruleForm.classId" class="w-full" placeholder="选择班级">
+          <ElOption :label="op.className" :value="op.classId" v-for="op in options" :key="op.classId" />
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="课程时间" prop="time">
-        <el-date-picker
-          v-model="ruleForm.time"
-          type="daterange"
-          range-separator="到"
-          start-placeholder="请选择上课时间"
-          end-placeholder="请选择结课时间"
-        />
+        <el-date-picker v-model="ruleForm.time" type="daterange" range-separator="到" start-placeholder="请选择上课时间"
+          end-placeholder="请选择结课时间" />
       </ElFormItem>
     </ElForm>
     <template #footer>
@@ -51,7 +25,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import { createClassSchedule, getClassList } from '@/http/api'
+import { createClassSchedule, getClassList, getCourse } from '@/http/api'
 import type { FormInstance, FormRules } from 'element-plus'
 import userStore from '@/store/userStore'
 const user = userStore()
@@ -72,7 +46,7 @@ const submitForm = async () => {
     dialogVisible.value = false
     return
   }
-  const valid = await ruleFormRef.value.validate().catch(() => {})
+  const valid = await ruleFormRef.value.validate().catch(() => { })
   //   register
   if (!valid) return
 
@@ -112,7 +86,17 @@ watch(dialogVisible, async vi => {
         departmentId: user.userInfo.departmentId,
       })
       options.value = data.rows
+    } else {
+      const { data } = await getCourse(courseId.value!)
+      if (data?.user?.departmentId) {
+        const { data: d } = await getClassList({
+          departmentId: data?.user?.departmentId,
+        })
+        options.value = d.rows
+      }
+
     }
+
   }
 })
 
