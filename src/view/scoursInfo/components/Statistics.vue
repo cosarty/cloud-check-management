@@ -69,7 +69,7 @@ const op2Comp = computed(() => {
       name: titleComp.value[0],
     },
     {
-      value: allintegral.sustains,
+      value: allintegral.sustains ?? 0,
       name: '总积分',
     },
   ]

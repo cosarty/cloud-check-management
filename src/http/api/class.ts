@@ -65,3 +65,9 @@ export const getClassStat = async (classId: any,pram: any) =>
     method: 'get',
     data:pram
   })
+export const getInstructor = async () =>
+  await http.request({
+    url: `class/getInstructor`,
+    method: 'get',
+
+  })

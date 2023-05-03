@@ -80,6 +80,11 @@ const checkUser = (userId: any) => {
   }
 }
 
+
+watch(props, () => {
+  getStudent()
+},{deep:true})
+
 onMounted(() => {
   getStudent()
 })

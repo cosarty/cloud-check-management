@@ -17,7 +17,7 @@
           <template #label>
             <div class="cell-item">
 
-              sTime
+              startTime
             </div>
           </template>
           {{ dayjs(starDate).format('YYYY-MM-DD') }}
@@ -165,7 +165,9 @@ const getHours = computed(
 )
 
 
-
+watch(props, async () => {
+  await getdata()
+}, { deep: true })
 
 
 </script>
