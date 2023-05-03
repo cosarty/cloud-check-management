@@ -1,9 +1,8 @@
 <template>
   <div class="h-full flex-grow flex bg-white">
-    <div class="basis-80 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500">
+    <div v-if="!userId" class=" basis-80 shrink-0 overflow-hidden border-solid border-r-2 border-neutral-500">
       <ElScrollbar>
         <div>
-
           <div class="p-2 flex items-center border-b-2 cursor-pointer" :class="{
               'bg-amber-200': activeStudent === ot.userId,
               'bg-slate-100': activeStudent !== ot.userId,
@@ -31,7 +30,7 @@
 
       <ElScrollbar>
         <!-- <Statistics :class-schedule-id="courseId" :user-id="activeStudentInfo?.userId"></Statistics> -->
-        <ClassDiagram :user-id="activeStudent" :class-id="classId"></ClassDiagram>
+        <ClassDiagram :user-id="activeStudent ?? userId" :class-id="classId"></ClassDiagram>
 
       </ElScrollbar>
     </div>
@@ -42,7 +41,7 @@
 import { getUsersClass } from '@/http/api';
 import ClassDiagram from './ClassDiagram.vue'
 
-const props = defineProps<{ classId: string }>()
+const props = defineProps<{ classId: string, userId?: string }>()
 const activeStudent = ref<any>(undefined)
 const students = ref<any>({})
 const getStudent = async () => {

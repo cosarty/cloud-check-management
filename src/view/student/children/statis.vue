@@ -7,6 +7,8 @@ export default defineComponent({
   // icon: 'icon-xuesheng',
   name: 'statis',
   auth: 'super',
+  hideMenu: true,
+
 })
 </script>
 <script setup lang="ts"></script>

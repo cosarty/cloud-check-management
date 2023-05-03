@@ -1,25 +1,11 @@
 <template>
   <div style="background-color: white; height: 100%" class="p-11">
-    <Table
-      :action="
-        user.auth.includes('super') ? showStudentAction : []
-      "
-      ref="showStudneTableRef"
-      :colums="teacherColumsComp"
-      :request="gettec"
-      :page-size="7"
-    >
+    <Table :action="user.auth.includes('super') ? [...AdminStudenAction, ...showStudentAction] : AdminStudenAction
+      " ref="showStudneTableRef" :colums="teacherColumsComp" :request="gettec" :page-size="7">
       <template #header>
-        <CheckTeacher
-          title="添加教师"
-          v-if="user.auth.includes('super')"
-          @reset="() => showStudneTableRef.reset()"
-          #default="{ updateVisBale }"
-          ref="checkTeacherRef"
-        >
-          <ElButton class="mb-6" type="primary" @click="updateVisBale"
-            >添加教师</ElButton
-          >
+        <CheckTeacher title="添加教师" v-if="user.auth.includes('super')" @reset="() => showStudneTableRef.reset()"
+          #default="{ updateVisBale }" ref="checkTeacherRef">
+          <ElButton class="mb-6" type="primary" @click="updateVisBale">添加教师</ElButton>
         </CheckTeacher>
       </template>
       <template #class="{ row }">

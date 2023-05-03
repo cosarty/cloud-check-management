@@ -1,24 +1,11 @@
 <template>
   <div style="background-color: white; height: 100%" class="p-11">
-    <Table
-      :action="
-        user.auth.includes('super') ? showStudentAction : AdminStudenAction
-      "
-      ref="showStudneTableRef"
-      :colums="studentColums"
-      :request="getStudent"
-      :page-size="7"
-    >
+    <Table :action="user.auth.includes('super') ? [...AdminStudenAction, ...showStudentAction] : AdminStudenAction
+      " ref="showStudneTableRef" :colums="studentColums" :request="getStudent" :page-size="7">
       <template #header>
-        <CheckStudent
-          title="添加学生"
-          @reset="() => showStudneTableRef.reset()"
-          #default="{ updateVisBale }"
-          ref="checkStudentRef"
-        >
-          <ElButton class="mb-6" type="primary" @click="updateVisBale"
-            >添加学生</ElButton
-          >
+        <CheckStudent title="添加学生" @reset="() => showStudneTableRef.reset()" #default="{ updateVisBale }"
+          ref="checkStudentRef">
+          <ElButton class="mb-6" type="primary" @click="updateVisBale">添加学生</ElButton>
         </CheckStudent>
       </template>
       <template #class="{ row }">
@@ -29,6 +16,7 @@
       </template>
     </Table>
   </div>
+  <ShowStudentPopup ref="showStudent"></ShowStudentPopup>
 </template>
 <script lang="ts">
 export default defineComponent({
@@ -43,7 +31,9 @@ import { TableActionType, TableColumType } from '@/components/Table.vue'
 import { bindUser, deleteUser, getStuudent, getUsersClass } from '@/http/api'
 import userStore from '@/store/userStore'
 import CheckStudent from './components/CheckStudent.vue'
+import ShowStudentPopup from './components/ShowStudentPopup.vue'
 const user = userStore()
+const showStudent = ref<InstanceType<typeof ShowStudentPopup>>()
 /**
  * 学生列表展示
  * 学生编辑
@@ -93,7 +83,8 @@ const AdminStudenAction: TableActionType = [
     title: '查看',
     link: true,
     event(row) {
-      // checkStudentRef.value.updateData(row, '查看学生', true)
+      console.log('row: ', row);
+      showStudent.value?.show(row.userId, row.classId)
     },
   },
 ]
