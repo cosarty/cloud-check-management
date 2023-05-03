@@ -24,7 +24,7 @@ const userStore = defineStore('user', () => {
   // 其他权限
   const otherAuh = computed(() => {
     const auth: string[] = []
-    if (userInfo.value.department) auth.push('department')
+    if (userInfo.value.myDepartment.length) auth.push('department')
     if (userInfo.value.instructor.length) auth.push('instructor')
     return auth
   })

@@ -1,17 +1,10 @@
 <template>
   <div style="background-color: white; height: 100%">
-    <div
-      class="h-14 w-full bg-slate-300 flex items-center justify-between box-border px-5"
-    >
+    <div class="h-14 w-full bg-slate-300 flex items-center justify-between box-border px-5">
       <div class="flex items-center">
-        <el-avatar
-          :size="40"
-          class="mr-3"
-          :src="
-            classInfo?.picture ??
-            'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-          "
-        />
+        <el-avatar :size="40" class="mr-3" :src="classInfo?.picture ??
+          'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+          " />
         <span class="text-2xl font-700 mr-3 align-middle">
           {{ classInfo?.className }}
         </span>
@@ -20,44 +13,19 @@
         </span>
       </div>
       <div>
-        <el-button :icon="Plus" type="primary" @click="studentVisible = true"
-          >添加学生</el-button
-        >
-        <el-popconfirm
-          confirm-button-text="是"
-          cancel-button-text="否"
-          title="确认删除"
-          @confirm="deleteUser"
-          ><template #reference>
-            <el-button type="danger" class="ml-2">删除学生</el-button></template
-          ></el-popconfirm
-        >
+        <el-button :icon="Plus" type="primary" @click="studentVisible = true">添加学生</el-button>
+        <el-popconfirm confirm-button-text="是" cancel-button-text="否" title="确认删除" @confirm="deleteUser"><template
+            #reference>
+            <el-button type="danger" class="ml-2">删除学生</el-button></template></el-popconfirm>
       </div>
     </div>
 
     <div class="my-5">
-      <Table
-        isSelect
-        :action="showStudentAction"
-        ref="showStudneTableRef"
-        :colums="studentColums"
-        :request="getStudent"
-        :page-size="10"
-      ></Table>
+      <Table isSelect :action="showStudentAction" ref="showStudneTableRef" :colums="studentColums" :request="getStudent"
+        :page-size="10"></Table>
     </div>
-    <el-dialog
-      v-model="studentVisible"
-      title="添加学生"
-      width="58%"
-      destroy-on-close
-    >
-      <Table
-        ref="studenTableRef"
-        isSelect
-        :colums="studentColums"
-        :request="request"
-        :page-size="4"
-      ></Table>
+    <el-dialog v-model="studentVisible" title="添加学生" width="58%" destroy-on-close>
+      <Table ref="studenTableRef" isSelect :colums="studentColums" :request="request" :page-size="4"></Table>
       <template #footer>
         <el-button @click="studentVisible = false">取消</el-button>
         <el-button type="primary" @click="addConfim"> 确认 </el-button>
@@ -70,7 +38,7 @@ export default defineComponent({
   title: '班级信息',
   // icon: 'icon-xuesheng',ff
   name: 'addUserToClass',
-  auth: 'super',
+  auth: ['super', 'department'],
   hideMenu: true,
 })
 </script>

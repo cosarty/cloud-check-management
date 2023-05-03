@@ -9,116 +9,68 @@
     </template>
     <div class="flex w-full h-full gap-6">
       <div class="w-56 sider flex flex-col">
-        <div class="add-department">
+
+        <div class="add-department" v-if="!isDepartment">
+
           <AddDeparment @reset="getData" />
         </div>
-        <div
-          class="department-list flex-grow overflow-y-auto"
-          v-loading="depLoading"
-        >
-          <ElScrollbar
-            ><div
-              class="department-item"
-              :class="{ active: activeDep === dp.departmentId }"
-              v-for="dp in departmentList"
-              :key="dp.departmentId"
-            >
+        <div class="department-list flex-grow overflow-y-auto" v-loading="depLoading">
+          <ElScrollbar>
+            <div class="department-item" :class="{ active: activeDep === dp.departmentId }"
+              v-for="dp in    departmentList   " :key="dp.departmentId">
               <svg class="icon" aria-hidden="true">
                 <use :xlink:href="`#icon-zuzhijiagou`"></use>
               </svg>
-              <div
-                class="department-name"
-                @click.self="checkDep(dp.departmentId)"
-              >
+              <div class="department-name" @click.self="checkDep(dp.departmentId)">
+
                 <template v-if="editDep !== dp.departmentId">
                   {{ dp.departmentName }}
-                  <ElIcon
-                    @click="editDepartment(dp.departmentId, dp.departmentName)"
-                    ><Edit /></ElIcon
-                ></template>
-
-                <ElInput
-                  v-else
-                  ref="depName"
-                  v-model="selectInpt"
-                  @keydown.enter="
-                    updateDepName($event, dp.departmentName, dp.departmentId)
-                  "
-                  @blur=";(editDep = undefined); (selectInpt = '')"
-                ></ElInput>
-              </div>
-              <ElPopconfirm
-                title="确认删除"
-                @confirm="delDepartment(dp.departmentId)"
-                confirm-button-text="确认"
-                cancel-button-text="取消"
-              >
-                <template #reference>
-                  <ElButton
-                    type="danger"
-                    :icon="Delete"
-                    circle
-                    :size="'small'"
-                  />
+                  <ElIcon v-if="!isDepartment" @click="editDepartment(dp.departmentId, dp.departmentName)">
+                    <Edit />
+                  </ElIcon>
                 </template>
-              </ElPopconfirm></div
-          ></ElScrollbar>
+
+                <ElInput v-else ref="depName" v-model="selectInpt" @keydown.enter="updateDepName($event, dp.departmentName, dp.departmentId)
+                  " @blur="; (editDep = undefined); (selectInpt = '')"></ElInput>
+
+              </div>
+              <ElPopconfirm v-if=" !isDepartment " title="确认删除" @confirm=" delDepartment(dp.departmentId) "
+                confirm-button-text="确认" cancel-button-text="取消">
+                <template #reference>
+                  <ElButton type="danger" :icon=" Delete " circle :size=" 'small' " />
+                </template>
+              </ElPopconfirm>
+            </div>
+          </ElScrollbar>
         </div>
       </div>
       <div class="h-full overflow-y-auto flex-grow content flex flex-col">
-        <div
-          class="font-bold flex mb-4 items-center bg-slate-400 py-4 pl-3"
-          v-if="activeDep"
-        >
+        <div class="font-bold flex mb-4 items-center bg-slate-400 py-4 pl-3" v-if=" activeDep && !isDepartment ">
           系主任 :
-          <ElSelect
-            v-model="targetTeacher"
-            class="w-32 ml-3"
-            placeholder="选择系主任"
-            clearable
-          >
-            <ElOption
-              :value="op.userId"
-              v-for="op in teacherList"
-              :key="op.userId"
-              :label="op.userName"
-            />
+          <ElSelect v-model=" targetTeacher " class="w-32 ml-3" placeholder="选择系主任" clearable>
+            <ElOption :value=" op.userId " v-for="   op    in    teacherList   " :key=" op.userId " :label=" op.userName " />
           </ElSelect>
         </div>
         <ElScrollbar>
           <div>
-            <Table
-              :colums="classTabColum"
-              :action="defaultAtion"
-              :request="request"
-              ref="tableRef"
-            >
-              <template #teacher="{ row }">{{
+            <Table :colums=" classTabColum " :action=" defaultAtion " :request=" request " ref="tableRef">
+              <template #teacher=" { row } ">{{
                 row?.teacher?.userName ?? '未知'
-              }}</template>
+                }}</template>
 
-              <template #department="{ row }">{{
+              <template #department=" { row } ">{{
                 row?.department?.departmentName ?? '未知'
-              }}</template>
+                }}</template>
 
-              <template #header
-                ><div class="my-5">
-                  <AddClass
-                    :departList="departmentList"
-                    :departmentId="activeDep"
-                    @reset="() => tableRef.reset()"
-                    v-slot="{ updateVisBale }"
-                    ref="addclassRef"
-                    ><el-button
-                      type="primary"
-                      :icon="Plus"
-                      @click="updateVisBale"
-                    >
+              <template #header>
+                <div class="my-5">
+                  <AddClass :departList=" departmentList " :departmentId=" activeDep " @reset=" () => tableRef.reset() "
+                    v-slot=" { updateVisBale } " ref="addclassRef"><el-button type="primary" :icon=" Plus "
+                      @click=" updateVisBale ">
                       添加班级
-                    </el-button></AddClass
-                  >
-                </div></template
-              >
+                    </el-button></AddClass>
+                </div>
+              </template>
             </Table>
           </div>
         </ElScrollbar>
@@ -131,7 +83,7 @@ export default defineComponent({
   title: '院系',
   icon: 'icon-bumen-department',
   name: 'department',
-  auth: 'super',
+  auth: ['super', 'department'],
 })
 </script>
 <script setup lang="ts">
@@ -147,9 +99,12 @@ import AddDeparment from './components/AddDeparment.vue'
 import AddClass from './components/AddClass.vue'
 import { Plus, Delete, Edit } from '@element-plus/icons-vue'
 import { TableColumType, TableActionType } from '@/components/Table.vue'
+import userStore from '@/store/userStore'
 
 const router = useRouter()
 const route = useRoute()
+const user = userStore()
+const isDepartment = computed(() => user.otherAuh.includes('department'))
 
 const departmentList = ref<
   {
@@ -253,9 +208,13 @@ const teacherList = ref<any>([])
 const tableRef = ref<any>()
 onMounted(() => {
   getData()
-  getTeacher({ flag: 'all' }).then(({ data }) => {
-    teacherList.value = data.rows
-  })
+
+  if (!isDepartment.value) {
+    getTeacher({ flag: 'all' }).then(({ data }) => {
+      teacherList.value = data.rows
+    })
+  }
+
 })
 
 const getData = async () => {
@@ -315,7 +274,7 @@ const checkDep = (id: string) => {
 const request = async (pram: any) => {
   const {
     data: { count, rows },
-  } = await getClassList({ ...pram, departmentId: activeDep.value })
+  } = await getClassList({ ...pram, departmentId: activeDep.value, ...(isDepartment.value ? { userId: user.userInfo.userId } : {}) })
   return [rows ?? [], count ?? 0]
 }
 
@@ -337,6 +296,7 @@ watch(
     overflow-y: auto;
     padding: 0;
   }
+
   .sider {
     border-right: 1px solid var(--el-card-border-color);
 
@@ -344,8 +304,10 @@ watch(
       padding: 1.1rem;
       border-bottom: 1px solid var(--el-card-border-color);
     }
+
     .department-list {
       padding: 0.6rem;
+
       .department-item {
         display: flex;
         align-items: center;
@@ -362,7 +324,9 @@ watch(
         &.active {
           background-color: var(--el-color-primary-light-5);
         }
+
         @include useIcon(1.4rem);
+
         .department-name {
           flex: 1;
           font-size: 13px;
@@ -370,6 +334,7 @@ watch(
       }
     }
   }
+
   .content {
     padding: 0.7rem;
   }
