@@ -10,3 +10,8 @@ export const getTeacherHome = async () =>
     url: '/home/teacher',
     method: 'get',
   })
+export const getStudentHome = async () =>
+  await http.request({
+    url: '/home/student',
+    method: 'get',
+  })
