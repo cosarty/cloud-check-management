@@ -15,20 +15,20 @@
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
-            <div class="cell-item">
+            <div class="cell-item  whitespace-nowrap">
 
               startTime
             </div>
           </template>
-          {{ dayjs(starDate).format('YYYY-MM-DD') }}
+          <div class=" whitespace-nowrap"> {{ dayjs(starDate).format('YYYY-MM-DD') }}</div>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
-            <div class="cell-item">
+            <div class="cell-item  whitespace-nowrap">
               endTtime
             </div>
           </template>
-          {{ dayjs(endDate).format('YYYY-MM-DD') }}
+          <div class=" whitespace-nowrap"> {{ dayjs(endDate).format('YYYY-MM-DD') }}</div>
         </el-descriptions-item>
 
       </template>

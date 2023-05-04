@@ -13,6 +13,7 @@
         </span>
       </div>
       <div>
+        <el-button link type="primary" @click="classVisible = true">查看</el-button>
         <el-button :icon="Plus" type="primary" @click="studentVisible = true">添加学生</el-button>
         <el-popconfirm confirm-button-text="是" cancel-button-text="否" title="确认删除" @confirm="deleteUser"><template
             #reference>
@@ -31,7 +32,26 @@
         <el-button type="primary" @click="addConfim"> 确认 </el-button>
       </template>
     </el-dialog>
+    <el-dialog v-model="classVisible" title="查看班级" width="78%" destroy-on-close style="width: 90%;"
+      @closed="activeName = 'first'">
+
+      <el-tabs v-model="activeName" style="height: 60%;">
+        <el-tab-pane label="统计" name="first">
+
+          <ClassStatInfo :class-id="classId"></ClassStatInfo>
+
+        </el-tab-pane>
+        <el-tab-pane label="课表" name="second">
+
+          <Tmetable :class-id="classId"></Tmetable>
+
+        </el-tab-pane>
+
+      </el-tabs>
+
+    </el-dialog>
   </div>
+  <ShowStudentPopup ref="showStudent"></ShowStudentPopup>
 </template>
 <script lang="ts">
 export default defineComponent({
@@ -45,6 +65,8 @@ export default defineComponent({
 <script setup lang="ts">
 import { TableActionType, TableColumType } from '@/components/Table.vue'
 import closeCurrentTab from '@/hooks/closeCurrentTab'
+import ClassStatInfo from '@/components/ClassStatInfo.vue'
+import Tmetable from '@/components/Tmetable.vue'
 import {
   addUsertoClass,
   delUsersClass,
@@ -53,14 +75,17 @@ import {
   getUsersClass,
 } from '@/http/api'
 import { Plus } from '@element-plus/icons-vue'
+import ShowStudentPopup from '../../student/children/components/ShowStudentPopup.vue'
 const route = useRoute()
 const close = closeCurrentTab()
 const classId = ref<string>('')
 const studentVisible = ref(false)
+const classVisible = ref(false)
 const classInfo = ref<any>({})
 const studenTableRef = ref<any>()
 const showStudneTableRef = ref<any>()
-
+const showStudent = ref<InstanceType<typeof ShowStudentPopup>>()
+const activeName = ref('first')
 const studentColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
   { prop: 'account', label: '学号', isSearch: true },
@@ -84,7 +109,12 @@ const studentColums: TableColumType = [
 ]
 
 const showStudentAction: TableActionType = [
-  { type: 'primary', title: '查看', link: true },
+  {
+    type: 'primary', title: '查看', link: true, event(row) {
+      console.log('row: ', row);
+      showStudent.value?.show(row.userId, classId.value)
+    },
+  },
   {
     type: 'danger',
     title: '删除',
