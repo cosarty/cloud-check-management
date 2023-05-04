@@ -40,7 +40,7 @@
      
     </div>
     <RenderClassList v-else @click=" checkClass " :class-list=" classList " />
-    <el-dialog v-model=" dialogVisible " title="设置课表" width="70%" destroy-on-close @close=" tagetCourseInfo = undefined ">
+    <el-dialog v-model="dialogVisible" title="设置课表" width="70%" destroy-on-close @close=" tagetCourseInfo = undefined ">
       <div class="mb-4 text-lg">
         课程时间：{{
         dayjs(tagetCourseInfo?.ClassSchedule?.starDate).format('YYYY-MM-DD')

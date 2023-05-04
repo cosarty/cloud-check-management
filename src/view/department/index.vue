@@ -47,7 +47,7 @@
       <div class="h-full overflow-y-auto flex-grow content flex flex-col">
         <div class="font-bold flex mb-4 items-center bg-slate-400 py-4 pl-3" v-if=" activeDep && !isDepartment ">
           系主任 :
-          <ElSelect v-model=" targetTeacher " class="w-32 ml-3" placeholder="选择系主任" clearable>
+          <ElSelect v-model="targetTeacher" class="w-32 ml-3" placeholder="选择系主任" clearable>
             <ElOption :value=" op.userId " v-for="   op    in    teacherList   " :key=" op.userId " :label=" op.userName " />
           </ElSelect>
         </div>

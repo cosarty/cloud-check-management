@@ -4,7 +4,7 @@
     <ElScrollbar>
       <div class="text-2xl font-bold p-3">管理班级</div>
       <div v-if="showClassInfo">
-        <el-page-header @back="showClassInfo = undefined; activeName = 'first'" :icon="ArrowLeft" title="返回"
+        <el-page-header @back="() => { showClassInfo = undefined; activeName = 'first' }" :icon="ArrowLeft" title="返回"
           class="p-4 pb-0">
           <template #content>
             <span class="text-large font-600 mr-3">
@@ -16,15 +16,15 @@
         <div class=" px-10 ">
 
 
-          <el-tabs v-model=" activeName " style="height: 90%;">
+          <el-tabs v-model="activeName" style="height: 90%;">
             <el-tab-pane label="统计" name="first">
 
-              <ClassStatInfo :class-id=" showClassInfo.classId "></ClassStatInfo>
+              <ClassStatInfo :class-id="showClassInfo.classId"></ClassStatInfo>
 
             </el-tab-pane>
             <el-tab-pane label="课表" name="second">
 
-              <Tmetable :class-id=" showClassInfo.classId "></Tmetable>
+              <Tmetable :class-id="showClassInfo.classId"></Tmetable>
 
             </el-tab-pane>
 
@@ -33,7 +33,7 @@
 
         </div>
       </div>
-      <RenderClassList v-else @click=" checkClass " :class-list=" classList " :hide-course=" true " />
+      <RenderClassList v-else @click="checkClass" :class-list="classList" :hide-course="true" />
     </ElScrollbar>
 
   </div>
