@@ -45,10 +45,6 @@ import ScheduleView from './components/ScheduleView.vue'
 const isHistory = ref<boolean>(false)
 const activeName = ref('sing')
 
-
-
-
-
 </script>
 
 <style scoped lang="scss"></style>

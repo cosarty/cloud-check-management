@@ -25,6 +25,11 @@ export const checkClassCourse = async (id: string) =>
     url: `/classSchedule/checkClassCourse/${id}`,
     method: 'get',
   })
+export const endCourse = async (id: string) =>
+  await http.request({
+    url: `/classSchedule/endCourse/${id}`,
+    method: 'get',
+  })
 
 // 获取自己授课的课程
 export const getClassChedule = async () =>
