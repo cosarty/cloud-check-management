@@ -1,5 +1,6 @@
 <template>
   <div class="course-box flex flex-wrap" :class="{ 'pointer-events-none': !!isHistory }">
+
     <div v-if="list?.length" @click="$emit('action', 'show', co)" v-for="co in list" :key="co.courseId"
       class="flex-shrink-0 course-item shadow-xl flex flex-col group rounded-xl overflow-hidden relative basis-1/6 hover:text-emerald-600"
       :class="{ disable: !!isHistory }" style="box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12)">
@@ -40,7 +41,7 @@
 
       <div
         class="hidden absolute p-1 px-4 group-hover:block items-center bottom-0 right-0 bg-cyan-200 rounded-tl-xl text-cyan-500"
-        v-if="isAction" @click.stop="$emit('action', 'issued', co)"></div>
+        v-if="isAction" @click.stop="$emit('action', 'issued', co)">下发</div>
 
       <slot :co="co" name="action"></slot>
       <div class="absolute h-8 w-20 flex justify-center items-center bottom-0 right-3 bg-cyan-200" v-if="$slots.default">
@@ -49,9 +50,10 @@
     </div>
 
     <div v-else class="text-cyan-700 mt-6 text-lg font-bold flex flex-col items-center mx-auto">
-        <ElImage :src=" emptyCourse " class="my-4"></ElImage>
-        暂无课程
-      </div>
+
+      <ElImage :src="emptyCourse" class="my-4"></ElImage>
+      暂无课程
+    </div>
   </div>
 
   <div class="flex justify-end my-4 mr-10">
@@ -86,10 +88,10 @@ defineEmits<{
 }>()
 const list = computed(() => {
 
-  if (props.data.length <= props.pageSize) return props.data.filter((d: any) => d.ClassSchedule.isEnd === props.isHistory)
+  if (props.data.length <= props.pageSize) return props.data.filter((d: any) => (!!d?.ClassSchedule?.isEnd) === props?.isHistory)
 
   return props.data
-    .filter((d: any) => d.ClassSchedule.isEnd === props.isHistory)
+    .filter((d: any) => !!d?.ClassSchedule?.isEnd === props.isHistory)
     .slice(
       props.pageSize * (currentPage.value - 1),
       props.pageSize * currentPage.value,
