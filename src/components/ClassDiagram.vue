@@ -20,7 +20,7 @@ import {
 import VChart from 'vue-echarts'
 import { getClassStat } from '@/http/api'
 
-const props = defineProps<{ userId?: string, classId: string }>()
+const props = defineProps<{ userId?: string, classId?: string, options?: any }>()
 const staDta = ref<any>({})
 use([
   CanvasRenderer,
@@ -48,7 +48,7 @@ const option = computed(() => ({
   xAxis: [
     {
       type: 'category',
-      data: staDta.value?.name ?? []
+      data: props.options?.name ?? staDta.value?.name ?? []
     }
   ],
   yAxis: [
@@ -64,7 +64,7 @@ const option = computed(() => ({
       emphasis: {
         focus: 'series'
       },
-      data: staDta.value?.value?.[2] ?? []
+      data: props.options?.value?.[2] ?? staDta.value?.value?.[2] ?? []
     },
     {
       name: '签到',
@@ -73,7 +73,7 @@ const option = computed(() => ({
       emphasis: {
         focus: 'series'
       },
-      data: staDta.value?.value?.[1] ?? []
+      data: props.options?.value?.[1] ?? staDta.value?.value?.[1] ?? []
     },
     {
       name: '迟到',
@@ -82,15 +82,18 @@ const option = computed(() => ({
       emphasis: {
         focus: 'series'
       },
-      data: staDta.value?.value?.[0] ?? []
+      data: props.options?.value?.[0] ?? staDta.value?.value?.[0] ?? []
     }
   ]
 }))
 
 
 watch(props, async () => {
-  const { data } = await getClassStat(props.classId, { userId: props.userId })
-  staDta.value = data
+  if (!props.options) {
+    const { data } = await getClassStat(props.classId, { userId: props.userId })
+    staDta.value = data
+  }
+
 }, {
   deep: true,
   immediate: true

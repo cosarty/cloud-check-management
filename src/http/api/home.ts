@@ -5,3 +5,8 @@ export const getAdminHome = async () =>
     url: '/home/admin',
     method: 'get',
   })
+export const getTeacherHome = async () =>
+  await http.request({
+    url: '/home/teacher',
+    method: 'get',
+  })

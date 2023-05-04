@@ -40,10 +40,6 @@
           </div>
           <el-progress :percentage="Math.round(v.ratio * 100)" :format="format" :color="colors[index]"/>
          </template>
-          <!-- <el-progress :percentage="100" :format="format" :color="colors[0]" />
-          <el-progress :percentage="100" :format="format" :color="colors[1]" />
-          <el-progress :percentage="100" :format="format" :color="colors[2]" />
-          <el-progress :percentage="50" :format="format" :color="colors[3]" /> -->
         </div>
       </el-card>
     </div>
@@ -114,7 +110,7 @@ const ranking = computed(() => [
 
   },
   {
-    title: '最后欢迎课程TOP',
+    title: '最受欢迎课程TOP',
     value: homeInfo.value.schduleRatio ?? []
   }
 ])
