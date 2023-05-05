@@ -3,7 +3,7 @@
 
   <el-dialog
     v-model="dialogVisible"
-    title="添加班级"
+    title="班级"
     width="30%"
     destroy-on-close
   >

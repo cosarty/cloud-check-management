@@ -59,15 +59,20 @@ export const delUsersClass = async (pram: any) =>
     method: 'delete',
     data: pram,
   })
-export const getClassStat = async (classId: any,pram: any) =>
+export const getClassStat = async (classId: any, pram: any) =>
   await http.request({
     url: `class/getClassStat/${classId}`,
     method: 'get',
-    data:pram
+    data: pram,
   })
 export const getInstructor = async () =>
   await http.request({
     url: `class/getInstructor`,
     method: 'get',
-
+  })
+export const getTeacherCourse = async (param: any) =>
+  await http.request({
+    url: `class/getTeacherCourse`,
+    method: 'get',
+    data: param,
   })

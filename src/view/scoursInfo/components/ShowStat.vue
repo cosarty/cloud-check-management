@@ -62,6 +62,11 @@ const show = async (id: any, name: any, cid: any) => {
 }
 
 
+
+defineExpose({
+  show
+})
+
 const setAction = async (action: number, userId: any, statId: any) => {
   await setStatType({ action, userId, statId, singTaskId: singTaskId.value, classScheduleId: classScheduleId.value })
   await getData()

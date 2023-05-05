@@ -110,7 +110,7 @@ import { createSingTask, updateSingTask } from '@/http/api/singTask'
 
 const emit = defineEmits<{ (e: 'submit'): void }>()
 
-const props = defineProps<{ classScheduleId: any }>()
+const props = defineProps<{ classScheduleId?: any }>()
 
 const mapRef = ref<any>()
 const dialogVisible = ref(false)

@@ -16,6 +16,7 @@
       </template>
     </Table>
   </div>
+  <ShowTeacherPopup ref="showTeacherRef"></ShowTeacherPopup>
 </template>
 <script lang="ts">
 export default defineComponent({
@@ -31,6 +32,7 @@ import { TableActionType, TableColumType } from '@/components/Table.vue'
 import { bindUser, deleteUser, getTeacher, setAdmin } from '@/http/api'
 import userStore from '@/store/userStore'
 import CheckTeacher from './components/CheckTeacher.vue'
+import ShowTeacherPopup from '@/view/userScourse/children/components/ShowTeacherPopup.vue'
 const user = userStore()
 /**
  * 学生列表展示
@@ -41,6 +43,7 @@ const user = userStore()
  */
 
 const showStudneTableRef = ref<any>()
+const showTeacherRef = ref<InstanceType<typeof ShowTeacherPopup>>()
 const checkTeacherRef = ref<any>()
 const teacherColums: TableColumType = [
   { prop: 'pic', label: '照片', type: 'image' },
@@ -86,7 +89,12 @@ const teacherColums: TableColumType = [
 ]
 
 const AdminStudenAction: TableActionType = [
-  { type: 'primary', title: '查看', link: true },
+  {
+    type: 'primary', title: '查看', link: true, event(row) {
+      // console.log('row: ', row);
+      showTeacherRef.value?.show(row.userId)
+    }
+  },
 ]
 
 const showStudentAction: TableActionType = [

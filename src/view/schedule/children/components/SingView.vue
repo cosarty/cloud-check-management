@@ -81,6 +81,10 @@
       </template>
     </Table>
   </div>
+
+  <ShowStat ref="showStatRef">
+
+  </ShowStat>
 </template>
 
 <script setup lang="ts">
@@ -88,11 +92,13 @@
 import { TableActionType, TableColumType } from '@/components/Table.vue';
 import { getCurrentTask, getSingTask, singDeleteTask, singEndTask, updateSingTask } from '@/http/api/singTask';
 import { RefreshLeft } from '@element-plus/icons-vue'
+import ShowStat from '@/view/scoursInfo/components/ShowStat.vue'
 const props = defineProps<{ isHistory: boolean }>()
+
 const singRef = ref<any>()
 const runRef = ref<any>()
 const sendTaskRef = ref<any>()
-
+const showStatRef = ref<InstanceType<typeof ShowStat>>()
 
 const timingAction: TableActionType = [
   {
@@ -100,7 +106,7 @@ const timingAction: TableActionType = [
     title: '编辑',
     link: true,
     event(row) {
-      sendTaskRef.value.updateInfo({...row})
+      sendTaskRef.value.updateInfo({ ...row })
     },
   },
   {
@@ -133,7 +139,7 @@ const hisoryAction: TableActionType = [
     link: true,
     async event(row: any) {
 
-      singRef.value.reset()
+      showStatRef.value?.show(row.singTaskId, row.taskName, row.classSchedule.courseId)
 
     },
   },
@@ -169,7 +175,7 @@ const timingColum: TableColumType = [
     label: '人脸识别',
     type: 'switch',
     async event(nv: boolean, row: any) {
-      await updateSingTask({ singTaskId: row.singTaskId,isFace:nv })
+      await updateSingTask({ singTaskId: row.singTaskId, isFace: nv })
       row.isFace = nv
     },
   }

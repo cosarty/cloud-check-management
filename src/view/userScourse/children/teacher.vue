@@ -73,14 +73,16 @@ import RenderCourse from '@/components/RenderCourse/index.vue'
 import { endCourse, getTeacherClass } from '@/http/api'
 import RenderClassList from './components/RenderClassList.vue'
 import { ArrowLeft } from '@element-plus/icons-vue'
+import userStore from '@/store/userStore'
 const classList = ref<any>([])
 const showClassInfo = ref<any>()
 const router = useRouter()
 const dialogVisible = ref(false)
 const tagetCourseInfo = ref<any>()
 const isHistory = ref<boolean>(false)
+const user = userStore()
 onMounted(() => {
-  getTeacherClass().then(({ data }) => {
+  getTeacherClass({userId:user.userInfo.userId}).then(({ data }) => {
     classList.value = data
   })
 })
