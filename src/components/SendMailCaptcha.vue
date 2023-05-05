@@ -111,6 +111,7 @@ const send = async () => {
     await sendMail({ email: countForm.value.email, type: 'register' }).finally(
       () => (sendLoading.value = false),
     )
+    cpatchaDiabled.value = true
     isSend.value = true
     startTime()
   }
@@ -121,6 +122,7 @@ const startTime = () => {
   let t = setInterval(() => {
     if (time.value--) return
     clearInterval(t)
+    cpatchaDiabled.value = false
     isSend.value = false
   }, 1000)
 }

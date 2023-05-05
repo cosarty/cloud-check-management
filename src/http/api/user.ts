@@ -28,7 +28,7 @@ export const updateUser = async (payload: { sex: 0 | 1 }) =>
     data: payload,
   })
 
-export const sendMail = async (payload: { email: string; type: 'register' }) =>
+export const sendMail = async (payload: { email: string; type: 'register'|'login' }) =>
   await http.request({
     url: '/genIn/sendMail',
     method: 'post',
@@ -107,6 +107,12 @@ export const setAdmin = async (userId: string, isAdmin: boolean) =>
 export const updateOtherUser = async (pram: any) =>
   await http.request({
     url: '/user/updateUser',
+    method: 'post',
+    data: pram,
+  })
+export const updateForgetPassword = async (pram: any) =>
+  await http.request({
+    url: '/user/updateForgetPassword',
     method: 'post',
     data: pram,
   })
