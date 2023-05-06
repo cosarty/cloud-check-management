@@ -1,5 +1,5 @@
 <template>
-  <ElScrollbar>
+  <ElScrollbar v-loading="loading">
     <div class="grid md:grid-cols-5 gap-3 ">
       <el-card shadow="hover" :body-style="{ padding: '20px' }" v-for="(card, index) of cards" :key="index"
         class="cursor-pointer">
@@ -96,6 +96,8 @@ const cards = computed(() => [
   }
 ])
 
+const loading = ref(false)
+
 const colors = ['#0EA5E9', 'rgb(45 212 191/1)', ' rgb(163 230 53 /1)', ' rgb(167 139 250 /1)', ' rgb(253 224 71 /1)', ' rgb(236 72 153 / 1)']
 
 const ranking = computed(() => [
@@ -117,9 +119,12 @@ const ranking = computed(() => [
 const format = (percentage: any) => (percentage > 100 ? 'Full' : `${percentage}%`)
 
 onMounted(async () => {
+  loading.value = true
   const { data } = await getAdminHome()
   console.log('data: ', data);
+
   homeInfo.value = data
+  loading.value = false
 
 })
 

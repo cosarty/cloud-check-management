@@ -12,7 +12,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '课表',
-  icon: 'icon-kecheng',
+  icon: 'icon-kebiao',
   name: 'courseTmetable',
   auth: ['student'],
   orderNo: 15,

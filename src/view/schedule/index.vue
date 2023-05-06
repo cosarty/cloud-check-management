@@ -13,7 +13,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '活动',
-  icon: 'icon-kecheng',
+  icon: 'icon-huodong',
   name: 'schedule',
   auth: ['teacher'],
   redirect: 'areaMange',

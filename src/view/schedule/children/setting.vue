@@ -33,7 +33,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '签到设置',
-  icon: 'icon-kecheng',
+  icon: 'icon-qiandao',
   name: 'scheduleSetting',
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <ElScrollbar>
+  <ElScrollbar v-loading="loading">
     <div class="grid md:grid-cols-4 gap-3 ">
       <el-card shadow="hover" :body-style="{ padding: '20px' }" v-for="(card, index) of cards" :key="index"
         class="cursor-pointer">
@@ -59,7 +59,7 @@ export default defineComponent({
 import { getTeacherHome } from '@/http/api';
 import ClassDiagram from '@/components/ClassDiagram.vue';
 const homeInfo = ref<any>({})
-
+const loading = ref(false)
 
 
 
@@ -104,9 +104,11 @@ const ranking = computed(() => [
 ])
 const format = (percentage: any) => (percentage > 100 ? 'Full' : `${percentage}%`)
 onMounted(async () => {
+  loading.value = true
   const { data } = await getTeacherHome()
   console.log('data: ', data);
   homeInfo.value = data
+  loading.value = false
 })
 </script>
 

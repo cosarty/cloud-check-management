@@ -38,7 +38,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '区域管理',
-  icon: 'icon-kecheng',
+  icon: 'icon-tianjiaquyu',
   name: 'areaMange',
 })
 </script>

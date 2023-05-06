@@ -2,7 +2,7 @@
 <template>
   <div style="background-color: white; height: 100%" class=" box-border">
     <ElScrollbar>
-      <div class="text-2xl font-bold p-3">管理班级</div>
+      <div class="text-2xl font-bold p-3">班级管理</div>
       <div v-if="showClassInfo">
         <el-page-header @back="() => { showClassInfo = undefined; activeName = 'first' }" :icon="ArrowLeft" title="返回"
           class="p-4 pb-0">
@@ -42,7 +42,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '班级',
-  icon: 'icon-kecheng',
+  icon: 'icon-banjiguanli-',
   name: 'instructor',
   auth: ['instructor'],
   orderNo: 15,

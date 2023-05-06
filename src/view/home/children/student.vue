@@ -1,5 +1,5 @@
 <template>
-  <ElScrollbar>
+  <ElScrollbar v-loading="loading">
     <div class="grid md:grid-cols-4 gap-3 ">
       <el-card shadow="hover" :body-style="{ padding: '20px' }" v-for="(card, index) of cards" :key="index"
         class="cursor-pointer">
@@ -39,7 +39,7 @@ import userStore from '@/store/userStore';
 const homeInfo = ref<any>({})
 
 const user = userStore()
-
+const loading = ref(false)
 const cards = computed(() => [
   {
     title: '总签到数',
@@ -73,11 +73,12 @@ const cards = computed(() => [
 
 
 onMounted(async () => {
+  loading.value = true
   const { data } = await getStudentHome()
   console.log('data: ', data);
 
   homeInfo.value = data
-
+  loading.value = false
 })
 </script>
 

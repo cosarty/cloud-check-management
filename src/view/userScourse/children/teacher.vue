@@ -59,7 +59,7 @@
 <script lang="ts">
 export default defineComponent({
   title: '课程',
-  icon: 'icon-xuesheng',
+  icon: 'icon-shouke',
   name: 'teacherClass',
   auth: 'teacher',
   hideMenu: true,

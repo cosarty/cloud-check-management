@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full">
+  <div class="w-full h-full" >
     <div class="flex justify-center my-4" v-if="user.auth.length > 1">
       <ElButtonGroup size="large">
         <ElButton

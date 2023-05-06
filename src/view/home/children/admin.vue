@@ -1,5 +1,5 @@
 <template>
-  <ElScrollbar>
+  <ElScrollbar v-loading="loading">
     <div class="grid md:grid-cols-5 gap-3 ">
       <el-card shadow="hover" :body-style="{ padding: '20px' }" v-for="(card, index) of cards" :key="index"
         class="cursor-pointer">
@@ -58,6 +58,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { getAdminHome } from '@/http/api/home';
 const homeInfo = ref<any>({})
+const loading = ref(false)
 const cards = computed(() => [
   {
     title: '课程数',
@@ -118,10 +119,11 @@ const ranking = computed(() => [
 const format = (percentage: any) => (percentage > 100 ? 'Full' : `${percentage}%`)
 
 onMounted(async () => {
+  loading.value = true
   const { data } = await getAdminHome()
   // console.log('data: ', data);
   homeInfo.value = data
-
+  loading.value = false
 })
 
 

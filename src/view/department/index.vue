@@ -53,7 +53,7 @@
         </div>
         <ElScrollbar>
           <div>
-            <Table :colums=" classTabColum " :action=" defaultAtion " :request=" request " ref="tableRef">
+            <Table :colums=" classTabColum " :action=" [...defaultAtion,...(!isDepartment?superColum:[])] " :request=" request " ref="tableRef">
               <template #teacher=" { row } ">{{
                 row?.teacher?.userName ?? '未知'
                 }}</template>
@@ -63,7 +63,7 @@
                 }}</template>
 
               <template #header>
-                <div class="my-5">
+                <div class="my-5" v-if="!isDepartment">
                   <AddClass :departList=" departmentList " :departmentId=" activeDep " @reset=" () => tableRef.reset() "
                     v-slot=" { updateVisBale } " ref="addclassRef"><el-button type="primary" :icon=" Plus "
                       @click=" updateVisBale ">
@@ -183,7 +183,11 @@ const defaultAtion: TableActionType = [
       })
     },
   },
-  {
+ 
+]
+
+const superColum:TableActionType = [
+{
     type: 'danger',
     title: '删除',
     confirmTitle: '确认删除',
