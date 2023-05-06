@@ -75,7 +75,7 @@ const setAction = async (action: number, userId: any, statId: any) => {
 
 
 const getData = async () => {
-  const { data } = await getSingStat({ singTaskId: singTaskId.value })
+  const { data } = await getSingStat({ singTaskId: singTaskId.value, classScheduleId: classScheduleId.value })
 
   // 
   statInfo.value = data

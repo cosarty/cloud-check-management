@@ -139,7 +139,7 @@ const hisoryAction: TableActionType = [
     link: true,
     async event(row: any) {
 
-      showStatRef.value?.show(row.singTaskId, row.taskName, row.classSchedule.courseId)
+      showStatRef.value?.show(row.singTaskId, row.taskName, row.classSchedule.classScheduleId)
 
     },
   },
