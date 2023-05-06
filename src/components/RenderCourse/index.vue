@@ -1,5 +1,5 @@
 <template>
-  <div class="course-box flex flex-wrap" :class="{ 'pointer-events-none': !!isHistory }">
+  <div class="course-box flex flex-wrap" :class="{ 'pointer-events-none': !!isHistory&& isStudent }">
 
     <div v-if="list?.length" @click="$emit('action', 'show', co)" v-for="co in list" :key="co.courseId"
       class="flex-shrink-0 course-item shadow-xl flex flex-col group rounded-xl overflow-hidden relative basis-1/6 hover:text-emerald-600"
@@ -66,8 +66,12 @@
 
 import dayjs from 'dayjs'
 import emptyCourse from '@/assets/course-empty.png'
+import emtyCourse from '@/assets/emty-course.png'
+import userStore from '@/store/userStore'
 const currentPage = ref<number>(1)
+const user = userStore()
 
+const isStudent = computed(()=>user?.auth?.includes('student'))
 const props = withDefaults(
   defineProps<{
     data: any
